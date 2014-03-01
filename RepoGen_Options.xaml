@@ -1,0 +1,14 @@
+﻿<Window x:Name="repoGenWindow" x:Class="SlickUpdater.RepoGen_Options"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Repo Generator Options" Height="110.258" Width="620" ResizeMode="CanMinimize" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded" WindowStyle="ToolWindow" Closed="Window_Closed">
+    <Grid>
+        <Label Content="Output Dir:" HorizontalAlignment="Left" Margin="11,41,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.526,-0.385"/>
+        <TextBox x:Name="outputDir_textBox" HorizontalAlignment="Left" Height="23" Margin="96,44,0,0" VerticalAlignment="Top" Width="433" TextChanged="outputDir_textBox_TextChanged"/>
+        <Label Content="Input Dir:" HorizontalAlignment="Left" Margin="11,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="inputDir_textBox" HorizontalAlignment="Left" Height="23" Margin="96,13,0,0" VerticalAlignment="Top" Width="433" TextChanged="inputDir_textBox_TextChanged"/>
+        <Button x:Name="inputDir_Button" Content="Browse" HorizontalAlignment="Left" Margin="534,16,0,0" VerticalAlignment="Top" Width="75" Click="inputDir_Button_Click"/>
+        <Button x:Name="outputDir_Button" Content="Browse" HorizontalAlignment="Left" Margin="534,41,0,0" VerticalAlignment="Top" Width="75" Click="outputDir_Button_Click"/>
+
+    </Grid>
+</Window>

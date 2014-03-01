@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4C3D216C-10EA-4EA8-96FC-AC269F80C9A7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SlickUpdater</RootNamespace>
+    <AssemblyName>Slick Updater Beta</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>C:\Users\Ian\Documents\Output\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://projectawesomemodhost.com/beta/net/</InstallUrl>
+    <UpdateUrl>http://projectawesomemodhost.com/beta/net/</UpdateUrl>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>Internet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Slick_Updater.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>98A8B9812E89ED7EB76B859EABB93BBDC5D0B031</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Slick Updater Beta_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\redditTest\redditTest\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\redditTest\redditTest\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="ReachFramework" />
+    <Reference Include="SevenZipSharp, Version=0.64.3890.29348, Culture=neutral, PublicKeyToken=20de82c62b055c88, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\SevenZipSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Arma3LaunchOptionsDialogue.xaml.cs">
+      <DependentUpon>Arma3LaunchOptionsDialogue.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigManager.cs" />
+    <Compile Include="downloader.cs" />
+    <Compile Include="DragAndDrop.cs" />
+    <Compile Include="Launch.cs" />
+    <Compile Include="log.xaml.cs">
+      <DependentUpon>log.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="logIt.cs" />
+    <Compile Include="newRepo.xaml.cs">
+      <DependentUpon>newRepo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RedditSharp\AuthenticatedUser.cs" />
+    <Compile Include="RedditSharp\Captcha.cs" />
+    <Compile Include="RedditSharp\CaptchaResponse.cs" />
+    <Compile Include="RedditSharp\Comment.cs" />
+    <Compile Include="RedditSharp\CreatedThing.cs" />
+    <Compile Include="RedditSharp\Extensions.cs" />
+    <Compile Include="RedditSharp\FlairTemplate.cs" />
+    <Compile Include="RedditSharp\FlairType.cs" />
+    <Compile Include="RedditSharp\ICaptchaSolver.cs" />
+    <Compile Include="RedditSharp\IWebAgent.cs" />
+    <Compile Include="RedditSharp\Listing.cs" />
+    <Compile Include="RedditSharp\ModeratorPermission.cs" />
+    <Compile Include="RedditSharp\ModeratorUser.cs" />
+    <Compile Include="RedditSharp\MultipartFormBuilder.cs" />
+    <Compile Include="RedditSharp\Post.cs" />
+    <Compile Include="RedditSharp\PrivateMessage.cs" />
+    <Compile Include="RedditSharp\RateLimitException.cs" />
+    <Compile Include="RedditSharp\Reddit.cs" />
+    <Compile Include="RedditSharp\RedditException.cs" />
+    <Compile Include="RedditSharp\RedditUser.cs" />
+    <Compile Include="RedditSharp\Subreddit.cs" />
+    <Compile Include="RedditSharp\SubredditImage.cs" />
+    <Compile Include="RedditSharp\SubredditSettings.cs" />
+    <Compile Include="RedditSharp\SubredditStyle.cs" />
+    <Compile Include="RedditSharp\Thing.cs" />
+    <Compile Include="RedditSharp\UnixTimeStamp.cs" />
+    <Compile Include="RedditSharp\UnixTimestampConverter.cs" />
+    <Compile Include="RedditSharp\VotableThing.cs" />
+    <Compile Include="RedditSharp\WebAgent.cs" />
+    <Compile Include="regcheck.cs" />
+    <Compile Include="a3UpdateManager.cs" />
+    <Compile Include="RepoGenerator.cs" />
+    <Compile Include="RepoGen_InputDir_Browse.xaml.cs">
+      <DependentUpon>RepoGen_InputDir_Browse.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepoGen_Options.xaml.cs">
+      <DependentUpon>RepoGen_Options.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RepoGen_OutputDir_Browse.xaml.cs">
+      <DependentUpon>RepoGen_OutputDir_Browse.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Unzippy.cs" />
+    <Compile Include="WindowManager.cs" />
+    <Compile Include="Zippy.cs" />
+    <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Arma3LaunchOptionsDialogue.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="newRepo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="themes\ExpressionDark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="log.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="RepoGen_InputDir_Browse.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepoGen_Options.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RepoGen_OutputDir_Browse.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="Slick Updater Beta_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ArmA3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\refreshHover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\modBlue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\modBrown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\modGreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\modRed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Slick_Updater.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\modYellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\betterRefresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="7z.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Resources\ArmA2.png" />
+    <Resource Include="Resources\mbg.png" />
+    <Resource Include="Resources\nyan.gif" />
+    <Resource Include="Resources\pretty.png" />
+    <Resource Include="Resources\metroblue.png" />
+    <Resource Include="Resources\paLogo.png" />
+    <Resource Include="SevenZipSharp.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
