@@ -98,8 +98,8 @@
                 <Label Content="Force Update" HorizontalAlignment="Left" Margin="10,57,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="127"/>
                 <Button x:Name="forceButton" Content="" Grid.Column="2" HorizontalAlignment="Left" Margin="0,57,0,0" Grid.Row="1" VerticalAlignment="Top" Width="22" Height="22" Click="forceToggle"/>
                 <Label Content="Current Repo: " HorizontalAlignment="Left" Margin="10,82,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="25" Width="140" Visibility="Hidden"/>
-                <Button x:Name="menuButton" Content="PA Repo" Grid.Column="2" HorizontalAlignment="Left" Margin="0,82,0,0" Grid.Row="1" VerticalAlignment="Top" Width="160" Height="20" Click="showRepos" HorizontalContentAlignment="Left"/>
-                <Menu x:Name="repomenu" Grid.Column="2" HorizontalAlignment="Left" Height="140" Margin="0,102,0,0" Grid.Row="1" VerticalAlignment="Top" Width="160">
+                <Button x:Name="menuButton" Content="PA Repo" Grid.Column="2" HorizontalAlignment="Left" Margin="0,82,0,0" Grid.Row="1" VerticalAlignment="Top" Width="160" Height="25" Click="showRepos" HorizontalContentAlignment="Left"/>
+                <Menu x:Name="repomenu" Grid.Column="2" HorizontalAlignment="Left" Height="138" Margin="0,107,0,0" Grid.Row="1" VerticalAlignment="Top" Width="160">
                     <Menu.Background>
                         <ImageBrush ImageSource="Resources/mbg.png"/>
                     </Menu.Background>
@@ -125,7 +125,7 @@
                     </MenuItem>
 
                 </Menu>
-                <Label Grid.ColumnSpan="2" Content="Repository:" HorizontalAlignment="Left" Margin="10,82,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="20"/>
+                <Label Grid.ColumnSpan="2" Content="Repository:" HorizontalAlignment="Left" Margin="10,82,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="25"/>
 
 
             </Grid>

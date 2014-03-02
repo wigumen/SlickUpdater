@@ -16,6 +16,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Xml.Linq;
 using RedditSharp;
+using System.Diagnostics;
 
 namespace SlickUpdater
 {
@@ -33,6 +34,9 @@ namespace SlickUpdater
         string rawslickServVer;
         string[] slickServVer;
         string subreddit = "/r/ProjectMilSim";
+        public int downloadSpeed = 0;
+        Stopwatch sw = new Stopwatch();
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -190,6 +194,7 @@ namespace SlickUpdater
                 if (!worker.IsBusy) {
                     setBusy(true);
                     worker.RunWorkerAsync();
+                    sw.Start();
                 } else {
                     MessageBox.Show("Worker is Busy(You really must be dicking around or unlucky to make this pop up...)");
                 }
@@ -306,6 +311,7 @@ namespace SlickUpdater
         }
 
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+            
             if (e.ProgressPercentage <= 100 && e.ProgressPercentage >= 0) {
                 indivProgress.Value = e.ProgressPercentage;
                 indivProgressTxt.Content = e.ProgressPercentage + "%";
@@ -319,9 +325,12 @@ namespace SlickUpdater
             } else if (e.ProgressPercentage == -1) {
                 MessageBox.Show(e.UserState as string);
             }
+            //int dlSpeed = (int)(downloadSpeed);
+            Title = "Slick Updater Beta @ " + (downloadSpeed / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00") + "kb/s";
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+            sw.Reset();
             a3UpdateCheck();
             indivProgress.Value = 0;
             midProgress.Value = 0;
@@ -329,7 +338,8 @@ namespace SlickUpdater
             midProgressTxt.Content = "";
             indivProgressTxt.Content = "";
             totalProgressTxt.Content = "";
-
+            Title = "Slick Updater Beta";
+            sw.Stop();
         }
 
         private void helpButton_Click(object sender, RoutedEventArgs e) {
@@ -455,6 +465,12 @@ namespace SlickUpdater
                 {
                     MessageBox.Show("checkWorker thread is currently busy...");
                 }
+        }
+
+        private void repoLostFocus(object sender, MouseButtonEventArgs e)
+        {
+            menuAnimation(140, 0);
+            showRepo = false;
         }
 
         void menuAnimation(int from, int to)
