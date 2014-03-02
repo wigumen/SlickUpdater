@@ -122,8 +122,8 @@ namespace SlickUpdater {
             string mod;
             string[] mods;
             string modFolder;
-            string versionString;
-            string version0String;
+            string versionString = "";
+            string version0String = "";
 
             mods = downloader.webReadLines(url + modlist);
             int i = 0;
@@ -157,7 +157,17 @@ namespace SlickUpdater {
                         } else {
                             //a3Items.Add(new Mod() { status = modBrown, modName = mod });
                             //MessageBox.Show(mod + " is missing a version file.");
-                            a3DetailUpdate(mod);
+                            version0String = downloader.webRead(url + mod + "\\" + version0File);
+                            MessageBoxResult result = MessageBox.Show("SlickUpdater have detected that you have the folder " + modFolder + " if your 100% sure this is up to date you don't have to re-download. \n\nAre you sure this mod is up to date?", "Mod folder detacted", MessageBoxButton.YesNo);
+                            switch (result)
+                            {
+                                case MessageBoxResult.Yes:
+                                    File.WriteAllText(modFolder + "\\SU.version", version0String);
+                                    break;
+                                case MessageBoxResult.No:
+                                    a3DetailUpdate(mod);
+                                    break;
+                            }
                         }
                     } else {
                         //a3Items.Add(new Mod() { status = modBlue, modName = mod });
