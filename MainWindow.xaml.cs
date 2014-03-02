@@ -400,8 +400,9 @@ namespace SlickUpdater
             }
         }
 
-        int nyanClick = 0;
+        
         #region TOPSECRET EASTEREGG NO PEAKING
+        int nyanClick = 0;
         private void nyanEgg(object sender, MouseButtonEventArgs e)
         {
             nyanClick++;
@@ -454,6 +455,28 @@ namespace SlickUpdater
                 ConfigManager.write("ArmA3", "currentrepo", obj.Header.ToString());
                 joinButton.Content = "Join TEST server";
                 subreddit = "/r/TestOutfit";
+            }
+            if (obj.Tag.ToString() == "paExtra")
+            {
+                if (slickServVer[4] == "not")
+                {
+                    MessageBox.Show("This repo has not yet been implemented, setting you to PA repo");
+                    menuButton.Content = "PA Repo";
+                    menuAnimation(140, 0);
+                    ConfigManager.write("ArmA3", "repourl", slickServVer[2]);
+                    ConfigManager.write("ArmA3", "currentrepo", obj.Header.ToString());
+                    joinButton.Content = "Join PA server";
+                    subreddit = "/r/ProjectMilSim";
+                }
+                else
+                {
+                    menuButton.Content = obj.Header;
+                    menuAnimation(140, 0);
+                    ConfigManager.write("ArmA3", "repourl", slickServVer[4]);
+                    ConfigManager.write("ArmA3", "currentrepo", obj.Header.ToString());
+                    joinButton.Content = "Join PA server";
+                    subreddit = "/r/ProjectMilSim";
+                }
             }
                 showRepo = false;
                 if (!checkWorker.IsBusy)
