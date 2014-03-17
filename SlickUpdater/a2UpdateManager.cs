@@ -53,7 +53,7 @@ namespace SlickUpdater {
                 url = xmlLine;
             }else{
                 MessageBox.Show("Your repourl is not set. Go into settings and change it! Setting it to default!");
-                url = parsedslickVersion[2];
+                url = parsedslickVersion[5];
                 ConfigManager.write("ArmA2", "repourl", parsedslickVersion[5]);
             }
             
