@@ -48,7 +48,6 @@ namespace SlickUpdater
             sw.Close();
             menuAnimation(140, 0);
             showRepo = false;
-            var gameversion = ConfigManager.fetch("GameVER", "Game");
             rawslickServVer = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
 #if DEBUG
             //local debug server for A2 
@@ -149,6 +148,7 @@ namespace SlickUpdater
                 doc.Save("config.xml");
             }
             //Check if the user if a PA user or a TEST user
+            var gameversion = ConfigManager.fetch("GameVER", "Game");
             if (gameversion == "ArmA3")
             {
                 a3DirText.Text = regcheck.arma3RegCheck();
@@ -164,7 +164,9 @@ namespace SlickUpdater
                     subreddit = "/r/testoutfit";
                     joinButton.Content = "Join TEST server";
                 }
-            }else{
+            }
+            else
+            {
                 var subredd = ConfigManager.fetch("ArmA2", "currentrepo");
                 if (subredd == "PA ArmA 2 Repo")
                 {
@@ -209,14 +211,20 @@ namespace SlickUpdater
             if (gameversion == "ArmA3")
             {
                 a3UpdateManager.arma3UpdateCheck();
+#if DEBUG
+                MessageBox.Show("DEBUG ARMA 3 UPDATE");
+#endif
             }
             else if (gameversion == "ArmA2")
             {
                 a2UpdateManager.arma2UpdateCheck();
+#if DEBUG
+                MessageBox.Show("DEBUG ARMA 2 UPDATE");
+#endif
             }
             else
             {
-                MessageBox.Show("Game version dun goofed! Please report issue to http:github.com/wigumen/slickupdater/issues");
+                MessageBox.Show("Game version dun goofed! Please report issue to wigumen");
             }
         }
 
@@ -360,7 +368,15 @@ namespace SlickUpdater
         }
 
         private void worker_DoWork(object sender, DoWorkEventArgs e) {
-            a3UpdateManager.a3Update();
+            var gameversion = ConfigManager.fetch("GameVER", "Game");
+            if (gameversion == "ArmA3")
+            {
+                a3UpdateManager.a3Update();
+            }
+            else
+            {
+                a2UpdateManager.a2Update();
+            }
         }
 
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
