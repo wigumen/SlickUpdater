@@ -37,7 +37,7 @@ namespace SlickUpdater {
             {
                 if (server == "PA Repo")
                 {
-                    args += " -port=2302 -connect=216.155.136.19 -password=PA";
+                    args += " -port=2302 -connect=216.155.136.21 -password=PA";
                 }
                 else if (server == "Test Outfit Repo")
                 {
