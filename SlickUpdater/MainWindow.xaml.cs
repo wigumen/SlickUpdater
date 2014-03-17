@@ -49,15 +49,18 @@ namespace SlickUpdater
             menuAnimation(140, 0);
             showRepo = false;
             rawslickServVer = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
+#if DEBUG
+            //local debug server for A2 
+            rawslickServVer = downloader.webRead("http://localhost/repo/slickupdater/slickversion");
+#endif
             slickServVer = rawslickServVer.Split('%');
-            
             MenuItem pa = new MenuItem();
             pa.Tag = "http://projectawesomemodhost.com/beta/repo/";
             pa.Header = "PA Repo";
             items.Add(pa);
             if (slickServVer[0] != slickVersion)
             {
-                MessageBoxResult result = MessageBox.Show("There seems to be a new version of slickupdater available, do you wanne update it it?", "New Update", MessageBoxButton.YesNo);
+                MessageBoxResult result = MessageBox.Show("There seems to be a new version of slickupdater available, do you wanna update it it?", "New Update", MessageBoxButton.YesNo);
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
@@ -101,7 +104,7 @@ namespace SlickUpdater
             }
             //Grenerate config xml
             if (!File.Exists("config.xml")) {
-                MessageBox.Show("Hello! This seems to be the first time you launch SlickUpdater so make sure your arma 3 and ts3 path is set correctly in options. Have a nice day!", "Welcome");
+                MessageBox.Show("Hello! This seems to be the first time you launch SlickUpdater so make sure your ArmA 3 and ts3 path is set correctly in options. Have a nice day!", "Welcome");
                 XDocument doc = new XDocument(
                     new XComment("Slick Updater config.xml File!"),
                     new XElement("SlickUpdater",
@@ -118,7 +121,23 @@ namespace SlickUpdater
                             new XElement("ts3Dir",""),
                             new XElement("repourl", "http://projectawesomemodhost.com/beta/repo/"),
                             new XElement("currentrepo", "PA Repo")),
-                        new XElement("ArmA2"),
+                            // add ArmA2 configs
+                        new XElement("ArmA2",
+                            new XElement("path", ""),
+                            new XElement("window", "false"),
+                            new XElement("nosplash", "true"),
+                            new XElement("skipIntro", "true"),
+                            new XElement("noLogs", "false"),
+                            new XElement("noPause", "true"),
+                            new XElement("showScriptErrors", "false"),
+                            new XElement("world", ""),
+                            new XElement("customParameters", ""),
+                            new XElement("ts3Dir", ""),
+                            new XElement("repourl", ""),
+                            new XElement("currentrepo", "PA Repo")),
+                            // add game version config (eg. ArmA3 or ArmA2)
+                        new XElement("GameVER",
+                            new XElement("Game", "ArmA3")),
                         new XElement("repoGen", 
                             new XElement("inputDir",""),
                             new XElement("outputDir", "")),
@@ -138,7 +157,11 @@ namespace SlickUpdater
             }else if(subredd == "Test Outfit Repo"){
                 subreddit = "/r/testoutfit";
                 joinButton.Content = "Join TEST server";
-            }
+            }else if(subredd == "PA ArmA 2 Repo")
+            {
+                subreddit = "/r/ProjectMilSim";
+                joinButton.Content = "Join PA ArmA 2 server";
+                }
         }
         //Do some work
         void checkWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -155,7 +178,7 @@ namespace SlickUpdater
                 MessageBox.Show("checkWorker is Busy!");
             }
         }
-
+        
         void checkWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             switch (e.ProgressPercentage) {
                 case -1:
@@ -170,9 +193,21 @@ namespace SlickUpdater
 
             }
         }
-
+        // worker runs the updateManager, checks game version using <GameVER><Game>
         void checkWorker_DoWork(object sender, DoWorkEventArgs e) {
-            a3UpdateManager.arma3UpdateCheck();
+            var gameversion = ConfigManager.fetch("GameVER", "Game");
+            if (gameversion == "ArmA3")
+            {
+                a3UpdateManager.arma3UpdateCheck();
+            }
+            else if (gameversion == "ArmA2")
+            {
+                a2UpdateManager.arma2UpdateCheck();
+            }
+            else
+            {
+                MessageBox.Show("Game version dun goofed! Please report issue to http:github.com/wigumen/slickupdater/issues");
+            }
         }
 
         private void setBusy(bool isBusy) {
@@ -190,7 +225,9 @@ namespace SlickUpdater
         }
 
         private void onArma3Clicked(object sender, RoutedEventArgs e) {
-            if (arma3Button.Content as string == "Update ArmA 3") {
+            var gameversion = ConfigManager.fetch("GameVER", "Game");
+            if (arma3Button.Content as string == "Update ArmA 3" || arma3Button.Content as string == "Update ArmA 2")
+            {
                 if (!worker.IsBusy) {
                     setBusy(true);
                     worker.RunWorkerAsync();
@@ -198,8 +235,14 @@ namespace SlickUpdater
                 } else {
                     MessageBox.Show("Worker is Busy(You really must be dicking around or unlucky to make this pop up...)");
                 }
-            } else {
+            }
+            else if (gameversion == "ArmA3")
+            {
                 Launch.a3Launch(false, "");
+            }
+            else
+            {
+                Launch.a2Launch(false, "");
             }
         }
 
@@ -444,6 +487,7 @@ namespace SlickUpdater
                 menuAnimation(140, 0);
                 ConfigManager.write("ArmA3", "repourl", slickServVer[2]);
                 ConfigManager.write("ArmA3", "currentrepo", obj.Header.ToString());
+                ConfigManager.write("GameVER", "Game", "ArmA3");
                 joinButton.Content = "Join PA server";
                 subreddit = "/r/ProjectMilSim";
             }
@@ -453,6 +497,7 @@ namespace SlickUpdater
                 menuAnimation(140, 0);
                 ConfigManager.write("ArmA3", "repourl", slickServVer[3]);
                 ConfigManager.write("ArmA3", "currentrepo", obj.Header.ToString());
+                ConfigManager.write("GameVER", "Game", "ArmA3");
                 joinButton.Content = "Join TEST server";
                 subreddit = "/r/TestOutfit";
             }
@@ -477,6 +522,16 @@ namespace SlickUpdater
                     joinButton.Content = "Join PA server";
                     subreddit = "/r/ProjectMilSim";
                 }
+            }
+            if (obj.Tag.ToString() == "paarama2")
+            {
+                menuButton.Content = obj.Header;
+                menuAnimation(140, 0);
+                ConfigManager.write("ArmA2", "repourl", slickServVer[5]);
+                ConfigManager.write("ArmA2", "currentrepo", obj.Header.ToString());
+                ConfigManager.write("GameVER", "Game", "ArmA2");
+                joinButton.Content = "Join PA ArmA 2 server";
+                subreddit = "/r/ProjectMilsim";
             }
                 showRepo = false;
                 if (!checkWorker.IsBusy)

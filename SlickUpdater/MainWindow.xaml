@@ -133,6 +133,17 @@
                             </TransformGroup>
                         </MenuItem.RenderTransform>
                     </MenuItem>
+                    <!-- ARMA2 REPO OPTION-->
+                    <MenuItem x:Name="parma2" Width="160" Margin="-161,125,0,-12" RenderTransformOrigin="0.5,0.5" Header="PA ArmA 2 Repo" Height="22" Click="setActiveRepo" Tag="paarama2">
+                        <MenuItem.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform X="-160" Y="-57"/>
+                            </TransformGroup>
+                        </MenuItem.RenderTransform>
+                    </MenuItem>
 
                 </Menu>
                 <Label Grid.ColumnSpan="2" Content="Repository:" HorizontalAlignment="Left" Margin="10,82,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="25"/>
