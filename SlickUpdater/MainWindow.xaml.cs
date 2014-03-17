@@ -36,7 +36,7 @@ namespace SlickUpdater
         string subreddit = "/r/ProjectMilSim";
         public int downloadSpeed = 0;
         Stopwatch sw = new Stopwatch();
-        
+
         public MainWindow()
         {
             InitializeComponent();
@@ -48,6 +48,7 @@ namespace SlickUpdater
             sw.Close();
             menuAnimation(140, 0);
             showRepo = false;
+            var gameversion = ConfigManager.fetch("GameVER", "Game");
             rawslickServVer = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
 #if DEBUG
             //local debug server for A2 
@@ -66,13 +67,13 @@ namespace SlickUpdater
                     case MessageBoxResult.Yes:
                         System.Diagnostics.Process.Start("SlickAutoUpdate.exe");
                         System.Diagnostics.Process.GetCurrentProcess().Kill();
-                    break;
+                        break;
                     case MessageBoxResult.No:
-                        
-                    break;
+
+                        break;
                 }
             }
-            
+
             // Initialize Update Worker
             worker = new BackgroundWorker();
             worker.DoWork += worker_DoWork;
@@ -95,7 +96,8 @@ namespace SlickUpdater
             WindowManager.SetWnd(this);
 
             //Test if config is up to date
-            if(File.Exists("config.xml")){
+            if (File.Exists("config.xml"))
+            {
                 XDocument testdoc = XDocument.Load("config.xml");
                 if (testdoc.Element("SlickUpdater").Element("ArmA3").Element("repourl") == null)
                 {
@@ -103,25 +105,26 @@ namespace SlickUpdater
                 }
             }
             //Grenerate config xml
-            if (!File.Exists("config.xml")) {
+            if (!File.Exists("config.xml"))
+            {
                 MessageBox.Show("Hello! This seems to be the first time you launch SlickUpdater so make sure your ArmA 3 and ts3 path is set correctly in options. Have a nice day!", "Welcome");
                 XDocument doc = new XDocument(
                     new XComment("Slick Updater config.xml File!"),
                     new XElement("SlickUpdater",
                         new XElement("ArmA3",
                             new XElement("path", ""),
-                            new XElement("window","false"),
-                            new XElement("nosplash","true"),
-                            new XElement("skipIntro","true"),
-                            new XElement("noLogs","false"),
-                            new XElement("noPause","true"),
-                            new XElement("showScriptErrors","false"),
-                            new XElement("world",""),
+                            new XElement("window", "false"),
+                            new XElement("nosplash", "true"),
+                            new XElement("skipIntro", "true"),
+                            new XElement("noLogs", "false"),
+                            new XElement("noPause", "true"),
+                            new XElement("showScriptErrors", "false"),
+                            new XElement("world", ""),
                             new XElement("customParameters", ""),
-                            new XElement("ts3Dir",""),
+                            new XElement("ts3Dir", ""),
                             new XElement("repourl", "http://projectawesomemodhost.com/beta/repo/"),
                             new XElement("currentrepo", "PA Repo")),
-                            // add ArmA2 configs
+                    // add ArmA2 configs
                         new XElement("ArmA2",
                             new XElement("path", ""),
                             new XElement("window", "false"),
@@ -135,33 +138,40 @@ namespace SlickUpdater
                             new XElement("ts3Dir", ""),
                             new XElement("repourl", ""),
                             new XElement("currentrepo", "PA Repo")),
-                            // add game version config (eg. ArmA3 or ArmA2)
+                    // add game version config (eg. ArmA3 or ArmA2)
                         new XElement("GameVER",
                             new XElement("Game", "ArmA3")),
-                        new XElement("repoGen", 
-                            new XElement("inputDir",""),
+                        new XElement("repoGen",
+                            new XElement("inputDir", ""),
                             new XElement("outputDir", "")),
                         new XElement("Client",
                             new XElement("FirstTimeLaunch", "true"))));
                 doc.Save("config.xml");
             }
             //Check if the user if a PA user or a TEST user
-            a3DirText.Text = regcheck.arma3RegCheck();
-            ts3DirText.Text = regcheck.ts3RegCheck();
-            menuButton.Content = ConfigManager.fetch("ArmA3", "currentrepo");
-            var subredd = ConfigManager.fetch("ArmA3", "currentrepo");
-            if (subredd == "PA Repo")
+            if (gameversion == "ArmA3")
             {
-                subreddit = "/r/ProjectMilSim";
-                joinButton.Content = "Join PA server";
-            }else if(subredd == "Test Outfit Repo"){
-                subreddit = "/r/testoutfit";
-                joinButton.Content = "Join TEST server";
-            }else if(subredd == "PA ArmA 2 Repo")
-            {
-                subreddit = "/r/ProjectMilSim";
-                joinButton.Content = "Join PA ArmA 2 server";
+                a3DirText.Text = regcheck.arma3RegCheck();
+                ts3DirText.Text = regcheck.ts3RegCheck();
+                menuButton.Content = ConfigManager.fetch("ArmA3", "currentrepo");
+                var subredd = ConfigManager.fetch("ArmA3", "currentrepo");
+                if (subredd == "PA Repo")
+                {
+                    subreddit = "/r/ProjectMilSim";
+                    joinButton.Content = "Join PA server";
+                }else if (subredd == "Test Outfit Repo")
+                {
+                    subreddit = "/r/testoutfit";
+                    joinButton.Content = "Join TEST server";
                 }
+            }else{
+                var subredd = ConfigManager.fetch("ArmA2", "currentrepo");
+                if (subredd == "PA ArmA 2 Repo")
+                {
+                    subreddit = "/r/ProjectMilSim";
+                    joinButton.Content = "Join PA ArmA 2 server";
+                }
+            }
         }
         //Do some work
         void checkWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
