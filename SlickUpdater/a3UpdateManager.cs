@@ -34,9 +34,11 @@ namespace SlickUpdater {
             string version0String;
             string xmlLine = ConfigManager.fetch("ArmA3", "repourl");
             string slickVersion = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
+            /*
 #if DEBUG
             xmlLine = "http://localhost/repo/";
 #endif
+             */
             string[] parsedslickVersion = slickVersion.Split('%');
             if (xmlLine != "")
             {
