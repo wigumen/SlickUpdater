@@ -211,17 +211,12 @@ namespace SlickUpdater
             var gameversion = ConfigManager.fetch("GameVER", "Game");
             if (gameversion == "ArmA3")
             {
+                
                 a3UpdateManager.arma3UpdateCheck();
-#if DEBUG
-                MessageBox.Show("DEBUG ARMA 3 UPDATE");
-#endif
             }
             else if (gameversion == "ArmA2")
             {
                 a2UpdateManager.arma2UpdateCheck();
-#if DEBUG
-                MessageBox.Show("DEBUG ARMA 2 UPDATE");
-#endif
             }
             else
             {
@@ -242,7 +237,6 @@ namespace SlickUpdater
                 menuButton.IsEnabled = true;
             }
         }
-
         private void onArma3Clicked(object sender, RoutedEventArgs e) {
             var gameversion = ConfigManager.fetch("GameVER", "Game");
             if (arma3Button.Content as string == "Update ArmA 3" || arma3Button.Content as string == "Update ArmA 2")
@@ -617,6 +611,19 @@ namespace SlickUpdater
             rposts.Clear();
             redditWorker.RunWorkerAsync();
             eventbutton.IsEnabled = false;
+        }
+        //logo change
+        void logocheck(String gameversion)
+        {
+            if (gameversion == "ArmA2")
+            {
+                
+                logo_image.Source = new BitmapImage(new Uri(@"Resources/ArmA2.png", UriKind.Relative));
+            }
+            else
+            {
+                logo_image.Source = new BitmapImage(new Uri(@"Resources/ArmA3.png", UriKind.Relative));
+            }
         }
 
         List<events> rposts = new List<events>();
