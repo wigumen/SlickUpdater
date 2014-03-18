@@ -126,6 +126,7 @@ namespace SlickUpdater {
             string modFolder;
             string versionString = "";
             string version0String = "";
+            WebClient client = new WebClient();
 
             mods = downloader.webReadLines(url + modlist);
             int i = 0;
@@ -154,7 +155,7 @@ namespace SlickUpdater {
                             } else {
                                 //a3Items.Add(new Mod() { status = modYellow, modName = mod });
                                 //MessageBox.Show(mod + " is out of date.");
-                                a3DetailUpdate(mod);
+                                a3DetailUpdate(mod, client);
                             }
                         } else {
                             //a3Items.Add(new Mod() { status = modBrown, modName = mod });
@@ -167,14 +168,14 @@ namespace SlickUpdater {
                                     File.WriteAllText(modFolder + "\\SU.version", version0String);
                                     break;
                                 case MessageBoxResult.No:
-                                    a3DetailUpdate(mod);
+                                    a3DetailUpdate(mod, client);
                                     break;
                             }
                         }
                     } else {
                         //a3Items.Add(new Mod() { status = modBlue, modName = mod });
                         //MessageBox.Show(mod + " doesn't exist on your computer.");
-                        a3DetailUpdate(mod);
+                        a3DetailUpdate(mod, client);
                     }
                 }
                 double status = (double)i / (double)mods.Length ;
@@ -187,10 +188,10 @@ namespace SlickUpdater {
             WindowManager.mainWindow.worker.ReportProgress((int)(progress*100) + 101);                
         }
 
-        static private void a3DetailUpdate (string mod) {
+        static private void a3DetailUpdate (string mod, WebClient client) {
             string arma3Path = regcheck.arma3RegCheck();
             string modPath = arma3Path + "\\" + mod;
-            
+
             Directory.CreateDirectory(modPath);
 
             updateProgress = 0;
@@ -205,7 +206,7 @@ namespace SlickUpdater {
             }
             checkFilesFolders(modPath);
 
-            downloader.download(url + mod + "/SU.version");
+            downloader.download(url + mod + "/SU.version", client);
             File.Delete(modPath + "\\SU.version");
             File.Move("SU.version", modPath + "\\SU.version");
         }
@@ -249,20 +250,20 @@ namespace SlickUpdater {
                     file.Delete();
                 }
             }
-            
+            WebClient client = new WebClient();
             foreach (string file in files) {
                 FileInfo fileInfo = new FileInfo(folder + "\\" + file);
                 if (fileInfo.Exists) {
                     string hash = RepoGenerator.md5Calc(fileInfo.FullName);
                     string downloadedHash = downloader.webRead(url + relativePath + "\\" + fileInfo.Name + ".hash");
                     if (hash != downloadedHash) {
-                        downloader.download(url + relativePath + "\\" + fileInfo.Name + ".7z");
+                        downloader.download(url + relativePath + "\\" + fileInfo.Name + ".7z", client);
                         Unzippy.extract(fileInfo.Name + ".7z", fileInfo.DirectoryName);
                         increment();
                         File.Delete(fileInfo.Name + ".7z");
                     }
                 } else {
-                    downloader.download(url + relativePath + "\\" + fileInfo.Name + ".7z");
+                    downloader.download(url + relativePath + "\\" + fileInfo.Name + ".7z", client);
                     Unzippy.extract(fileInfo.Name + ".7z", fileInfo.DirectoryName);
                     increment();
                     File.Delete(fileInfo.Name + ".7z");

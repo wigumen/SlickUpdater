@@ -76,11 +76,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\redditTest\redditTest\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\redditTest\redditTest\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
@@ -132,35 +130,6 @@
     <Compile Include="newRepo.xaml.cs">
       <DependentUpon>newRepo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RedditSharp\AuthenticatedUser.cs" />
-    <Compile Include="RedditSharp\Captcha.cs" />
-    <Compile Include="RedditSharp\CaptchaResponse.cs" />
-    <Compile Include="RedditSharp\Comment.cs" />
-    <Compile Include="RedditSharp\CreatedThing.cs" />
-    <Compile Include="RedditSharp\Extensions.cs" />
-    <Compile Include="RedditSharp\FlairTemplate.cs" />
-    <Compile Include="RedditSharp\FlairType.cs" />
-    <Compile Include="RedditSharp\ICaptchaSolver.cs" />
-    <Compile Include="RedditSharp\IWebAgent.cs" />
-    <Compile Include="RedditSharp\Listing.cs" />
-    <Compile Include="RedditSharp\ModeratorPermission.cs" />
-    <Compile Include="RedditSharp\ModeratorUser.cs" />
-    <Compile Include="RedditSharp\MultipartFormBuilder.cs" />
-    <Compile Include="RedditSharp\Post.cs" />
-    <Compile Include="RedditSharp\PrivateMessage.cs" />
-    <Compile Include="RedditSharp\RateLimitException.cs" />
-    <Compile Include="RedditSharp\Reddit.cs" />
-    <Compile Include="RedditSharp\RedditException.cs" />
-    <Compile Include="RedditSharp\RedditUser.cs" />
-    <Compile Include="RedditSharp\Subreddit.cs" />
-    <Compile Include="RedditSharp\SubredditImage.cs" />
-    <Compile Include="RedditSharp\SubredditSettings.cs" />
-    <Compile Include="RedditSharp\SubredditStyle.cs" />
-    <Compile Include="RedditSharp\Thing.cs" />
-    <Compile Include="RedditSharp\UnixTimeStamp.cs" />
-    <Compile Include="RedditSharp\UnixTimestampConverter.cs" />
-    <Compile Include="RedditSharp\VotableThing.cs" />
-    <Compile Include="RedditSharp\WebAgent.cs" />
     <Compile Include="regcheck.cs" />
     <Compile Include="a3UpdateManager.cs" />
     <Compile Include="RepoGenerator.cs" />
