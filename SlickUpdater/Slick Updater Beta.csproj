@@ -130,6 +130,7 @@
     <Compile Include="newRepo.xaml.cs">
       <DependentUpon>newRepo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="reddit.cs" />
     <Compile Include="regcheck.cs" />
     <Compile Include="a3UpdateManager.cs" />
     <Compile Include="RepoGenerator.cs" />
