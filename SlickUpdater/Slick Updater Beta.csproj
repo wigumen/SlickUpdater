@@ -143,6 +143,7 @@
     <Compile Include="RepoGen_OutputDir_Browse.xaml.cs">
       <DependentUpon>RepoGen_OutputDir_Browse.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Unzippy.cs" />
     <Compile Include="WindowManager.cs" />
     <Compile Include="Zippy.cs" />

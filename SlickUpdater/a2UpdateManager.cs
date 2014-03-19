@@ -40,7 +40,7 @@ namespace SlickUpdater {
             string versionString;
             string version0String;
             WebClient client = new WebClient();
-            string xmlLine = ConfigManager.fetch("ArmA2", "repourl");
+            string xmlLine = Properties.Settings.Default.A2repo;
             string slickVersion = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
             
 #if DEBUG
@@ -55,7 +55,7 @@ namespace SlickUpdater {
             }else{
                 MessageBox.Show("Your repourl is not set. Go into settings and change it! Setting it to default!");
                 url = parsedslickVersion[5];
-                ConfigManager.write("ArmA2", "repourl", parsedslickVersion[5]);
+                Properties.Settings.Default.A2repo = parsedslickVersion[5];
             }
             
 
@@ -126,7 +126,7 @@ namespace SlickUpdater {
 
         public static void a2Update() {
             if (url == ""){
-                url = ConfigManager.fetch("ArmA2", "repourl");
+                url = Properties.Settings.Default.A2repo;
             }
 
             string arma2Path = regcheck.arma2RegCheck();
@@ -283,14 +283,14 @@ namespace SlickUpdater {
                 //Now Create all of the directories
                 foreach (string dirPath in Directory.GetDirectories(info.FullName, "*",
                     SearchOption.AllDirectories))
-                    Directory.CreateDirectory(dirPath.Replace(info.FullName, ConfigManager.fetch("ArmA3" ,"ts3Dir") + "\\plugins"));
+                    Directory.CreateDirectory(dirPath.Replace(info.FullName, Properties.Settings.Default.ts3Dir + "\\plugins"));
 
                 //Copy all the files
                 foreach (string newPath in Directory.GetFiles(info.FullName, "*.*", SearchOption.AllDirectories)) {
-                    if (!File.Exists(newPath.Replace(info.FullName, ConfigManager.fetch("ArmA3", "ts3Dir") + "\\plugins")))
+                    if (!File.Exists(newPath.Replace(info.FullName, Properties.Settings.Default.ts3Dir + "\\plugins")))
                     {
                         try {
-                            File.Copy(newPath, newPath.Replace(info.FullName, ConfigManager.fetch("ArmA3", "ts3Dir") + "\\plugins"), true);
+                            File.Copy(newPath, newPath.Replace(info.FullName, Properties.Settings.Default.ts3Dir + "\\plugins"), true);
                             logIt.addData("Copied ACRE plugin to TS3 folder");
                         } catch (Exception e) {
                             WindowManager.mainWindow.worker.ReportProgress(-1, e.Message);
