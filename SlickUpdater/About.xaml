@@ -1,9 +1,0 @@
-﻿<Window x:Class="SlickUpdater.About"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="About" Height="511.5" Width="813" Closed="Window_Closed">
-    <Grid>
-        <MediaElement HorizontalAlignment="Left" Height="480" VerticalAlignment="Top" Width="804" Source="http://projectawesomemodhost.com/beta/docs/repogen.mp4"/>
-
-    </Grid>
-</Window>
