@@ -630,29 +630,30 @@ namespace SlickUpdater
 
         void redditWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-
-            string url = @"http://www.reddit.com" + subreddit + "/hot.json";
-            string json = downloader.webRead(url);
-            RootObject topic = JsonConvert.DeserializeObject<RootObject>(json);
+            /*
+            var reddit = new Reddit();
+            var rsubreddit = reddit.GetSubreddit(subreddit);
+            var posts = rsubreddit.GetHot();
             
-            foreach(Child i in topic.data.children)
+            WebClient client = new WebClient();
+            Stream stream = client.OpenRead("http://www.reddit.com" + subreddit + "/hot.xml?sort=hot");
+            StreamReader reader = new StreamReader(stream);
+            string redditData = reader.Read().ToString();
+            XDocument events = XDocument.Load(redditData);
+            
+            foreach(var i in events.Descendants("channel"))
             {
-                if (i.data.link_flair_text == "EVENT")
+                if ("" == "")
                 {
-                    /*
                     events evt = new events();
                     evt.title = post[i].title.ToString();
                     evt.author = post[i].author.ToString();
                     evt.url = post[i].permalink;
-                    */
-                    events evt = new events();
-                    evt.title = i.data.title;
-                    evt.author = i.data.author;
-                    evt.url = i.data.permalink;
+
                     rposts.Add(evt);
                 }
             }
-             
+             */
         }
 
         void redditworker_Done(object sender, AsyncCompletedEventArgs e)
@@ -675,6 +676,7 @@ namespace SlickUpdater
         void newEvent_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
+            //string url = button.Tag.ToString();
             System.Diagnostics.Process.Start(button.Tag.ToString());
         }
 
