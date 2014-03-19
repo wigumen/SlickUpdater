@@ -161,6 +161,7 @@
     <Compile Include="RedditSharp\UnixTimestampConverter.cs" />
     <Compile Include="RedditSharp\VotableThing.cs" />
     <Compile Include="RedditSharp\WebAgent.cs" />
+    <Compile Include="reddit.cs" />
     <Compile Include="regcheck.cs" />
     <Compile Include="a3UpdateManager.cs" />
     <Compile Include="RepoGenerator.cs" />

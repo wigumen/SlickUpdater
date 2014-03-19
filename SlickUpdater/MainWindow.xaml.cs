@@ -629,14 +629,27 @@ namespace SlickUpdater
 
         void redditWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+<<<<<<< HEAD
             var reddit = new Reddit();
             var rsubreddit = reddit.GetSubreddit(subreddit);
             var posts = rsubreddit.GetHot();
             foreach (var post in posts.Take(20))
             {
                 if (post.LinkFlairText == "EVENT")
+=======
+
+            string url = @"http://www.reddit.com" + subreddit + "/hot.json";
+            string json = downloader.webRead(url);
+            RootObject topic = JsonConvert.DeserializeObject<RootObject>(json);
+            
+            foreach(Child i in topic.data.children)
+            {
+                if (i.data.link_flair_text == "EVENT")
+>>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
                 {
+                    /*
                     events evt = new events();
+<<<<<<< HEAD
                     evt.title = post.Title.ToString();
                     evt.author = post.Author.ToString();
                     evt.url = post.Shortlink;
@@ -644,6 +657,20 @@ namespace SlickUpdater
                     rposts.Add(evt);
                 }
             }
+=======
+                    evt.title = post[i].title.ToString();
+                    evt.author = post[i].author.ToString();
+                    evt.url = post[i].permalink;
+                    */
+                    events evt = new events();
+                    evt.title = i.data.title;
+                    evt.author = i.data.author;
+                    evt.url = i.data.permalink;
+                    rposts.Add(evt);
+                }
+            }
+             
+>>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
         }
 
         void redditworker_Done(object sender, AsyncCompletedEventArgs e)
@@ -665,7 +692,6 @@ namespace SlickUpdater
         void newEvent_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            //string url = button.Tag.ToString();
             System.Diagnostics.Process.Start(button.Tag.ToString());
         }
 
