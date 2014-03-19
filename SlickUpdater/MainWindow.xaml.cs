@@ -630,6 +630,7 @@ namespace SlickUpdater
         void redditWorker_DoWork(object sender, DoWorkEventArgs e)
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             var reddit = new Reddit();
             var rsubreddit = reddit.GetSubreddit(subreddit);
             var posts = rsubreddit.GetHot();
@@ -637,6 +638,8 @@ namespace SlickUpdater
             {
                 if (post.LinkFlairText == "EVENT")
 =======
+=======
+>>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
 
             string url = @"http://www.reddit.com" + subreddit + "/hot.json";
             string json = downloader.webRead(url);
@@ -645,6 +648,9 @@ namespace SlickUpdater
             foreach(Child i in topic.data.children)
             {
                 if (i.data.link_flair_text == "EVENT")
+<<<<<<< HEAD
+>>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
+=======
 >>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
                 {
                     /*
@@ -670,6 +676,9 @@ namespace SlickUpdater
                 }
             }
              
+<<<<<<< HEAD
+>>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
+=======
 >>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
         }
 
