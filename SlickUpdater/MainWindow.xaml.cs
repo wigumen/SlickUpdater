@@ -15,8 +15,9 @@ using System.Windows.Media.Animation;
 using System.ComponentModel;
 using System.IO;
 using System.Xml.Linq;
-using RedditSharp;
 using System.Diagnostics;
+using Newtonsoft.Json;
+using System.Net;
 
 namespace SlickUpdater
 {
@@ -631,11 +632,23 @@ namespace SlickUpdater
         {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            /*
+>>>>>>> parent of fdb1bb1... W
             var reddit = new Reddit();
             var rsubreddit = reddit.GetSubreddit(subreddit);
             var posts = rsubreddit.GetHot();
-            foreach (var post in posts.Take(20))
+            
+            WebClient client = new WebClient();
+            Stream stream = client.OpenRead("http://www.reddit.com" + subreddit + "/hot.xml?sort=hot");
+            StreamReader reader = new StreamReader(stream);
+            string redditData = reader.Read().ToString();
+            XDocument events = XDocument.Load(redditData);
+            
+            foreach(var i in events.Descendants("channel"))
             {
+<<<<<<< HEAD
                 if (post.LinkFlairText == "EVENT")
 =======
 =======
@@ -652,9 +665,13 @@ namespace SlickUpdater
 >>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
 =======
 >>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
+=======
+                if ("" == "")
+>>>>>>> parent of fdb1bb1... W
                 {
                     /*
                     events evt = new events();
+<<<<<<< HEAD
 <<<<<<< HEAD
                     evt.title = post.Title.ToString();
                     evt.author = post.Author.ToString();
@@ -680,12 +697,23 @@ namespace SlickUpdater
 >>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
 =======
 >>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
+=======
+                    evt.title = post[i].title.ToString();
+                    evt.author = post[i].author.ToString();
+                    evt.url = post[i].permalink;
+
+                    rposts.Add(evt);
+                }
+            }
+             */
+>>>>>>> parent of fdb1bb1... W
         }
 
         void redditworker_Done(object sender, AsyncCompletedEventArgs e)
         {
             foreach (events evn in rposts)
             {
+                
                 Button newEvent = new Button();
                 newEvent.Content = evn.title + " by " + evn.author;
                 newEvent.Height = 50;
@@ -694,7 +722,7 @@ namespace SlickUpdater
                 newEvent.FontSize = 14;
                 newEvent.Click += newEvent_Click;
                 eventbox.Items.Add(newEvent);
-            }
+             }
             eventbutton.IsEnabled = true;
         }
 
