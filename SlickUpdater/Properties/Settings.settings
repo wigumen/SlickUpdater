@@ -1,4 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
+<<<<<<< HEAD
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SlickUpdater.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
@@ -39,4 +40,11 @@
       <Value Profile="(Default)" />
     </Setting>
   </Settings>
+=======
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
+>>>>>>> parent of d87612a... Removed crappy reddit api and improved downloader
 </SettingsFile>

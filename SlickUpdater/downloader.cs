@@ -60,8 +60,9 @@ namespace SlickUpdater {
             return list.ToArray();
         }
 
-        public static string download(string url, WebClient client) {
+        public static string download(string url) {
             downloadFinished = false;
+            WebClient client = new WebClient();
             client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(onProgressChanged);
             client.DownloadFileCompleted += new AsyncCompletedEventHandler(onComplete);
             Uri uri = new Uri(url);

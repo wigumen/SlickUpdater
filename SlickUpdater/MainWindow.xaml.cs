@@ -15,9 +15,8 @@ using System.Windows.Media.Animation;
 using System.ComponentModel;
 using System.IO;
 using System.Xml.Linq;
+using RedditSharp;
 using System.Diagnostics;
-using Newtonsoft.Json;
-using System.Net;
 
 namespace SlickUpdater
 {
@@ -630,37 +629,27 @@ namespace SlickUpdater
 
         void redditWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            /*
             var reddit = new Reddit();
             var rsubreddit = reddit.GetSubreddit(subreddit);
             var posts = rsubreddit.GetHot();
-            
-            WebClient client = new WebClient();
-            Stream stream = client.OpenRead("http://www.reddit.com" + subreddit + "/hot.xml?sort=hot");
-            StreamReader reader = new StreamReader(stream);
-            string redditData = reader.Read().ToString();
-            XDocument events = XDocument.Load(redditData);
-            
-            foreach(var i in events.Descendants("channel"))
+            foreach (var post in posts.Take(20))
             {
-                if ("" == "")
+                if (post.LinkFlairText == "EVENT")
                 {
                     events evt = new events();
-                    evt.title = post[i].title.ToString();
-                    evt.author = post[i].author.ToString();
-                    evt.url = post[i].permalink;
-
+                    evt.title = post.Title.ToString();
+                    evt.author = post.Author.ToString();
+                    evt.url = post.Shortlink;
+                    
                     rposts.Add(evt);
                 }
             }
-             */
         }
 
         void redditworker_Done(object sender, AsyncCompletedEventArgs e)
         {
             foreach (events evn in rposts)
             {
-                
                 Button newEvent = new Button();
                 newEvent.Content = evn.title + " by " + evn.author;
                 newEvent.Height = 50;
@@ -669,7 +658,7 @@ namespace SlickUpdater
                 newEvent.FontSize = 14;
                 newEvent.Click += newEvent_Click;
                 eventbox.Items.Add(newEvent);
-             }
+            }
             eventbutton.IsEnabled = true;
         }
 
