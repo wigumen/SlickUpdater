@@ -130,35 +130,6 @@
     <Compile Include="newRepo.xaml.cs">
       <DependentUpon>newRepo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RedditSharp\AuthenticatedUser.cs" />
-    <Compile Include="RedditSharp\Captcha.cs" />
-    <Compile Include="RedditSharp\CaptchaResponse.cs" />
-    <Compile Include="RedditSharp\Comment.cs" />
-    <Compile Include="RedditSharp\CreatedThing.cs" />
-    <Compile Include="RedditSharp\Extensions.cs" />
-    <Compile Include="RedditSharp\FlairTemplate.cs" />
-    <Compile Include="RedditSharp\FlairType.cs" />
-    <Compile Include="RedditSharp\ICaptchaSolver.cs" />
-    <Compile Include="RedditSharp\IWebAgent.cs" />
-    <Compile Include="RedditSharp\Listing.cs" />
-    <Compile Include="RedditSharp\ModeratorPermission.cs" />
-    <Compile Include="RedditSharp\ModeratorUser.cs" />
-    <Compile Include="RedditSharp\MultipartFormBuilder.cs" />
-    <Compile Include="RedditSharp\Post.cs" />
-    <Compile Include="RedditSharp\PrivateMessage.cs" />
-    <Compile Include="RedditSharp\RateLimitException.cs" />
-    <Compile Include="RedditSharp\Reddit.cs" />
-    <Compile Include="RedditSharp\RedditException.cs" />
-    <Compile Include="RedditSharp\RedditUser.cs" />
-    <Compile Include="RedditSharp\Subreddit.cs" />
-    <Compile Include="RedditSharp\SubredditImage.cs" />
-    <Compile Include="RedditSharp\SubredditSettings.cs" />
-    <Compile Include="RedditSharp\SubredditStyle.cs" />
-    <Compile Include="RedditSharp\Thing.cs" />
-    <Compile Include="RedditSharp\UnixTimeStamp.cs" />
-    <Compile Include="RedditSharp\UnixTimestampConverter.cs" />
-    <Compile Include="RedditSharp\VotableThing.cs" />
-    <Compile Include="RedditSharp\WebAgent.cs" />
     <Compile Include="reddit.cs" />
     <Compile Include="regcheck.cs" />
     <Compile Include="a3UpdateManager.cs" />

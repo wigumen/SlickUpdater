@@ -630,29 +630,6 @@ namespace SlickUpdater
 
         void redditWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-            /*
->>>>>>> parent of fdb1bb1... W
-            var reddit = new Reddit();
-            var rsubreddit = reddit.GetSubreddit(subreddit);
-            var posts = rsubreddit.GetHot();
-            
-            WebClient client = new WebClient();
-            Stream stream = client.OpenRead("http://www.reddit.com" + subreddit + "/hot.xml?sort=hot");
-            StreamReader reader = new StreamReader(stream);
-            string redditData = reader.Read().ToString();
-            XDocument events = XDocument.Load(redditData);
-            
-            foreach(var i in events.Descendants("channel"))
-            {
-<<<<<<< HEAD
-                if (post.LinkFlairText == "EVENT")
-=======
-=======
->>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
 
             string url = @"http://www.reddit.com" + subreddit + "/hot.json";
             string json = downloader.webRead(url);
@@ -661,26 +638,9 @@ namespace SlickUpdater
             foreach(Child i in topic.data.children)
             {
                 if (i.data.link_flair_text == "EVENT")
-<<<<<<< HEAD
->>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
-=======
->>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
-=======
-                if ("" == "")
->>>>>>> parent of fdb1bb1... W
                 {
                     /*
                     events evt = new events();
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    evt.title = post.Title.ToString();
-                    evt.author = post.Author.ToString();
-                    evt.url = post.Shortlink;
-                    
-                    rposts.Add(evt);
-                }
-            }
-=======
                     evt.title = post[i].title.ToString();
                     evt.author = post[i].author.ToString();
                     evt.url = post[i].permalink;
@@ -693,20 +653,6 @@ namespace SlickUpdater
                 }
             }
              
-<<<<<<< HEAD
->>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
-=======
->>>>>>> parent of 9f93c92... Revert "Made events tab 1000000 times faster"
-=======
-                    evt.title = post[i].title.ToString();
-                    evt.author = post[i].author.ToString();
-                    evt.url = post[i].permalink;
-
-                    rposts.Add(evt);
-                }
-            }
-             */
->>>>>>> parent of fdb1bb1... W
         }
 
         void redditworker_Done(object sender, AsyncCompletedEventArgs e)
