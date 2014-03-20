@@ -35,7 +35,7 @@ namespace SlickUpdater
         string rawslickServVer;
         string[] slickServVer;
         string subreddit = "/r/ProjectMilSim";
-        public int downloadSpeed = 0;
+        public double downloadedBytes = 1;
         Stopwatch sw = new Stopwatch();
 
         public MainWindow()
@@ -244,7 +244,6 @@ namespace SlickUpdater
                 if (!worker.IsBusy) {
                     setBusy(true);
                     worker.RunWorkerAsync();
-                    sw.Start();
                 } else {
                     MessageBox.Show("Worker is Busy(You really must be dicking around or unlucky to make this pop up...)");
                 }
@@ -363,6 +362,7 @@ namespace SlickUpdater
         }
 
         private void worker_DoWork(object sender, DoWorkEventArgs e) {
+            sw.Start();
             var gameversion = ConfigManager.fetch("GameVER", "Game");
             if (gameversion == "ArmA3")
             {
@@ -375,7 +375,6 @@ namespace SlickUpdater
         }
 
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-            
             if (e.ProgressPercentage <= 100 && e.ProgressPercentage >= 0) {
                 indivProgress.Value = e.ProgressPercentage;
                 indivProgressTxt.Content = e.ProgressPercentage + "%";
@@ -389,12 +388,12 @@ namespace SlickUpdater
             } else if (e.ProgressPercentage == -1) {
                 MessageBox.Show(e.UserState as string);
             }
-            //int dlSpeed = (int)(downloadSpeed);
-            Title = "Slick Updater Beta @ " + (downloadSpeed / 1024d / sw.Elapsed.TotalSeconds).ToString("0.00") + "kb/s";
+            double downloadSpeed = downloadedBytes / 1048576 / sw.Elapsed.TotalMilliseconds * 1000;
+            Title = "Slick Updater Beta @ " + downloadSpeed.ToString("0.00#") + " Mb/s";
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            sw.Reset();
+            sw.Stop();
             a3UpdateCheck();
             indivProgress.Value = 0;
             midProgress.Value = 0;
@@ -403,7 +402,7 @@ namespace SlickUpdater
             indivProgressTxt.Content = "";
             totalProgressTxt.Content = "";
             Title = "Slick Updater Beta";
-            sw.Stop();
+            
         }
 
         private void helpButton_Click(object sender, RoutedEventArgs e) {
@@ -639,12 +638,6 @@ namespace SlickUpdater
             {
                 if (i.data.link_flair_text == "EVENT")
                 {
-                    /*
-                    events evt = new events();
-                    evt.title = post[i].title.ToString();
-                    evt.author = post[i].author.ToString();
-                    evt.url = post[i].permalink;
-                    */
                     events evt = new events();
                     evt.title = i.data.title;
                     evt.author = i.data.author;
