@@ -26,6 +26,28 @@ namespace SlickUpdater
                 return line;
             }
         }
+        //ArmA2 regcheck(Operation Arrowhead)
+        public static string arma2RegCheck()
+        {
+            string line = ConfigManager.fetch("ArmA2", "path");
+            if (line == "")
+            {
+                String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Bohemia Interactive\ArmA 2 OA\BattlEye", "MAIN", null);
+                if (value != null)
+                {
+                    ConfigManager.write("ArmA2", "path", value);
+                    return value;
+                }
+                else
+                {
+                    return line;
+                }
+            }
+            else
+            {
+                return line;
+            }
+        }
         public static string ts3RegCheck() {
             string line = ConfigManager.fetch("ArmA3", "ts3Dir");
             if (line == "") {

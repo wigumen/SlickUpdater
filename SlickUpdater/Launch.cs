@@ -62,6 +62,71 @@ namespace SlickUpdater {
             Process.Start(arma3Path, args);
             logIt.addData("Launched Arma 3 with " + args);
         }
+        //added ArmA2 OA launcher
+        static public void a2Launch(bool connectToServer, string server)
+        {
+            string arma2Path = regcheck.arma2RegCheck() + "\\ArmA2OA.exe";
+            string world = ConfigManager.fetch("ArmA2", "world");
+            string customParams = ConfigManager.fetch("ArmA2", "customParameters");
+            string mods = modlister();
+
+            string args = "";
+            if (ConfigManager.fetch("ArmA2", "window") == "true")
+            {
+                args += " -window";
+            }
+            if (ConfigManager.fetch("ArmA2", "nosplash") == "true")
+            {
+                args += " -nosplash";
+            }
+            if (ConfigManager.fetch("ArmA2", "skipIntro") == "true")
+            {
+                args += " -skipIntro";
+            }
+            if (ConfigManager.fetch("ArmA2", "noLogs") == "true")
+            {
+                args += " -noLogs";
+            }
+            if (ConfigManager.fetch("ArmA2", "noPause") == "true")
+            {
+                args += " -noPause";
+            }
+            if (ConfigManager.fetch("ArmA2", "showScriptErrors") == "true")
+            {
+                args += " -showScriptErrors";
+            }
+            if (connectToServer == true)
+            {
+                if (server == "PA Repo")
+                {
+                    // insert ArmA 2 OA server here!!!! !!! 
+                    args += " -port=2302 -connect=216.155.136.19 -password=PA";
+                }
+            }
+            if (world != "")
+            {
+                if (world == "demwaffels")
+                {
+                    System.Diagnostics.Process.Start("http://www.youtube.com/watch?v=8W5WdS7q3ns");
+                    return;
+                }
+                else
+                {
+                    args += " -world=" + world;
+                }
+            }
+            if (customParams != "")
+            {
+                args += " " + customParams;
+            }
+            if (mods != "")
+            {
+                args += " -mod=" + mods;
+            }
+
+            Process.Start(arma2Path, args);
+            logIt.addData("Launched Arma 2 with " + args);
+        }
         static private string modlister() {
             string modlist = "";
             foreach (Mod item in WindowManager.mainWindow.a3ModList.Items) {
