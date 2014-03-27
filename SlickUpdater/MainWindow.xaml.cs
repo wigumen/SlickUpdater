@@ -94,68 +94,14 @@ namespace SlickUpdater
             redditWorker.RunWorkerCompleted += redditworker_Done;
 
             WindowManager.SetWnd(this);
-
-            //Test if config is up to date
-            if (File.Exists("config.xml"))
-            {
-                XDocument testdoc = XDocument.Load("config.xml");
-                if (testdoc.Element("SlickUpdater").Element("ArmA3").Element("repourl") == null)
-                {
-                    File.Delete("config.xml");
-                }
-            }
-            //Grenerate config xml
-            if (!File.Exists("config.xml"))
-            {
-                MessageBox.Show("Hello! This seems to be the first time you launch SlickUpdater so make sure your ArmA 3 and ts3 path is set correctly in options. Have a nice day!", "Welcome");
-                XDocument doc = new XDocument(
-                    new XComment("Slick Updater config.xml File!"),
-                    new XElement("SlickUpdater",
-                        new XElement("ArmA3",
-                            new XElement("path", ""),
-                            new XElement("window", "false"),
-                            new XElement("nosplash", "true"),
-                            new XElement("skipIntro", "true"),
-                            new XElement("noLogs", "false"),
-                            new XElement("noPause", "true"),
-                            new XElement("showScriptErrors", "false"),
-                            new XElement("world", ""),
-                            new XElement("customParameters", ""),
-                            new XElement("ts3Dir", ""),
-                            new XElement("repourl", "http://projectawesomemodhost.com/beta/repo/"),
-                            new XElement("currentrepo", "PA Repo")),
-                    // add ArmA2 configs
-                        new XElement("ArmA2",
-                            new XElement("path", ""),
-                            new XElement("window", "false"),
-                            new XElement("nosplash", "true"),
-                            new XElement("skipIntro", "true"),
-                            new XElement("noLogs", "false"),
-                            new XElement("noPause", "true"),
-                            new XElement("showScriptErrors", "false"),
-                            new XElement("world", ""),
-                            new XElement("customParameters", ""),
-                            new XElement("ts3Dir", ""),
-                            new XElement("repourl", ""),
-                            new XElement("currentrepo", "PA Repo")),
-                    // add game version config (eg. ArmA3 or ArmA2)
-                        new XElement("GameVER",
-                            new XElement("Game", "ArmA3")),
-                        new XElement("repoGen",
-                            new XElement("inputDir", ""),
-                            new XElement("outputDir", "")),
-                        new XElement("Client",
-                            new XElement("FirstTimeLaunch", "true"))));
-                doc.Save("config.xml");
-            }
             //Check if the user if a PA user or a TEST user
-            var gameversion = ConfigManager.fetch("GameVER", "Game");
+            var gameversion = Properties.Settings.Default.gameversion;
             if (gameversion == "ArmA3")
             {
                 a3DirText.Text = regcheck.arma3RegCheck();
                 ts3DirText.Text = regcheck.ts3RegCheck();
-                menuButton.Content = ConfigManager.fetch("ArmA3", "currentrepo");
-                var subredd = ConfigManager.fetch("ArmA3", "currentrepo");
+                menuButton.Content = Properties.Settings.Default.A3repo;
+                var subredd = Properties.Settings.Default.A3repo;
                 if (subredd == "PA Repo")
                 {
                     subreddit = "/r/ProjectMilSim";
@@ -168,7 +114,7 @@ namespace SlickUpdater
             }
             else
             {
-                var subredd = ConfigManager.fetch("ArmA2", "currentrepo");
+                var subredd = Properties.Settings.Default.A2repo;
                 if (subredd == "PA ArmA 2 Repo")
                 {
                     subreddit = "/r/ProjectMilSim";
@@ -208,7 +154,7 @@ namespace SlickUpdater
         }
         // worker runs the updateManager, checks game version using <GameVER><Game>
         void checkWorker_DoWork(object sender, DoWorkEventArgs e) {
-            var gameversion = ConfigManager.fetch("GameVER", "Game");
+            var gameversion = Properties.Settings.Default.gameversion;
             if (gameversion == "ArmA3")
             {
                 
@@ -238,7 +184,7 @@ namespace SlickUpdater
             }
         }
         private void onArma3Clicked(object sender, RoutedEventArgs e) {
-            var gameversion = ConfigManager.fetch("GameVER", "Game");
+            var gameversion = Properties.Settings.Default.gameversion;
             if (arma3Button.Content as string == "Update ArmA 3" || arma3Button.Content as string == "Update ArmA 2")
             {
                 if (!worker.IsBusy) {
@@ -299,12 +245,12 @@ namespace SlickUpdater
         }
 
         private void a3DirText_TextChanged(object sender, TextChangedEventArgs e) {
-            ConfigManager.write("ArmA3", "path", a3DirText.Text);
+            Properties.Settings.Default.path = a3DirText.Text;
         }
 
         private void a3Ts3Text_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ConfigManager.write("ArmA3", "ts3Dir", ts3DirText.Text);
+            Properties.Settings.Default.ts3Dir = ts3DirText.Text;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e) {
@@ -363,7 +309,7 @@ namespace SlickUpdater
 
         private void worker_DoWork(object sender, DoWorkEventArgs e) {
             sw.Start();
-            var gameversion = ConfigManager.fetch("GameVER", "Game");
+            var gameversion = Properties.Settings.Default.gameversion;
             if (gameversion == "ArmA3")
             {
                 a3UpdateManager.a3Update();
@@ -419,7 +365,7 @@ namespace SlickUpdater
 
         private void forceToggle(object sender, RoutedEventArgs e)
         {
-            var currepourl = ConfigManager.fetch("ArmA3", "repourl");
+            var currepourl = Properties.Settings.Default.A3repourl;
             string[] modlist = downloader.webReadLines(currepourl + "modlist.cfg");
             MessageBoxResult result = MessageBox.Show("This will delete your mods and redownload them are you sure?", "You 100% sure?", MessageBoxButton.YesNo);
             switch (result)
@@ -479,8 +425,16 @@ namespace SlickUpdater
 
         private void LaunchAndJoin(object sender, RoutedEventArgs e)
         {
-            var server = ConfigManager.fetch("ArmA3", "currentrepo");
-            Launch.a3Launch(true, server);
+            var gameversion = Properties.Settings.Default.gameversion;
+            if (gameversion == "ArmA3")
+            {
+                var server = Properties.Settings.Default.A3repo;
+                Launch.a3Launch(true, server);
+            }
+            else
+            {
+                Launch.a2Launch(true, "PA Repo");
+            }
         }
         bool showRepo = false;
         private void showRepos(object sender, RoutedEventArgs e)
@@ -505,9 +459,9 @@ namespace SlickUpdater
             {
                 menuButton.Content = obj.Header;
                 menuAnimation(140, 0);
-                ConfigManager.write("ArmA3", "repourl", slickServVer[2]);
-                ConfigManager.write("ArmA3", "currentrepo", obj.Header.ToString());
-                ConfigManager.write("GameVER", "Game", "ArmA3");
+                Properties.Settings.Default.A3repourl = slickServVer[2];
+                Properties.Settings.Default.A3repo = obj.Header.ToString();
+                Properties.Settings.Default.gameversion = "ArmA3";
                 joinButton.Content = "Join PA server";
                 subreddit = "/r/ProjectMilSim";
             }
@@ -515,9 +469,9 @@ namespace SlickUpdater
             {
                 menuButton.Content = obj.Header;
                 menuAnimation(140, 0);
-                ConfigManager.write("ArmA3", "repourl", slickServVer[3]);
-                ConfigManager.write("ArmA3", "currentrepo", obj.Header.ToString());
-                ConfigManager.write("GameVER", "Game", "ArmA3");
+                Properties.Settings.Default.A3repourl = slickServVer[3];
+                Properties.Settings.Default.A3repo = obj.Header.ToString();
+                Properties.Settings.Default.gameversion = "ArmA3";
                 joinButton.Content = "Join TEST server";
                 subreddit = "/r/TestOutfit";
             }
@@ -528,8 +482,8 @@ namespace SlickUpdater
                     MessageBox.Show("This repo has not yet been implemented, setting you to PA repo");
                     menuButton.Content = "PA Repo";
                     menuAnimation(140, 0);
-                    ConfigManager.write("ArmA3", "repourl", slickServVer[2]);
-                    ConfigManager.write("ArmA3", "currentrepo", obj.Header.ToString());
+                    Properties.Settings.Default.A3repourl = slickServVer[2];
+                    Properties.Settings.Default.A3repo = obj.Header.ToString();
                     joinButton.Content = "Join PA server";
                     subreddit = "/r/ProjectMilSim";
                 }
@@ -537,8 +491,8 @@ namespace SlickUpdater
                 {
                     menuButton.Content = obj.Header;
                     menuAnimation(140, 0);
-                    ConfigManager.write("ArmA3", "repourl", slickServVer[4]);
-                    ConfigManager.write("ArmA3", "currentrepo", obj.Header.ToString());
+                    Properties.Settings.Default.A3repourl =  slickServVer[4];
+                    Properties.Settings.Default.A3repo = obj.Header.ToString();
                     joinButton.Content = "Join PA server";
                     subreddit = "/r/ProjectMilSim";
                 }
@@ -547,9 +501,9 @@ namespace SlickUpdater
             {
                 menuButton.Content = obj.Header;
                 menuAnimation(140, 0);
-                ConfigManager.write("ArmA2", "repourl", slickServVer[5]);
-                ConfigManager.write("ArmA2", "currentrepo", obj.Header.ToString());
-                ConfigManager.write("GameVER", "Game", "ArmA2");
+                Properties.Settings.Default.A2repo = slickServVer[5];
+                Properties.Settings.Default.A2current = obj.Header.ToString();
+                Properties.Settings.Default.gameversion = "ArmA2";
                 joinButton.Content = "Join PA ArmA 2 server";
                 subreddit = "/r/ProjectMilsim";
             }
@@ -670,7 +624,10 @@ namespace SlickUpdater
             Button button = sender as Button;
             System.Diagnostics.Process.Start(button.Tag.ToString());
         }
-
+        void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Properties.Settings.Default.Save();
+        }
     }
     public class Mod {
         public ImageSource status { get; set; }

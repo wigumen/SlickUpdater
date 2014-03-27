@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Properties="clr-namespace:SlickUpdater.Properties" xmlns:local="clr-namespace:SlickUpdater" x:Name="mainWindow" mc:Ignorable="d" x:Class="SlickUpdater.MainWindow"
+        Closing="Window_Closing"
         Title="Slick Updater Beta" Height="350" Width="550" ResizeMode="CanMinimize" Loaded="MainWindow_Loaded" Background="White">
     <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="322" Margin="0,0,-4,-3" VerticalAlignment="Top" Width="550" Background="White">
         <TabItem Header="Arma 3">
