@@ -27,7 +27,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="gameversion" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">ArmA3</Value>
     </Setting>
     <Setting Name="A2repo" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -36,6 +36,12 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="A3repo" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PA repo</Value>
+    </Setting>
+    <Setting Name="A3repourl" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="A2current" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

@@ -157,13 +157,37 @@ namespace SlickUpdater.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("PA repo")]
         public string A3repo {
             get {
                 return ((string)(this["A3repo"]));
             }
             set {
                 this["A3repo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string A3repourl {
+            get {
+                return ((string)(this["A3repourl"]));
+            }
+            set {
+                this["A3repourl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string A2current {
+            get {
+                return ((string)(this["A2current"]));
+            }
+            set {
+                this["A2current"] = value;
             }
         }
     }
