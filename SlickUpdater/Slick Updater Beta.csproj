@@ -118,7 +118,6 @@
     <Compile Include="Arma3LaunchOptionsDialogue.xaml.cs">
       <DependentUpon>Arma3LaunchOptionsDialogue.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConfigManager.cs" />
     <Compile Include="a2UpdateManager.cs" />
     <Compile Include="downloader.cs" />
     <Compile Include="DragAndDrop.cs" />
@@ -129,6 +128,11 @@
     <Compile Include="logIt.cs" />
     <Compile Include="newRepo.xaml.cs">
       <DependentUpon>newRepo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="reddit.cs" />
     <Compile Include="regcheck.cs" />
@@ -201,11 +205,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -216,6 +215,7 @@
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>

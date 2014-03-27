@@ -12,12 +12,13 @@ namespace SlickUpdater
     {
         public static string arma3RegCheck()
         {
-            string line = ConfigManager.fetch("ArmA3", "path");
+            string line = Properties.Settings.Default.A3path;
             if (line == "")
             {
                 String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Bohemia Interactive\Arma 3", "MAIN", null);
                 if (value != null) {
-                    ConfigManager.write("ArmA3", "path", value);
+                    Properties.Settings.Default.A3path = value;
+                    //ConfigManager.write("ArmA3", "path", value);
                     return value;
                 } else {
                     return line;
@@ -29,13 +30,14 @@ namespace SlickUpdater
         //ArmA2 regcheck(Operation Arrowhead)
         public static string arma2RegCheck()
         {
-            string line = ConfigManager.fetch("ArmA2", "path");
+            string line = Properties.Settings.Default.A2path;
             if (line == "")
             {
                 String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Bohemia Interactive\ArmA 2 OA\BattlEye", "MAIN", null);
                 if (value != null)
                 {
-                    ConfigManager.write("ArmA2", "path", value);
+                    Properties.Settings.Default.A2path = value;
+                    //ConfigManager.write("ArmA2", "path", value);
                     return value;
                 }
                 else
@@ -49,7 +51,7 @@ namespace SlickUpdater
             }
         }
         public static string ts3RegCheck() {
-            string line = ConfigManager.fetch("ArmA3", "ts3Dir");
+            string line = Properties.Settings.Default.ts3Dir;
             if (line == "") {
                 String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Classes\ts3file\shell\open\command", null, null);
                 if (value != null) {
@@ -63,7 +65,8 @@ namespace SlickUpdater
                         }
                     }
 
-                    ConfigManager.write("ArmA3", "ts3Dir", value);
+                    //ConfigManager.write("ArmA3", "ts3Dir", value);
+                    Properties.Settings.Default.ts3Dir = value;
                     return value;
                 } else {
                     return line;
