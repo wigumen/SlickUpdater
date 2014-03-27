@@ -11,7 +11,7 @@
     <Setting Name="window" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="nosplash" Type="System.String" Scope="User">
+    <Setting Name="nosplash" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="skipIntro" Type="System.Boolean" Scope="User">
@@ -42,6 +42,24 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="A2current" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="inputDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="outputDir" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="showScriptErrors" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="world" Type="System.String" Scope="User">
+      <Value Profile="(Default)">empty</Value>
+    </Setting>
+    <Setting Name="customParams" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="A3path" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

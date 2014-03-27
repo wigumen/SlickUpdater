@@ -29,8 +29,8 @@ namespace SlickUpdater {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            string input = ConfigManager.fetch("repoGen", "inputDir");
-            string output = ConfigManager.fetch("repoGen", "outputDir");
+            string input = Properties.Settings.Default.inputDir;
+            string output = Properties.Settings.Default.outputDir;
             
             //If configfile is blank make input arma 3 path, else make input from config file.
             if (input == "") {
@@ -53,11 +53,13 @@ namespace SlickUpdater {
         }
 
         private void inputDir_textBox_TextChanged(object sender, TextChangedEventArgs e) {
-            ConfigManager.write("repoGen", "inputDir", inputDir_textBox.Text);
+            Properties.Settings.Default.inputDir = inputDir_textBox.Text;
+            //ConfigManager.write("repoGen", "inputDir", inputDir_textBox.Text);
         }
 
         private void outputDir_textBox_TextChanged(object sender, TextChangedEventArgs e) {
-            ConfigManager.write("repoGen", "outputDir", outputDir_textBox.Text);
+            Properties.Settings.Default.outputDir = outputDir_textBox.Text;
+            //ConfigManager.write("repoGen", "outputDir", outputDir_textBox.Text);
         }
 
         private void Window_Closed(object sender, EventArgs e) {
