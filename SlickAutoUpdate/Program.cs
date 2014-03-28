@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace SlickAutoUpdate
 {
@@ -13,9 +14,12 @@ namespace SlickAutoUpdate
     {
         static string[] localversion;
         static WebClient client = new WebClient();
-        static string version;
+        static versionfile slickversion;
         static void Main(string[] args)
         {
+            string rawSlickJson = reader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
+            slickversion = JsonConvert.DeserializeObject<versionfile>(rawSlickJson);
+
             if (File.Exists(Directory.GetCurrentDirectory() + "\\" + "localversion"))
             {
                 localversion = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\" + "localversion");
@@ -27,24 +31,22 @@ namespace SlickAutoUpdate
             
             try
             {
-                version = reader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
             } catch (WebException e) {
                 Console.WriteLine("ERROR: Could not locate web server");
             }
-            if (version != "")
+            if (rawSlickJson != null)
             {
-                string[] versions = version.Split('%');
 
 
-                if (versions[0] == localversion[0])
+                if (slickversion.version == localversion[0])
                 {
                     Console.WriteLine("All is up to date so why are you launching this again?");
                 }
 
-                if (versions[0] != localversion[0])
+                if (slickversion.version!= localversion[0])
                 {
                     Console.WriteLine("Found a new version of slick updater downloading now...");
-                    client.DownloadFile(versions[1], "newSlickVersion.zip");
+                    client.DownloadFile(slickversion.download, "newSlickVersion.zip");
                     Console.WriteLine("Ok downloaded the new version just have to extract it now");
                     SlickUpdater.Unzippy.extract("newSlickVersion.zip", Directory.GetCurrentDirectory());
                     File.Delete("newSlickVersion.zip");
