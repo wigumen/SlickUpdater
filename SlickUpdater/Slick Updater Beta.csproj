@@ -119,6 +119,7 @@
       <DependentUpon>Arma3LaunchOptionsDialogue.xaml</DependentUpon>
     </Compile>
     <Compile Include="a2UpdateManager.cs" />
+    <Compile Include="config.cs" />
     <Compile Include="downloader.cs" />
     <Compile Include="DragAndDrop.cs" />
     <Compile Include="Launch.cs" />

@@ -30,10 +30,11 @@ namespace SlickUpdater
         public BackgroundWorker checkWorker;
         public BackgroundWorker redditWorker;
         public logIt logThread;
-        public string slickVersion = "1.2.4";
+        public string slickVersion = "1.3";
         List<MenuItem> items = new List<MenuItem>();
         string rawslickServVer;
         string[] slickServVer;
+        versionfile slickversion;
         string subreddit = "/r/ProjectMilSim";
         public double downloadedBytes = 1;
         Stopwatch sw = new Stopwatch();
@@ -41,6 +42,8 @@ namespace SlickUpdater
         public MainWindow()
         {
             InitializeComponent();
+            var rawSlickJson = downloader.webRead("arma.projectawesome.net/beta/repo/slickversion.json");
+            slickversion = JsonConvert.DeserializeObject<versionfile>(rawSlickJson);
             //First launch message!
             if(Properties.Settings.Default.firstLaunch == true)
             {
@@ -66,7 +69,7 @@ namespace SlickUpdater
             pa.Tag = "http://projectawesomemodhost.com/beta/repo/";
             pa.Header = "PA Repo";
             items.Add(pa);
-            if (slickServVer[0] != slickVersion)
+            if (slickversion.version != slickVersion)
             {
                 MessageBoxResult result = MessageBox.Show("There seems to be a new version of slickupdater available, do you wanna update it it?", "New Update", MessageBoxButton.YesNo);
                 switch (result)
