@@ -41,6 +41,13 @@ namespace SlickUpdater
         public MainWindow()
         {
             InitializeComponent();
+            //First launch message!
+            if(Properties.Settings.Default.firstLaunch == true)
+            {
+                MessageBox.Show("Hello! This seems to be the first time you launch SlickUpdater so make sure your arma 3 and ts3 path is set correctly in options. Have a nice day!", "Welcome");
+                Properties.Settings.Default.A3repourl = slickServVer[2];
+                Properties.Settings.Default.firstLaunch = false;
+            }
             logThread = new logIt();
             repoHide();
             FileStream fs = new FileStream("localversion", FileMode.Create, FileAccess.Write);
@@ -622,7 +629,7 @@ namespace SlickUpdater
         void newEvent_Click(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
-            System.Diagnostics.Process.Start(button.Tag.ToString());
+            System.Diagnostics.Process.Start("http://www.reddit.com" + button.Tag.ToString());
         }
         void Window_Closing(object sender, CancelEventArgs e)
         {
