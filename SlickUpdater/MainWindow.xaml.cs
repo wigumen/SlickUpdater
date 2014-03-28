@@ -41,9 +41,9 @@ namespace SlickUpdater
 
         public MainWindow()
         {
-            InitializeComponent();
-            var rawSlickJson = downloader.webRead("arma.projectawesome.net/beta/repo/slickversion.json");
+            string rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
             slickversion = JsonConvert.DeserializeObject<versionfile>(rawSlickJson);
+            InitializeComponent();
             //First launch message!
             if(Properties.Settings.Default.firstLaunch == true)
             {
@@ -131,6 +131,7 @@ namespace SlickUpdater
                     joinButton.Content = "Join PA ArmA 2 server";
                 }
             }
+
         }
         //Do some work
         void checkWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
