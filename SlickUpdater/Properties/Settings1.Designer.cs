@@ -157,7 +157,7 @@ namespace SlickUpdater.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("PA repo")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string A3repo {
             get {
                 return ((string)(this["A3repo"]));

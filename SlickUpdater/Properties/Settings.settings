@@ -36,7 +36,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="A3repo" Type="System.String" Scope="User">
-      <Value Profile="(Default)">PA repo</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="A3repourl" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
