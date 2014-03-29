@@ -32,9 +32,9 @@ namespace SlickUpdater
         public logIt logThread;
         public string slickVersion = "1.3";
         List<MenuItem> items = new List<MenuItem>();
-        string rawslickServVer;
-        string[] slickServVer;
-        versionfile slickversion;
+        //string rawslickServVer;
+        //string[] slickServVer;
+        public versionfile slickversion;
         string subreddit = "/r/ProjectMilSim";
         public double downloadedBytes = 1;
         Stopwatch sw = new Stopwatch();
@@ -48,7 +48,6 @@ namespace SlickUpdater
             if(Properties.Settings.Default.firstLaunch == true)
             {
                 MessageBox.Show("Hello! This seems to be the first time you launch SlickUpdater so make sure your arma 3 and ts3 path is set correctly in options. Have a nice day!", "Welcome");
-                Properties.Settings.Default.A3repourl = slickServVer[2];
                 Properties.Settings.Default.firstLaunch = false;
             }
             logThread = new logIt();
@@ -57,14 +56,10 @@ namespace SlickUpdater
             StreamWriter sw = new StreamWriter(fs);
             sw.WriteLine(slickVersion);
             sw.Close();
-            menuAnimation(140, 0);
-            showRepo = false;
-            rawslickServVer = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
 #if DEBUG
             //local debug server for A2 
             rawslickServVer = downloader.webRead("http://localhost/repo/slickupdater/slickversion");
 #endif
-            slickServVer = rawslickServVer.Split('%');
             MenuItem pa = new MenuItem();
             pa.Tag = "http://projectawesomemodhost.com/beta/repo/";
             pa.Header = "PA Repo";
@@ -83,7 +78,7 @@ namespace SlickUpdater
                         break;
                 }
             }
-
+            initRepos();
             // Initialize Update Worker
             worker = new BackgroundWorker();
             worker.DoWork += worker_DoWork;
@@ -104,31 +99,28 @@ namespace SlickUpdater
             redditWorker.RunWorkerCompleted += redditworker_Done;
 
             WindowManager.SetWnd(this);
+
             //Check if the user if a PA user or a TEST user
-            var gameversion = Properties.Settings.Default.gameversion;
-            if (gameversion == "ArmA3")
+            if (repomenu.SelectedIndex != -1)
             {
-                a3DirText.Text = regcheck.arma3RegCheck();
-                ts3DirText.Text = regcheck.ts3RegCheck();
-                menuButton.Content = Properties.Settings.Default.A3repo;
-                var subredd = Properties.Settings.Default.A3repo;
-                if (subredd == "PA Repo")
+                var gameversion = Properties.Settings.Default.gameversion;
+                if (gameversion == "ArmA3")
                 {
-                    subreddit = "/r/ProjectMilSim";
-                    joinButton.Content = "Join PA server";
-                }else if (subredd == "Test Outfit Repo")
-                {
-                    subreddit = "/r/testoutfit";
-                    joinButton.Content = "Join TEST server";
+                    a3DirText.Text = regcheck.arma3RegCheck();
+                    ts3DirText.Text = regcheck.ts3RegCheck();
+                    //menuButton.Content = Properties.Settings.Default.A3repo;
+                    subreddit = slickversion.repos[repomenu.SelectedIndex].subreddit;
+                    joinButton.Content = slickversion.repos[repomenu.SelectedIndex].joinText;
+
                 }
-            }
-            else
-            {
-                var subredd = Properties.Settings.Default.A2repo;
-                if (subredd == "PA ArmA 2 Repo")
+                else if(gameversion == "ArmA2")
                 {
-                    subreddit = "/r/ProjectMilSim";
-                    joinButton.Content = "Join PA ArmA 2 server";
+                    var subredd = Properties.Settings.Default.A2repo;
+                    if (subredd == "PA ArmA 2 Repo")
+                    {
+                        subreddit = "/r/ProjectMilSim";
+                        joinButton.Content = "Join PA ArmA 2 server";
+                    }
                 }
             }
 
@@ -186,12 +178,12 @@ namespace SlickUpdater
                 a3RefreshButton.IsEnabled = false;
                 arma3Button.IsEnabled = false;
                 joinButton.IsEnabled = false;
-                menuButton.IsEnabled = false;
+                repomenu.IsEnabled = false;
             } else if (!isBusy) {
                 a3RefreshButton.IsEnabled = true;
                 arma3Button.IsEnabled = true;
                 joinButton.IsEnabled = true;
-                menuButton.IsEnabled = true;
+                repomenu.IsEnabled = true;
             }
         }
         private void onArma3Clicked(object sender, RoutedEventArgs e) {
@@ -207,11 +199,11 @@ namespace SlickUpdater
             }
             else if (gameversion == "ArmA3")
             {
-                Launch.a3Launch(false, "");
+                Launch.a3Launch(false, null);
             }
             else
             {
-                Launch.a2Launch(false, "");
+                Launch.a2Launch(false, null);
             }
         }
 
@@ -426,7 +418,7 @@ namespace SlickUpdater
         private void nyanEgg(object sender, MouseButtonEventArgs e)
         {
             nyanClick++;
-            if (nyanClick > 14)
+            if (nyanClick >= 15)
             {
                 suIcon.Visibility = Visibility.Hidden;
                 nyan.Visibility = Visibility.Visible;
@@ -439,7 +431,7 @@ namespace SlickUpdater
             var gameversion = Properties.Settings.Default.gameversion;
             if (gameversion == "ArmA3")
             {
-                var server = Properties.Settings.Default.A3repo;
+                var server = slickversion.repos[repomenu.SelectedIndex].server;
                 Launch.a3Launch(true, server);
             }
             else
@@ -447,126 +439,45 @@ namespace SlickUpdater
                 Launch.a2Launch(true, "PA Repo");
             }
         }
-        bool showRepo = false;
-        private void showRepos(object sender, RoutedEventArgs e)
-        {
-            if (showRepo == false)
-            {
-                menuAnimation(0, 140);
-                //repomenu.Visibility = Visibility.Visible; 
-                showRepo = true;
-            }
-            else {
-                menuAnimation(140, 0);
-                showRepo = false;
-            }
 
+        private void initRepos()
+        {
+            //List<ComboBoxItem> repos = new List<ComboBoxItem>();
+            if(Properties.Settings.Default.A3repo != "")
+            {
+                repomenu.SelectedIndex = int.Parse(Properties.Settings.Default.A3repo);
+            }
+            foreach(Repos repo in slickversion.repos)
+            {
+                ComboBoxItem newItem = new ComboBoxItem();
+                newItem.Tag = repo.url;
+                newItem.Content = repo.name;
+                newItem.MouseDown += setActiveRepo;
+                repomenu.Items.Add(newItem);
+            }
         }
 
         private void setActiveRepo(object sender, RoutedEventArgs e)
         {
-            MenuItem obj = sender as MenuItem;
-            if (obj.Tag.ToString() == "pa")
+            //MessageBox.Show("IT WORKS OMG" + "     " + repomenu.SelectedIndex);
+            if (slickversion.repos[repomenu.SelectedIndex].url == "not")
             {
-                menuButton.Content = obj.Header;
-                menuAnimation(140, 0);
-                Properties.Settings.Default.A3repourl = slickServVer[2];
-                Properties.Settings.Default.A3repo = obj.Header.ToString();
-                Properties.Settings.Default.gameversion = "ArmA3";
-                joinButton.Content = "Join PA server";
-                subreddit = "/r/ProjectMilSim";
+                MessageBox.Show("This repo has not yet been implemented. Setting you to default");
+                repomenu.SelectedIndex = 0;
+                Properties.Settings.Default.A3repo = "" + 0;
+                Properties.Settings.Default.A3repourl = slickversion.repos[0].url;
             }
-            if (obj.Tag.ToString() == "test")
+            else
             {
-                menuButton.Content = obj.Header;
-                menuAnimation(140, 0);
-                Properties.Settings.Default.A3repourl = slickServVer[3];
-                Properties.Settings.Default.A3repo = obj.Header.ToString();
-                Properties.Settings.Default.gameversion = "ArmA3";
-                joinButton.Content = "Join TEST server";
-                subreddit = "/r/TestOutfit";
+                Properties.Settings.Default.A3repo = "" + repomenu.SelectedIndex;
+                Properties.Settings.Default.A3repourl = slickversion.repos[repomenu.SelectedIndex].url;
             }
-            if (obj.Tag.ToString() == "paExtra")
-            {
-                if (slickServVer[4] == "not")
+
+            if (repomenu.IsDropDownOpen == true)
                 {
-                    MessageBox.Show("This repo has not yet been implemented, setting you to PA repo");
-                    menuButton.Content = "PA Repo";
-                    menuAnimation(140, 0);
-                    Properties.Settings.Default.A3repourl = slickServVer[2];
-                    Properties.Settings.Default.A3repo = obj.Header.ToString();
-                    joinButton.Content = "Join PA server";
-                    subreddit = "/r/ProjectMilSim";
-                }
-                else
-                {
-                    menuButton.Content = obj.Header;
-                    menuAnimation(140, 0);
-                    Properties.Settings.Default.A3repourl =  slickServVer[4];
-                    Properties.Settings.Default.A3repo = obj.Header.ToString();
-                    joinButton.Content = "Join PA server";
-                    subreddit = "/r/ProjectMilSim";
-                }
-            }
-            if (obj.Tag.ToString() == "paarama2")
-            {
-                menuButton.Content = obj.Header;
-                menuAnimation(140, 0);
-                Properties.Settings.Default.A2repo = slickServVer[5];
-                Properties.Settings.Default.A2current = obj.Header.ToString();
-                Properties.Settings.Default.gameversion = "ArmA2";
-                joinButton.Content = "Join PA ArmA 2 server";
-                subreddit = "/r/ProjectMilsim";
-            }
-                showRepo = false;
-                if (!checkWorker.IsBusy)
-                {
-                    setBusy(true);
                     a3UpdateCheck();
                 }
-                else
-                {
-                    MessageBox.Show("checkWorker thread is currently busy...");
-                }
-        }
-
-        private void repoLostFocus(object sender, MouseButtonEventArgs e)
-        {
-            menuAnimation(140, 0);
-            showRepo = false;
-        }
-
-        void menuAnimation(int from, int to)
-        {
-            DoubleAnimation animation = new DoubleAnimation();
-
-            animation.From = from;
-            animation.To = to;
-            animation.Duration = new Duration(TimeSpan.FromSeconds(.3));
-            animation.AccelerationRatio = 0.3;
-            animation.DecelerationRatio = 0.3;
-
-            Storyboard storyboard = new Storyboard();
-
-            Storyboard.SetTarget(animation, repomenu);
-
-            Storyboard.SetTargetProperty(animation,
-                new PropertyPath("Height", repomenu));
-            storyboard.Children.Add(animation);
-
-
-            this.BeginStoryboard(storyboard);
-            //repomenu.Visibility = Visibility.Hidden; 
-            showRepo = false;
-        }
-        
-        void addNewMenuItem(string repoPath, string name)
-        {
-            MenuItem newItem = new MenuItem();
-            newItem.Header = name;
-            newItem.Tag = repoPath;
-            //newItem.Click += new EventHandler(this.setActiveRepo);
-            items.Add(newItem);
+            
         }
 
         private void refreshEvents(object sender, RoutedEventArgs e)

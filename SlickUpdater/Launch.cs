@@ -35,13 +35,9 @@ namespace SlickUpdater {
             }
             if (connectToServer == true)
             {
-                if (server == "PA Repo")
+                if (server != null)
                 {
-                    args += " -port=2302 -connect=arma.projectawesome.net -password=PA";
-                }
-                else if (server == "Test Outfit Repo")
-                {
-                    args += " -port=2302 -connect=arma.testoutfit.info -password=scott";
+                    args += " -port=2302 -connect=" + server + " -password=PA";
                 }
             }
             if (world != "") {

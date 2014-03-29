@@ -10,6 +10,9 @@ namespace SlickUpdater
     {
         public string name { get; set; }
         public string url { get; set; }
+        public string server { get; set; }
+        public string joinText { get; set; }
+        public string subreddit { get; set; }
     }
 
     public class versionfile

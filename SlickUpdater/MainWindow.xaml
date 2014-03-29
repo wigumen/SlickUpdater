@@ -1,9 +1,11 @@
 ﻿<Window
+    
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Properties="clr-namespace:SlickUpdater.Properties" xmlns:local="clr-namespace:SlickUpdater" x:Name="mainWindow" mc:Ignorable="d" x:Class="SlickUpdater.MainWindow"
         Closing="Window_Closing"
         Title="Slick Updater Beta" Height="350" Width="550" ResizeMode="CanMinimize" Loaded="MainWindow_Loaded" Background="White">
+        
     <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="322" Margin="0,0,-4,-3" VerticalAlignment="Top" Width="550" Background="White">
         <TabItem Header="Arma 3">
             <Grid Width="544" Margin="0,0,0,-3">
@@ -99,55 +101,8 @@
                 <Label Content="Force Update" HorizontalAlignment="Left" Margin="10,57,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="127"/>
                 <Button x:Name="forceButton" Content="" Grid.Column="2" HorizontalAlignment="Left" Margin="0,57,0,0" Grid.Row="1" VerticalAlignment="Top" Width="22" Height="22" Click="forceToggle"/>
                 <Label Content="Current Repo: " HorizontalAlignment="Left" Margin="10,82,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="25" Width="140" Visibility="Hidden"/>
-                <Button x:Name="menuButton" Content="PA Repo" Grid.Column="2" HorizontalAlignment="Left" Margin="0,82,0,0" Grid.Row="1" VerticalAlignment="Top" Width="160" Height="25" Click="showRepos" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Light"/>
-                <Menu x:Name="repomenu" Grid.Column="2" HorizontalAlignment="Left" Height="138" Margin="0,107,0,0" Grid.Row="1" VerticalAlignment="Top" Width="160">
-                    <Menu.Background>
-                        <ImageBrush ImageSource="Resources/mbg.png"/>
-                    </Menu.Background>
-                    <MenuItem x:Name="paRepo" Header="PA Repo" Width="160" Height="22" RenderTransformOrigin="0.5,0.5" Background="#FF5B5B5B" Click="setActiveRepo" Tag="pa">
-                        <MenuItem.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform Y="-59"/>
-                            </TransformGroup>
-                        </MenuItem.RenderTransform>
-                    </MenuItem>
-                    <MenuItem x:Name="testRepo" Width="160" Margin="0,59,0,57" RenderTransformOrigin="0.5,0.5" Header="Test Outfit Repo" Height="22" Click="setActiveRepo" Tag="test">
-                        <MenuItem.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform X="-160" Y="-14"/>
-                            </TransformGroup>
-                        </MenuItem.RenderTransform>
-                    </MenuItem>
-                    <MenuItem x:Name="paExtra" Width="160" Margin="-162,59,0,57" RenderTransformOrigin="0.5,0.5" Header="PA Extra Repo" Height="22" Click="setActiveRepo" Tag="paExtra">
-                        <MenuItem.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform X="-160" Y="-37"/>
-                            </TransformGroup>
-                        </MenuItem.RenderTransform>
-                    </MenuItem>
-                    <!-- ARMA2 REPO OPTION-->
-                    <MenuItem x:Name="parma2" Width="160" Margin="-161,125,0,-12" RenderTransformOrigin="0.5,0.5" Header="PA ArmA 2 Repo" Height="22" Click="setActiveRepo" Tag="paarama2">
-                        <MenuItem.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform X="-160" Y="-57"/>
-                            </TransformGroup>
-                        </MenuItem.RenderTransform>
-                    </MenuItem>
-
-                </Menu>
-                <Label Grid.ColumnSpan="2" Content="Repository:" HorizontalAlignment="Left" Margin="10,82,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="25"/>
+                <Label Grid.ColumnSpan="2" Content="Repository:" HorizontalAlignment="Left" Margin="10,84,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="23"/>
+                <ComboBox x:Name="repomenu" Grid.Column="2" HorizontalAlignment="Left" Margin="0,84,0,0" Grid.Row="1" VerticalAlignment="Top" Width="372" Height="23" SelectionChanged="setActiveRepo"/>
 
 
             </Grid>

@@ -17,7 +17,7 @@ namespace SlickUpdater {
         public static string arma3Path = regcheck.arma3RegCheck();
         static Queue<string> queue = new Queue<string>();
         static public bool isUpdateStarted;
-        static string url = "";
+        static string url = "http://arma.projectawesome.net/beta/repo";
         static string modlist = "modlist.cfg";
         public static bool a3UpdateComplete;
         static int updateProgress;
@@ -33,20 +33,21 @@ namespace SlickUpdater {
             string versionString;
             string version0String;
             string xmlLine = Properties.Settings.Default.A3repourl;
-            string slickVersion = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
+            versionfile slickversion = WindowManager.mainWindow.slickversion;
+            //string slickVersion = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
             /*
 #if DEBUG
             xmlLine = "http://localhost/repo/";
 #endif
              */
-            string[] parsedslickVersion = slickVersion.Split('%');
+            //string[] parsedslickVersion = slickVersion.Split('%');
             if (xmlLine != "")
             {
                 url = xmlLine;
             }else{
                 MessageBox.Show("Your repourl is not set. Go into settings and change it! Setting it to default!");
-                url = parsedslickVersion[2];
-                Properties.Settings.Default.A3repourl = parsedslickVersion[2];
+                url = slickversion.repos[0].url;
+                Properties.Settings.Default.A3repourl = slickversion.repos[0].url;
             }
             
 
