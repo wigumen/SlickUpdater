@@ -70,7 +70,7 @@ namespace SlickUpdater {
             } catch (WebException e) {
                 MessageBox.Show(e.Message);
             } catch (NotSupportedException) {
-                MessageBox.Show("Tell Slick He Fucked Up!", "A NotSupportedException occurred in the download method");
+                MessageBox.Show("Please report this bug.", "A NotSupportedException occurred in the download method");
             }
             while (!downloadFinished) { System.Threading.Thread.Sleep(20);  };
             logIt.addData("Downloaded " + filename);
