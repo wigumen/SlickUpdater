@@ -47,7 +47,7 @@ namespace SlickUpdater
             //First launch message!
             if(Properties.Settings.Default.firstLaunch == true)
             {
-                MessageBox.Show("Hello! This seems to be the first time you launch SlickUpdater so make sure your arma 3 and ts3 path is set correctly in options. Have a nice day!", "Welcome");
+                MessageBox.Show("Hello! This seems to be the first time you launch SlickUpdater, so make sure your Arma 3 and TS3 paths are set correctly in options. Have a nice day!", "Welcome!");
                 Properties.Settings.Default.firstLaunch = false;
             }
             logThread = new logIt();
@@ -169,7 +169,7 @@ namespace SlickUpdater
             }
             else
             {
-                MessageBox.Show("Game version dun goofed! Please report issue to wigumen");
+                MessageBox.Show("Error initializing game version! Please report issue to wigumen.");
             }
         }
 
@@ -194,7 +194,7 @@ namespace SlickUpdater
                     setBusy(true);
                     worker.RunWorkerAsync();
                 } else {
-                    MessageBox.Show("Worker is Busy(You really must be dicking around or unlucky to make this pop up...)");
+                    MessageBox.Show("Rare exception: Worker is Busy.");
                 }
             }
             else if (gameversion == "ArmA3")
@@ -370,11 +370,11 @@ namespace SlickUpdater
         {
             var currepourl = Properties.Settings.Default.A3repourl;
             string[] modlist = downloader.webReadLines(currepourl + "modlist.cfg");
-            MessageBoxResult result = MessageBox.Show("This will delete your mods and redownload them are you sure?", "You 100% sure?", MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show("This will delete your mods and redownload them. Are you sure?", "You 100% sure?", MessageBoxButton.YesNo);
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    string msg = "Removed mods";
+                    string msg = "Removed mods.";
                     forceButton.Content = msg;
                     forceButton.Width = 90;
                     string a3path = regcheck.arma3RegCheck();
