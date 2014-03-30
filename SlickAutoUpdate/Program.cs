@@ -40,17 +40,17 @@ namespace SlickAutoUpdate
 
                 if (slickversion.version == localversion[0])
                 {
-                    Console.WriteLine("All is up to date so why are you launching this again?");
+                    Console.WriteLine("SlickUpdater Already is up-to-date.");
                 }
 
                 if (slickversion.version!= localversion[0])
                 {
-                    Console.WriteLine("Found a new version of slick updater downloading now...");
+                    Console.WriteLine("Found a updated version of SlickUpdater, downloading now...");
                     client.DownloadFile(slickversion.download, "newSlickVersion.zip");
-                    Console.WriteLine("Ok downloaded the new version just have to extract it now");
+                    Console.WriteLine("Extracting download...");
                     SlickUpdater.Unzippy.extract("newSlickVersion.zip", Directory.GetCurrentDirectory());
                     File.Delete("newSlickVersion.zip");
-                    Console.WriteLine("Ok its all updated killing this thread in 3 secs");
+                    Console.WriteLine("Update succes, killing process...");
                 }
             }
             System.Threading.Thread.Sleep(3000);
