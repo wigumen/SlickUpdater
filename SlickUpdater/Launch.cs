@@ -41,10 +41,7 @@ namespace SlickUpdater {
                 }
             }
             if (world != "") {
-                if (world == "demwaffels") {
-                    System.Diagnostics.Process.Start("http://www.youtube.com/watch?v=8W5WdS7q3ns");
-                    return;
-                } else {
+                {
                     args += " -world=" + world;
                 }
             }
@@ -101,13 +98,7 @@ namespace SlickUpdater {
             }
             if (world != "")
             {
-                if (world == "demwaffels")
-                {
-                    System.Diagnostics.Process.Start("http://www.youtube.com/watch?v=8W5WdS7q3ns");
-                    return;
-                }
-                else
-                {
+                                {
                     args += " -world=" + world;
                 }
             }
