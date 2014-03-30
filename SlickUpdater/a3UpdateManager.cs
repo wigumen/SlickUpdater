@@ -45,7 +45,7 @@ namespace SlickUpdater {
             {
                 url = xmlLine;
             }else{
-                MessageBox.Show("Your repourl is not set. Go into settings and change it! Setting it to default!");
+                MessageBox.Show("Your repo-URL is not set. PLease go into settings and change it. Setting it to default for now.");
                 url = slickversion.repos[0].url;
                 Properties.Settings.Default.A3repourl = slickversion.repos[0].url;
             }
@@ -162,7 +162,7 @@ namespace SlickUpdater {
                             //a3Items.Add(new Mod() { status = modBrown, modName = mod });
                             //MessageBox.Show(mod + " is missing a version file.");
                             version0String = downloader.webRead(url + mod + "\\" + version0File);
-                            MessageBoxResult result = MessageBox.Show("SlickUpdater have detected that you have the folder " + modFolder + " if your 100% sure this is up to date you don't have to re-download. \n\nAre you sure this mod is up to date?", "Mod folder detacted", MessageBoxButton.YesNo);
+                            MessageBoxResult result = MessageBox.Show("SlickUpdater has detected that you have the folder " + modFolder + ", if you're 100% sure this is up to date, you don't have to re-download. \n\nAre you sure this mod is up to date?", "Mod folder detected", MessageBoxButton.YesNo);
                             switch (result)
                             {
                                 case MessageBoxResult.Yes:
@@ -283,7 +283,7 @@ namespace SlickUpdater {
                     {
                         try {
                             File.Copy(newPath, newPath.Replace(info.FullName, Properties.Settings.Default.ts3Dir + "\\plugins"), true);
-                            logIt.addData("Copied ACRE plugin to TS3 folder");
+                            logIt.addData("Copied ACRE plugin to TS3 folder.");
                         } catch (Exception e) {
                             WindowManager.mainWindow.worker.ReportProgress(-1, e.Message);
                             logIt.addData("Failed to copy ACRE plugin to TS3 folder. Error Message: " + e.Message);
