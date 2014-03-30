@@ -40,12 +40,12 @@ namespace SlickAutoUpdate
 
                 if (slickversion.version == localversion[0])
                 {
-                    Console.WriteLine("SlickUpdater Already is up-to-date.");
+                    Console.WriteLine("SlickUpdater already is up-to-date.");
                 }
 
                 if (slickversion.version!= localversion[0])
                 {
-                    Console.WriteLine("Found a updated version of SlickUpdater, downloading now...");
+                    Console.WriteLine("Found an updated version of SlickUpdater, downloading now...");
                     client.DownloadFile(slickversion.download, "newSlickVersion.zip");
                     Console.WriteLine("Extracting download...");
                     SlickUpdater.Unzippy.extract("newSlickVersion.zip", Directory.GetCurrentDirectory());
