@@ -546,6 +546,12 @@ namespace SlickUpdater
             Button button = sender as Button;
             System.Diagnostics.Process.Start("http://www.reddit.com" + button.Tag.ToString());
         }
+		//clock
+        private void Clock_Click(object sender, RoutedEventArgs e)
+        {
+            time dialogue = new time();
+            dialogue.Show();
+        }
         void Window_Closing(object sender, CancelEventArgs e)
         {
             Properties.Settings.Default.Save();

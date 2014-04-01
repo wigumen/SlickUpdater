@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Properties="clr-namespace:SlickUpdater.Properties" xmlns:local="clr-namespace:SlickUpdater" x:Name="mainWindow" mc:Ignorable="d" x:Class="SlickUpdater.MainWindow"
         Closing="Window_Closing"
         Title="Slick Updater Beta" Height="350" Width="550" ResizeMode="CanMinimize" Loaded="MainWindow_Loaded" Background="White">
-        
+
     <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="322" Margin="0,0,-4,-3" VerticalAlignment="Top" Width="550" Background="White">
         <TabItem Header="Arma 3">
             <Grid Width="544" Margin="0,0,0,-3">
@@ -103,6 +103,7 @@
                 <Label Content="Current Repo: " HorizontalAlignment="Left" Margin="10,82,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="25" Width="140" Visibility="Hidden"/>
                 <Label Grid.ColumnSpan="2" Content="Repository:" HorizontalAlignment="Left" Margin="10,84,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="23"/>
                 <ComboBox x:Name="repomenu" Grid.Column="2" HorizontalAlignment="Left" Margin="0,84,0,0" Grid.Row="1" VerticalAlignment="Top" Width="372" Height="23" SelectionChanged="setActiveRepo"/>
+                <Button Content="Clock" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,112,0,0" Click="Clock_Click" Grid.Row="1" Grid.ColumnSpan="2"/>
 
 
             </Grid>
