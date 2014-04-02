@@ -30,7 +30,7 @@ namespace SlickUpdater
         public BackgroundWorker checkWorker;
         public BackgroundWorker redditWorker;
         public logIt logThread;
-        public string slickVersion = "1.3";
+        public string slickVersion = "1.3.1";
         List<MenuItem> items = new List<MenuItem>();
         //string rawslickServVer;
         //string[] slickServVer;
@@ -38,6 +38,7 @@ namespace SlickUpdater
         string subreddit = "/r/ProjectMilSim";
         public double downloadedBytes = 1;
         Stopwatch sw = new Stopwatch();
+        string title = "Slick Updater Beta";
 
         public MainWindow()
         {
