@@ -103,7 +103,6 @@
                 <Label Content="Current Repo: " HorizontalAlignment="Left" Margin="10,82,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="25" Width="140" Visibility="Hidden"/>
                 <Label Grid.ColumnSpan="2" Content="Repository:" HorizontalAlignment="Left" Margin="10,84,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Height="23"/>
                 <ComboBox x:Name="repomenu" Grid.Column="2" HorizontalAlignment="Left" Margin="0,84,0,0" Grid.Row="1" VerticalAlignment="Top" Width="372" Height="23" SelectionChanged="setActiveRepo"/>
-                <Button Content="Clock" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,112,0,0" Click="Clock_Click" Grid.Row="1" Grid.ColumnSpan="2"/>
 
 
             </Grid>

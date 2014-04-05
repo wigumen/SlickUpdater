@@ -130,7 +130,6 @@
     <Compile Include="newRepo.xaml.cs">
       <DependentUpon>newRepo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ntp.cs" />
     <Compile Include="Properties\Settings1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -150,9 +149,6 @@
       <DependentUpon>RepoGen_OutputDir_Browse.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="time.xaml.cs">
-      <DependentUpon>time.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Unzippy.cs" />
     <Compile Include="WindowManager.cs" />
     <Compile Include="Zippy.cs" />
@@ -199,10 +195,6 @@
     <Page Include="RepoGen_OutputDir_Browse.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="time.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
