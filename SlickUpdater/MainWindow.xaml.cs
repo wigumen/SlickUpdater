@@ -364,7 +364,7 @@ namespace SlickUpdater
                 MessageBox.Show(e.UserState as string);
             }
             double downloadSpeed = downloadedBytes / 1048576 / sw.Elapsed.TotalMilliseconds * 1000;
-            downloadProgress = " @ " + downloadSpeed.ToString("0.00#") + " Mb/s";
+            downloadProgress = " @ " + downloadSpeed.ToString("0.00#") + " MB/s";
             updateTitle();
         }
 
