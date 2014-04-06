@@ -272,7 +272,7 @@ namespace SlickUpdater
         }
 
         private void a3DirText_TextChanged(object sender, TextChangedEventArgs e) {
-            Properties.Settings.Default.path = a3DirText.Text;
+            Properties.Settings.Default.A3path = a3DirText.Text;
         }
 
         private void a3Ts3Text_TextChanged(object sender, TextChangedEventArgs e)
