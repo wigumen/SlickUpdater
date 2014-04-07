@@ -13,6 +13,7 @@ namespace SlickUpdater
         public string server { get; set; }
         public string joinText { get; set; }
         public string subreddit { get; set; }
+        public string password { get; set; }
     }
 
     public class versionfile

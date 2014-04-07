@@ -199,7 +199,7 @@ namespace SlickUpdater
             }
             else if (gameversion == "ArmA3")
             {
-                Launch.a3Launch(false, null);
+                Launch.a3Launch(false, null, null);
             }
             else
             {
@@ -432,7 +432,8 @@ namespace SlickUpdater
             if (gameversion == "ArmA3")
             {
                 var server = slickversion.repos[repomenu.SelectedIndex].server;
-                Launch.a3Launch(true, server);
+                var password = slickversion.repos[repomenu.SelectedIndex].password;
+                Launch.a3Launch(true, server, password);
             }
             else
             {

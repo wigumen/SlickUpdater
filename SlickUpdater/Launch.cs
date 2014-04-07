@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace SlickUpdater {
     static class Launch {
-        static public void a3Launch(bool connectToServer, string server) {
+        static public void a3Launch(bool connectToServer, string server, string serverPass) {
             string arma3Path = regcheck.arma3RegCheck() + "\\arma3.exe";
             string world = Properties.Settings.Default.world;
             string customParams = Properties.Settings.Default.customParams;
@@ -37,7 +37,7 @@ namespace SlickUpdater {
             {
                 if (server != null)
                 {
-                    args += " -port=2302 -connect=" + server + " -password=PA";
+                    args += " -port=2302 -connect=" + server + " -password=" + serverPass;
                 }
             }
             if (world != "") {
