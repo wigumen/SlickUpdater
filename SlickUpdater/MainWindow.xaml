@@ -5,11 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Properties="clr-namespace:SlickUpdater.Properties" xmlns:local="clr-namespace:SlickUpdater" x:Name="mainWindow" mc:Ignorable="d" x:Class="SlickUpdater.MainWindow"
         Closing="Window_Closing"
         Title="Slick Updater Beta" Height="350" Width="550" ResizeMode="CanMinimize" Loaded="MainWindow_Loaded" Background="White">
-<<<<<<< HEAD
         
-=======
-
->>>>>>> dev
     <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="322" Margin="0,0,-4,-3" VerticalAlignment="Top" Width="550" Background="White">
         <TabItem Header="Arma 3">
             <Grid Width="544" Margin="0,0,0,-3">
@@ -73,8 +69,8 @@
         <TabItem Header="Events">
             <Grid HorizontalAlignment="Left" Height="305" VerticalAlignment="Top" Width="546" Margin="0,0,0,-5">
                 <ListBox x:Name="eventbox" HorizontalAlignment="Left" Height="251" Margin="0,37,0,0" VerticalAlignment="Top" Width="533" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
-                <Label Content="Upcoming Events:" HorizontalAlignment="Left" Margin="167,1,0,0" VerticalAlignment="Top" Height="40" Width="210" FontSize="24"/>
-                <Button x:Name="eventbutton" Content="Refresh" HorizontalAlignment="Left" Margin="478,12,0,0" VerticalAlignment="Top" Width="55" Height="20" Click="refreshEvents"/>
+                <Label Content="Upcoming Events:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Height="40" Width="210" FontSize="24"/>
+                <Button x:Name="eventbutton" Content="Refresh" HorizontalAlignment="Left" Margin="210,13,0,0" VerticalAlignment="Top" Width="55" Height="20" Click="refreshEvents"/>
             </Grid>
         </TabItem>
         <TabItem Header="Options" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60">
