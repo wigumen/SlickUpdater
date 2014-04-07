@@ -35,8 +35,12 @@ namespace SlickUpdater
             string line = Properties.Settings.Default.A2path;
             if (line == "")
             {
+<<<<<<< HEAD
                 String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Bohemia Interactive\ArmA 2 OA\BattlEye", "MAIN", null);
                 // Automatically redirects itself on 32b and 64b systems.
+=======
+                String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Bohemia Interactive\ArmA 2 OA\BattlEye", "MAIN", null);
+>>>>>>> dev
                 if (value != null)
                 {
                     Properties.Settings.Default.A2path = value;

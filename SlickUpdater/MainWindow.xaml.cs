@@ -18,6 +18,9 @@ using System.Xml.Linq;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace SlickUpdater
 {
@@ -29,8 +32,14 @@ namespace SlickUpdater
         public BackgroundWorker worker;
         public BackgroundWorker checkWorker;
         public BackgroundWorker redditWorker;
+        private DispatcherTimer timer;
+
         public logIt logThread;
+<<<<<<< HEAD
         public string slickVersion = "1.3";
+=======
+        public string slickVersion = "1.3.2";
+>>>>>>> dev
         List<MenuItem> items = new List<MenuItem>();
         //string rawslickServVer;
         //string[] slickServVer;
@@ -38,6 +47,12 @@ namespace SlickUpdater
         string subreddit = "/r/ProjectMilSim";
         public double downloadedBytes = 1;
         Stopwatch sw = new Stopwatch();
+<<<<<<< HEAD
+=======
+        string title = "Slick Updater Beta";
+        string downloadProgress = "";
+        string time = "";
+>>>>>>> dev
 
         public MainWindow()
         {
@@ -60,10 +75,16 @@ namespace SlickUpdater
             //local debug server for A2 
             rawslickServVer = downloader.webRead("http://localhost/repo/slickupdater/slickversion");
 #endif
+<<<<<<< HEAD
             MenuItem pa = new MenuItem();
             pa.Tag = "http://projectawesomemodhost.com/beta/repo/";
             pa.Header = "PA Repo";
             items.Add(pa);
+=======
+            //Timer callback stuff for clock
+
+
+>>>>>>> dev
             if (slickversion.version != slickVersion)
             {
                 MessageBoxResult result = MessageBox.Show("There seems to be a new version of slickupdater available, do you wanna update it it?", "New Update", MessageBoxButton.YesNo);
@@ -97,6 +118,12 @@ namespace SlickUpdater
             redditWorker = new BackgroundWorker();
             redditWorker.DoWork += redditWorker_DoWork;
             redditWorker.RunWorkerCompleted += redditworker_Done;
+
+            //Init timer
+            timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Tick += new EventHandler(updateTime);
+            timer.Interval = new TimeSpan(0, 0, 10);
+            timer.Start();
 
             WindowManager.SetWnd(this);
 
@@ -171,6 +198,20 @@ namespace SlickUpdater
             {
                 MessageBox.Show("Game version dun goofed! Please report issue to wigumen");
             }
+<<<<<<< HEAD
+=======
+        }
+
+        private void updateTitle()
+        {
+            Title = time + " GMT" + " | " + title + downloadProgress ;
+        }
+
+        private void updateTime(object obj, EventArgs e)
+        {
+            time = DateTime.UtcNow.ToString("HH:mm");
+            updateTitle();
+>>>>>>> dev
         }
 
         private void setBusy(bool isBusy) {
@@ -248,7 +289,11 @@ namespace SlickUpdater
         }
 
         private void a3DirText_TextChanged(object sender, TextChangedEventArgs e) {
+<<<<<<< HEAD
             Properties.Settings.Default.path = a3DirText.Text;
+=======
+            Properties.Settings.Default.A3path = a3DirText.Text;
+>>>>>>> dev
         }
 
         private void a3Ts3Text_TextChanged(object sender, TextChangedEventArgs e)
@@ -261,6 +306,8 @@ namespace SlickUpdater
             a3UpdateCheck();
             redditWorker.RunWorkerAsync();
             eventbutton.IsEnabled = false;
+            time = DateTime.UtcNow.ToString("HH:mm");
+            updateTitle();
         }
 
         private void repoGen_Options_Click(object sender, RoutedEventArgs e) {
@@ -338,7 +385,12 @@ namespace SlickUpdater
                 MessageBox.Show(e.UserState as string);
             }
             double downloadSpeed = downloadedBytes / 1048576 / sw.Elapsed.TotalMilliseconds * 1000;
+<<<<<<< HEAD
             Title = "Slick Updater Beta @ " + downloadSpeed.ToString("0.00#") + " Mb/s";
+=======
+            downloadProgress = " @ " + downloadSpeed.ToString("0.00#") + " MB/s";
+            updateTitle();
+>>>>>>> dev
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -350,7 +402,12 @@ namespace SlickUpdater
             midProgressTxt.Content = "";
             indivProgressTxt.Content = "";
             totalProgressTxt.Content = "";
+<<<<<<< HEAD
             Title = "Slick Updater Beta";
+=======
+            downloadProgress = "";
+            updateTitle();
+>>>>>>> dev
             
         }
 
@@ -461,6 +518,7 @@ namespace SlickUpdater
         {
             //MessageBox.Show("IT WORKS OMG" + "     " + repomenu.SelectedIndex);
             if (slickversion.repos[repomenu.SelectedIndex].url == "not")
+<<<<<<< HEAD
             {
                 MessageBox.Show("This repo has not yet been implemented. Setting you to default");
                 repomenu.SelectedIndex = 0;
@@ -472,6 +530,19 @@ namespace SlickUpdater
                 Properties.Settings.Default.A3repo = "" + repomenu.SelectedIndex;
                 Properties.Settings.Default.A3repourl = slickversion.repos[repomenu.SelectedIndex].url;
             }
+=======
+            {
+                MessageBox.Show("This repo has not yet been implemented. Setting you to default");
+                repomenu.SelectedIndex = 0;
+                Properties.Settings.Default.A3repo = "" + 0;
+                Properties.Settings.Default.A3repourl = slickversion.repos[0].url;
+            }
+            else
+            {
+                Properties.Settings.Default.A3repo = "" + repomenu.SelectedIndex;
+                Properties.Settings.Default.A3repourl = slickversion.repos[repomenu.SelectedIndex].url;
+            }
+>>>>>>> dev
 
             if (repomenu.IsDropDownOpen == true)
                 {
