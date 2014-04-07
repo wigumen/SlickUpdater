@@ -35,7 +35,7 @@ namespace SlickUpdater
         private DispatcherTimer timer;
 
         public logIt logThread;
-        public string slickVersion = "1.3.1";
+        public string slickVersion = "1.3.2";
         List<MenuItem> items = new List<MenuItem>();
         //string rawslickServVer;
         //string[] slickServVer;
