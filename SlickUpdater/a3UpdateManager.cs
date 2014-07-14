@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Net;
-using System.ComponentModel;
-using SevenZip;
-using System.Threading;
 
 namespace SlickUpdater {
 
     public static class a3UpdateManager {
-        public static string arma3Path = regcheck.arma3RegCheck();
+        public static string arma3Path = Properties.Settings.Default.A3path;
         static Queue<string> queue = new Queue<string>();
         static public bool isUpdateStarted;
-        static string url = "http://arma.projectawesome.net/beta/repo";
-        static string modlist = "modlist.cfg";
+        private static string url = "http://arma.projectawesome.net/beta/repo";
+        private static string modlist = "modlist.cfg";
         public static bool a3UpdateComplete;
         static int updateProgress;
         static int totalFiles;
+        public static bool isArma2 = false;
 
 
         public static void arma3UpdateCheck() {
+            if (isArma2)
+            {
+                arma3Path = regcheck.arma2RegCheck();
+            }
+            else { arma3Path = Properties.Settings.Default.A3path; }
             string mod;
             int index;
             string[] mods;
@@ -108,20 +108,28 @@ namespace SlickUpdater {
                 }
             }
             if (date == true) {
-                WindowManager.mainWindow.checkWorker.ReportProgress(1, "Launch ArmA 3");
+                WindowManager.mainWindow.checkWorker.ReportProgress(1, "Launch " + WindowManager.mainWindow.currentGame);
             } else {
-                WindowManager.mainWindow.checkWorker.ReportProgress(1, "Update ArmA 3");
+                WindowManager.mainWindow.checkWorker.ReportProgress(1, "Update " + WindowManager.mainWindow.currentGame);
             }
             WindowManager.mainWindow.checkWorker.ReportProgress(2, a3Items);
         }
 
 
         public static void a3Update() {
+            if (isArma2)
+            {
+                arma3Path = Properties.Settings.Default.A2path;
+            }
+            else { arma3Path = Properties.Settings.Default.A3path; }
             if (url == ""){
                 url = Properties.Settings.Default.A3repourl;
             }
-
-            string arma3Path = regcheck.arma3RegCheck();
+            if (isArma2)
+            {
+                string arma3Path = regcheck.arma2RegCheck();
+            }
+            else { string arma3Path = regcheck.arma3RegCheck(); }
             string mod;
             string[] mods;
             string modFolder;
@@ -190,10 +198,19 @@ namespace SlickUpdater {
         }
 
         static private void a3DetailUpdate (string mod, WebClient client) {
-            string arma3Path = regcheck.arma3RegCheck();
+            string arma3Path = "";
+            if(isArma2)
+            {
+                arma3Path = regcheck.arma2RegCheck();
+            }
+            else
+            {
+                arma3Path = regcheck.arma3RegCheck();
+            }
+            
             string modPath = arma3Path + "\\" + mod;
 
-            Directory.CreateDirectory(modPath);
+            Directory.CreateDirectory(arma3Path + "\\" + mod);
 
             updateProgress = 0;
             try {
@@ -205,14 +222,19 @@ namespace SlickUpdater {
                 WindowManager.mainWindow.worker.ReportProgress(-1, e.Message);
                 return;
             }
-            checkFilesFolders(modPath);
+            checkFilesFolders(arma3Path + "\\" + mod);
 
             downloader.download(url + mod + "/SU.version", client);
-            File.Delete(modPath + "\\SU.version");
-            File.Move("SU.version", modPath + "\\SU.version");
+            File.Delete(arma3Path + "\\" + mod + "\\SU.version");
+            File.Move("SU.version", arma3Path + "\\" + mod + "\\SU.version");
         }
 
         static private void checkFilesFolders(string folder) {
+            if (isArma2)
+            {
+                arma3Path = regcheck.arma2RegCheck();
+            }
+            else { arma3Path = Properties.Settings.Default.A3path; }
             string relativePath = folder.Replace(arma3Path, "");
             string[] files = downloader.webReadLines(url + relativePath + "/files.cfg");
 

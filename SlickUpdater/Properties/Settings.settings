@@ -30,7 +30,7 @@
       <Value Profile="(Default)">ArmA3</Value>
     </Setting>
     <Setting Name="A2repo" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ts3Dir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -60,6 +60,9 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="A3path" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="vA2Path" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

@@ -10,14 +10,12 @@ namespace SlickUpdater
 {
     public static class regcheck
     {
-        //Arma 3 regcheck
         public static string arma3RegCheck()
         {
             string line = Properties.Settings.Default.A3path;
             if (line == "")
             {
-                String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Bohemia Interactive\Arma 3", "MAIN", null);
-                // Automatically redirects itself on 32b and 64b systems.
+                String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Bohemia Interactive\Arma 3", "MAIN", null);
                 if (value != null) {
                     Properties.Settings.Default.A3path = value;
                     //ConfigManager.write("ArmA3", "path", value);
@@ -35,12 +33,33 @@ namespace SlickUpdater
             string line = Properties.Settings.Default.A2path;
             if (line == "")
             {
-                String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Bohemia Interactive\ArmA 2 OA\BattlEye", "MAIN", null);
-                // Automatically redirects itself on 32b and 64b systems.
+                String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Bohemia Interactive\ArmA 2 OA\BattlEye", "MAIN", null);
                 if (value != null)
                 {
                     Properties.Settings.Default.A2path = value;
                     //ConfigManager.write("ArmA2", "path", value);
+                    return value;
+                }
+                else
+                {
+                    return line;
+                }
+            }
+            else
+            {
+                return line;
+            }
+        }
+
+        public static string varma2RegCheck()
+        {
+            string line = Properties.Settings.Default.vA2Path;
+            if(line == "")
+            {
+                String value = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Bohemia Interactive\ArmA 2\BattlEye", "MAIN", null);
+                if (value != null)
+                {
+                    Properties.Settings.Default.vA2Path = value;
                     return value;
                 }
                 else

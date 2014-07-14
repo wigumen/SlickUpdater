@@ -118,7 +118,6 @@
     <Compile Include="Arma3LaunchOptionsDialogue.xaml.cs">
       <DependentUpon>Arma3LaunchOptionsDialogue.xaml</DependentUpon>
     </Compile>
-    <Compile Include="a2UpdateManager.cs" />
     <Compile Include="config.cs" />
     <Compile Include="downloader.cs" />
     <Compile Include="DragAndDrop.cs" />
@@ -216,7 +215,6 @@
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>

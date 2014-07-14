@@ -26,7 +26,6 @@ namespace SlickUpdater {
             } catch (InvalidOperationException e) {
                 MessageBox.Show(e.Message);
             }
-
         }
         private static void onComplete(object sender, AsyncCompletedEventArgs args) {
             downloadFinished = true;
@@ -74,6 +73,7 @@ namespace SlickUpdater {
             }
             while (!downloadFinished) { System.Threading.Thread.Sleep(20);  };
             logIt.addData("Downloaded " + filename);
+            
             return filename;
         }
 

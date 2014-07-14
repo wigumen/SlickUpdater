@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace SlickUpdater {
     static class Launch {
-        static public void a3Launch(bool connectToServer, string server, string serverPass) {
+        static public void a3Launch(bool connectToServer, string server, string password) {
             string arma3Path = regcheck.arma3RegCheck() + "\\arma3.exe";
             string world = Properties.Settings.Default.world;
             string customParams = Properties.Settings.Default.customParams;
@@ -37,7 +37,14 @@ namespace SlickUpdater {
             {
                 if (server != null)
                 {
-                    args += " -port=2302 -connect=" + server + " -password=" + serverPass;
+                    if (password != null)
+                    {
+                        args += " -port=2302 -connect=" + server + " -password=" + password;
+                    }
+                    else
+                    {
+                        args += " -port=2302 -connect=" + server;
+                    }
                 }
             }
             if (world != "") {
@@ -59,14 +66,15 @@ namespace SlickUpdater {
             logIt.addData("Launched Arma 3 with " + args);
         }
         //added ArmA2 OA launcher
-        static public void a2Launch(bool connectToServer, string server)
+        static public void a2Launch(bool connectToServer, string server, string password)
         {
             string arma2Path = regcheck.arma2RegCheck() + "\\ArmA2OA.exe";
+            string varma2Path = regcheck.varma2RegCheck();
             string world = Properties.Settings.Default.world;
             string customParams = Properties.Settings.Default.customParams;
             string mods = modlister();
-
             string args = "";
+
             if (Properties.Settings.Default.window == true)
             {
                 args += " -window";
@@ -93,10 +101,16 @@ namespace SlickUpdater {
             }
             if (connectToServer == true)
             {
-                if (server == "PA Repo")
+                if (server != null)
                 {
-                    // insert ArmA 2 OA server here!!!! !!! 
-                    args += " -port=2302 -connect=216.155.136.19 -password=PA";
+                    if (password != null)
+                    {
+                        args += " -port=2302 -connect=" + server + " -password=" + password;
+                    }
+                    else
+                    {
+                        args += " -port=2302 -connect=" + server;
+                    }
                 }
             }
             if (world != "")
@@ -117,7 +131,7 @@ namespace SlickUpdater {
             }
             if (mods != "")
             {
-                args += " -mod=" + mods;
+                args += " \"-mod=" + varma2Path + ";EXPANSION;ca\"" + " \"-beta=Expansion\\beta;Expansion\\beta\\Expansion\" " + " \"-mod=" + mods + "\"";
             }
 
             Process.Start(arma2Path, args);

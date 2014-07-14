@@ -14,6 +14,7 @@ namespace SlickUpdater
         public string joinText { get; set; }
         public string subreddit { get; set; }
         public string password { get; set; }
+        public string game { get; set; }
     }
 
     public class versionfile
@@ -22,4 +23,4 @@ namespace SlickUpdater
         public string download { get; set; }
         public List<Repos> repos { get; set; }
     }
-}
+    }
