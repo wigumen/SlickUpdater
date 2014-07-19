@@ -31,8 +31,8 @@ namespace SlickUpdater {
             downloadFinished = true;
         }
         private static void onProgressChanged(object sender, DownloadProgressChangedEventArgs args) {
-            WindowManager.mainWindow.worker.ReportProgress(args.ProgressPercentage);
-            WindowManager.mainWindow.downloadedBytes = args.BytesReceived;
+            WindowManager.mainWindow.Worker.ReportProgress(args.ProgressPercentage);
+            WindowManager.mainWindow.DownloadedBytes = args.BytesReceived;
         }
         public static string webRead(string url) {
             WebClient client = new WebClient();

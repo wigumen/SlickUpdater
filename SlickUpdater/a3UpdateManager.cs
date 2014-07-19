@@ -33,7 +33,7 @@ namespace SlickUpdater {
             string versionString;
             string version0String;
             string xmlLine = Properties.Settings.Default.A3repourl;
-            versionfile slickversion = WindowManager.mainWindow.slickversion;
+            versionfile slickversion = WindowManager.mainWindow.Slickversion;
             //string slickVersion = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
             /*
 #if DEBUG
@@ -60,7 +60,7 @@ namespace SlickUpdater {
             try {
                 mods = downloader.webReadLines(url + modlist);
             } catch (WebException e) {
-                WindowManager.mainWindow.checkWorker.ReportProgress(-1, e.Message);
+                WindowManager.mainWindow.CheckWorker.ReportProgress(-1, e.Message);
                 return;
             }
             bool date = true;
@@ -108,11 +108,11 @@ namespace SlickUpdater {
                 }
             }
             if (date == true) {
-                WindowManager.mainWindow.checkWorker.ReportProgress(1, "Launch " + WindowManager.mainWindow.currentGame);
+                WindowManager.mainWindow.CheckWorker.ReportProgress(1, "Launch " + WindowManager.mainWindow.CurrentGame);
             } else {
-                WindowManager.mainWindow.checkWorker.ReportProgress(1, "Update " + WindowManager.mainWindow.currentGame);
+                WindowManager.mainWindow.CheckWorker.ReportProgress(1, "Update " + WindowManager.mainWindow.CurrentGame);
             }
-            WindowManager.mainWindow.checkWorker.ReportProgress(2, a3Items);
+            WindowManager.mainWindow.CheckWorker.ReportProgress(2, a3Items);
         }
 
 
@@ -188,13 +188,13 @@ namespace SlickUpdater {
                     }
                 }
                 double status = (double)i / (double)mods.Length ;
-                WindowManager.mainWindow.worker.ReportProgress((int)(status * 100) + 202);
+                WindowManager.mainWindow.Worker.ReportProgress((int)(status * 100) + 202);
             }
         }
 
         static private void increment() {
             double progress = ((double)++updateProgress / (double)totalFiles);
-            WindowManager.mainWindow.worker.ReportProgress((int)(progress*100) + 101);                
+            WindowManager.mainWindow.Worker.ReportProgress((int)(progress*100) + 101);                
         }
 
         static private void a3DetailUpdate (string mod, WebClient client) {
@@ -216,10 +216,10 @@ namespace SlickUpdater {
             try {
                 totalFiles = Convert.ToInt32(downloader.webRead(url + mod + "/count.txt"));
             } catch (WebException) {
-                WindowManager.mainWindow.worker.ReportProgress(-1, "Web exception in reading " + url + mod + "/count.txt");
+                WindowManager.mainWindow.Worker.ReportProgress(-1, "Web exception in reading " + url + mod + "/count.txt");
                 return;
             } catch (Exception e) {
-                WindowManager.mainWindow.worker.ReportProgress(-1, e.Message);
+                WindowManager.mainWindow.Worker.ReportProgress(-1, e.Message);
                 return;
             }
             checkFilesFolders(arma3Path + "\\" + mod);
@@ -307,7 +307,7 @@ namespace SlickUpdater {
                             File.Copy(newPath, newPath.Replace(info.FullName, Properties.Settings.Default.ts3Dir + "\\plugins"), true);
                             logIt.addData("Copied ACRE plugin to TS3 folder");
                         } catch (Exception e) {
-                            WindowManager.mainWindow.worker.ReportProgress(-1, e.Message);
+                            WindowManager.mainWindow.Worker.ReportProgress(-1, e.Message);
                             logIt.addData("Failed to copy ACRE plugin to TS3 folder. Error Message: " + e.Message);
                         }
                     }
@@ -327,7 +327,7 @@ namespace SlickUpdater {
                     try {
                         File.Copy(newPath, newPath.Replace(info.FullName, output), true);
                     } catch (Exception e) {
-                        WindowManager.mainWindow.worker.ReportProgress(-1, e.Message);
+                        WindowManager.mainWindow.Worker.ReportProgress(-1, e.Message);
                     }
             }
             

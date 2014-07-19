@@ -25,7 +25,7 @@
                     <RowDefinition Height="151*"/>
                     <RowDefinition Height="104*"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="arma3Button" Content="Update ArmA 3" HorizontalAlignment="Right" VerticalAlignment="Top" Width="175" Height="88" Grid.Row="2" Grid.Column="6" Click="onArma3Clicked" Margin="0,3,0,0"/>
+                <Button x:Name="arma3Button" Content="Update ArmA 3" HorizontalAlignment="Right" VerticalAlignment="Top" Width="175" Height="88" Grid.Row="2" Grid.Column="6" Click="OnArma3Clicked" Margin="0,3,0,0"/>
                 <ListView x:Name="a3ModList" HorizontalAlignment="Left" Height="190" VerticalAlignment="Top" Width="342" Grid.ColumnSpan="6" Grid.RowSpan="2" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListView.View>
                         <GridView>
