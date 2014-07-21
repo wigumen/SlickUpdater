@@ -12,6 +12,7 @@ TestResults
 *.suo
 *.user
 *.sln.docstates
+Slick Updater Beta.sln.ide/
 
 # Build results
 [Dd]ebug/
