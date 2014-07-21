@@ -14,6 +14,12 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 using SlickUpdater.Properties;
+using Button = System.Windows.Controls.Button;
+using DragEventArgs = System.Windows.DragEventArgs;
+using MenuItem = System.Windows.Controls.MenuItem;
+using MessageBox = System.Windows.MessageBox;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using Timer = System.Timers.Timer;
 
 namespace SlickUpdater
 {
@@ -64,7 +70,7 @@ namespace SlickUpdater
             sw.Close();
 #if DEBUG
     //local debug server for A2 
-            rawslickServVer = downloader.webRead("http://localhost/repo/slickupdater/slickversion");
+            rawSlickJson = downloader.webRead("http://localhost/repo/slickupdater/slickversion.json");
 #endif
             //Timer callback stuff for clock
 
@@ -120,6 +126,7 @@ namespace SlickUpdater
             Settings.Default.firstLaunch = false;
             InitProperties();
             logocheck();
+
         }
 
         private void InitProperties()
@@ -180,7 +187,7 @@ namespace SlickUpdater
             string gameversion = Settings.Default.gameversion;
             if (gameversion == "ArmA3")
             {
-                a3UpdateManager.arma3UpdateCheck();
+                UpdateManager.arma3UpdateCheck();
             }
             else
             {
@@ -373,7 +380,7 @@ namespace SlickUpdater
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            a3UpdateManager.a3Update();
+            UpdateManager.a3Update();
         }
 
         private void updateDlSpeed(object sender, ElapsedEventArgs e)
@@ -571,14 +578,14 @@ namespace SlickUpdater
                 logo_image.Source = new BitmapImage(new Uri(@"Resources/ArmA2.png", UriKind.Relative));
                 mainTab.Header = "Arma 2";
                 CurrentGame = "Arma 2";
-                a3UpdateManager.isArma2 = true;
+                UpdateManager.isArma2 = true;
             }
             else
             {
                 logo_image.Source = new BitmapImage(new Uri(@"Resources/ArmA3.png", UriKind.Relative));
                 mainTab.Header = "Arma 3";
                 CurrentGame = "Arma 3";
-                a3UpdateManager.isArma2 = false;
+                UpdateManager.isArma2 = false;
             }
         }
 

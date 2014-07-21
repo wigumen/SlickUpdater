@@ -1,30 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Net;
+using SlickUpdater.Properties;
 
-namespace SlickUpdater {
-
-    public static class a3UpdateManager {
-        public static string arma3Path = Properties.Settings.Default.A3path;
-        static Queue<string> queue = new Queue<string>();
-        static public bool isUpdateStarted;
+namespace SlickUpdater
+{
+    public static class UpdateManager
+    {
+        public static string armaPath = Settings.Default.A3path;
+        private static Queue<string> queue = new Queue<string>();
+        public static bool isUpdateStarted;
         private static string url = "http://arma.projectawesome.net/beta/repo";
         private static string modlist = "modlist.cfg";
         public static bool a3UpdateComplete;
-        static int updateProgress;
-        static int totalFiles;
+        private static int updateProgress;
+        private static int totalFiles;
         public static bool isArma2 = false;
 
 
-        public static void arma3UpdateCheck() {
+        public static void arma3UpdateCheck()
+        {
             if (isArma2)
             {
-                arma3Path = regcheck.arma2RegCheck();
+                armaPath = regcheck.arma2RegCheck();
             }
-            else { arma3Path = Properties.Settings.Default.A3path; }
+            else
+            {
+                armaPath = Settings.Default.A3path;
+            }
             string mod;
             int index;
             string[] mods;
@@ -32,7 +38,7 @@ namespace SlickUpdater {
             string versionFile;
             string versionString;
             string version0String;
-            string xmlLine = Properties.Settings.Default.A3repourl;
+            string xmlLine = Settings.Default.A3repourl;
             versionfile slickversion = WindowManager.mainWindow.Slickversion;
             //string slickVersion = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
             /*
@@ -44,62 +50,110 @@ namespace SlickUpdater {
             if (xmlLine != "")
             {
                 url = xmlLine;
-            }else{
+            }
+            else
+            {
                 MessageBox.Show("Your repourl is not set. Go into settings and change it! Setting it to default!");
                 url = slickversion.repos[0].url;
-                Properties.Settings.Default.A3repourl = slickversion.repos[0].url;
+                Settings.Default.A3repourl = slickversion.repos[0].url;
             }
-            
 
-            BitmapImage modRed = new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modRed.png"));
-            BitmapImage modGreen = new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modGreen.png"));
-            BitmapImage modBlue = new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modBlue.png"));
-            BitmapImage modBrown = new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modBrown.png"));
-            BitmapImage modYellow = new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modYellow.png"));
-            List<Mod> a3Items = new List<Mod>();
-            try {
+
+            var modRed =
+                new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modRed.png"));
+            var modGreen =
+                new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modGreen.png"));
+            var modBlue =
+                new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modBlue.png"));
+            var modBrown =
+                new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modBrown.png"));
+            var modYellow =
+                new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modYellow.png"));
+            var a3Items = new List<Mod>();
+            try
+            {
                 mods = downloader.webReadLines(url + modlist);
-            } catch (WebException e) {
+            }
+            catch (WebException e)
+            {
                 WindowManager.mainWindow.CheckWorker.ReportProgress(-1, e.Message);
                 return;
             }
             bool date = true;
-            foreach (string modline in mods) {
+            foreach (string modline in mods)
+            {
                 index = modline.IndexOf("#");
-                if (index != 0) {
-                    if (index != -1) {
+                if (index != 0)
+                {
+                    if (index != -1)
+                    {
                         mod = modline.Substring(0, index);
-                    } else {
+                    }
+                    else
+                    {
                         mod = modline;
                     }
-                    modFolder = arma3Path + "\\" + mod;
-                    versionFile = arma3Path + "\\" + mod + "\\SU.version";
+                    modFolder = armaPath + "\\" + mod;
+                    versionFile = armaPath + "\\" + mod + "\\SU.version";
                     version0String = downloader.webRead(url + "/" + mod + "/" + "SU.version");
-                    if (Directory.Exists(modFolder)) {
-                        if (File.Exists(versionFile)) {
+                    if (Directory.Exists(modFolder))
+                    {
+                        if (File.Exists(versionFile))
+                        {
                             versionString = File.ReadAllText(versionFile);
-                            if (versionString == version0String) {
+                            if (versionString == version0String)
+                            {
                                 modGreen.Freeze();
-                                a3Items.Add(new Mod() { status = modGreen, modName = mod, version = "v. " + versionString, servVersion = "v. " + version0String });
+                                a3Items.Add(new Mod
+                                {
+                                    status = modGreen,
+                                    modName = mod,
+                                    version = "v. " + versionString,
+                                    servVersion = "v. " + version0String
+                                });
                                 logIt.addData(mod + " is up to date.");
                                 //MessageBox.Show(mod + " is up to date.");
-                            } else {
+                            }
+                            else
+                            {
                                 modYellow.Freeze();
-                                a3Items.Add(new Mod() { status = modYellow, modName = mod, version = "v. " + versionString, servVersion = "v. " + version0String });
+                                a3Items.Add(new Mod
+                                {
+                                    status = modYellow,
+                                    modName = mod,
+                                    version = "v. " + versionString,
+                                    servVersion = "v. " + version0String
+                                });
                                 date = false;
                                 //MessageBox.Show(mod + " is out of date.");
                                 logIt.addData(mod + " is out to date.");
                             }
-                        } else {
+                        }
+                        else
+                        {
                             modBrown.Freeze();
-                            a3Items.Add(new Mod() { status = modBrown, modName = mod, version = "No file", servVersion = "v. " + version0String });
+                            a3Items.Add(new Mod
+                            {
+                                status = modBrown,
+                                modName = mod,
+                                version = "No file",
+                                servVersion = "v. " + version0String
+                            });
                             date = false;
                             //MessageBox.Show(mod + " is missing a version file.");
                             logIt.addData(mod + " is missing a version file.");
                         }
-                    } else {
+                    }
+                    else
+                    {
                         modBlue.Freeze();
-                        a3Items.Add(new Mod() { status = modBlue, modName = mod, version = "No file", servVersion = "v. " + version0String });
+                        a3Items.Add(new Mod
+                        {
+                            status = modBlue,
+                            modName = mod,
+                            version = "No file",
+                            servVersion = "v. " + version0String
+                        });
                         //File.Delete(versionFile);
                         date = false;
                         //MessageBox.Show(mod + " doesn't exist on your computer.");
@@ -107,70 +161,96 @@ namespace SlickUpdater {
                     }
                 }
             }
-            if (date == true) {
+            if (date)
+            {
                 WindowManager.mainWindow.CheckWorker.ReportProgress(1, "Launch " + WindowManager.mainWindow.CurrentGame);
-            } else {
+            }
+            else
+            {
                 WindowManager.mainWindow.CheckWorker.ReportProgress(1, "Update " + WindowManager.mainWindow.CurrentGame);
             }
             WindowManager.mainWindow.CheckWorker.ReportProgress(2, a3Items);
         }
 
 
-        public static void a3Update() {
+        public static void a3Update()
+        {
             if (isArma2)
             {
-                arma3Path = Properties.Settings.Default.A2path;
+                armaPath = Settings.Default.A2path;
             }
-            else { arma3Path = Properties.Settings.Default.A3path; }
-            if (url == ""){
-                url = Properties.Settings.Default.A3repourl;
+            else
+            {
+                armaPath = Settings.Default.A3path;
+            }
+            if (url == "")
+            {
+                url = Settings.Default.A3repourl;
             }
             if (isArma2)
             {
                 string arma3Path = regcheck.arma2RegCheck();
             }
-            else { string arma3Path = regcheck.arma3RegCheck(); }
+            else
+            {
+                string arma3Path = regcheck.arma3RegCheck();
+            }
             string mod;
             string[] mods;
             string modFolder;
             string versionString = "";
             string version0String = "";
-            WebClient client = new WebClient();
+            var client = new WebClient();
 
             mods = downloader.webReadLines(url + modlist);
             int i = 0;
-            foreach (string modline in mods) {
+            foreach (string modline in mods)
+            {
                 i++;
                 int index = modline.IndexOf("#");
-                if (index != 0) {
-                    if (index != -1) {
+                if (index != 0)
+                {
+                    if (index != -1)
+                    {
                         mod = modline.Substring(0, index);
-                    } else {
+                    }
+                    else
+                    {
                         mod = modline;
                     }
-                    modFolder = arma3Path + "\\" + mod;
-                    if (Directory.Exists(modFolder)) {
-                        string versionFile = arma3Path + "\\" + mod + "\\" + "SU.version";
+                    modFolder = armaPath + "\\" + mod;
+                    if (Directory.Exists(modFolder))
+                    {
+                        string versionFile = armaPath + "\\" + mod + "\\" + "SU.version";
                         string version0File = "SU.version";
-                        if (File.Exists(versionFile)) {
-                            
+                        if (File.Exists(versionFile))
+                        {
                             versionString = File.ReadAllText(versionFile);
                             version0String = downloader.webRead(url + mod + "\\" + version0File);
                             logIt.addData("Fetched versionfile from server version is " + versionString);
                             File.Delete(version0File);
-                            if (versionString == version0String) {
+                            if (versionString == version0String)
+                            {
                                 //a3Items.Add(new Mod() { status = modGreen, modName = mod });
                                 //MessageBox.Show(mod + " is up to date.");
-                            } else {
+                            }
+                            else
+                            {
                                 //a3Items.Add(new Mod() { status = modYellow, modName = mod });
                                 //MessageBox.Show(mod + " is out of date.");
                                 a3DetailUpdate(mod, client);
                             }
-                        } else {
+                        }
+                        else
+                        {
                             //a3Items.Add(new Mod() { status = modBrown, modName = mod });
                             //MessageBox.Show(mod + " is missing a version file.");
                             version0String = downloader.webRead(url + mod + "\\" + version0File);
-                            MessageBoxResult result = MessageBox.Show("SlickUpdater have detected that you have the folder " + modFolder + " if your 100% sure this is up to date you don't have to re-download. \n\nAre you sure this mod is up to date?", "Mod folder detacted", MessageBoxButton.YesNo);
+                            MessageBoxResult result =
+                                MessageBox.Show(
+                                    "SlickUpdater have detected that you have the folder " + modFolder +
+                                    " if your 100% sure this is up to date you don't have to re-download. \n\nAre you sure this mod is up to date?",
+                                    "Mod folder detacted", MessageBoxButton.YesNo);
                             switch (result)
                             {
                                 case MessageBoxResult.Yes:
@@ -181,25 +261,29 @@ namespace SlickUpdater {
                                     break;
                             }
                         }
-                    } else {
+                    }
+                    else
+                    {
                         //a3Items.Add(new Mod() { status = modBlue, modName = mod });
                         //MessageBox.Show(mod + " doesn't exist on your computer.");
                         a3DetailUpdate(mod, client);
                     }
                 }
-                double status = (double)i / (double)mods.Length ;
-                WindowManager.mainWindow.Worker.ReportProgress((int)(status * 100) + 202);
+                double status = i/(double) mods.Length;
+                WindowManager.mainWindow.Worker.ReportProgress((int) (status*100) + 202);
             }
         }
 
-        static private void increment() {
-            double progress = ((double)++updateProgress / (double)totalFiles);
-            WindowManager.mainWindow.Worker.ReportProgress((int)(progress*100) + 101);                
+        private static void increment()
+        {
+            double progress = (++updateProgress/(double) totalFiles);
+            WindowManager.mainWindow.Worker.ReportProgress((int) (progress*100) + 101);
         }
 
-        static private void a3DetailUpdate (string mod, WebClient client) {
+        private static void a3DetailUpdate(string mod, WebClient client)
+        {
             string arma3Path = "";
-            if(isArma2)
+            if (isArma2)
             {
                 arma3Path = regcheck.arma2RegCheck();
             }
@@ -207,18 +291,24 @@ namespace SlickUpdater {
             {
                 arma3Path = regcheck.arma3RegCheck();
             }
-            
+
             string modPath = arma3Path + "\\" + mod;
 
             Directory.CreateDirectory(arma3Path + "\\" + mod);
 
             updateProgress = 0;
-            try {
+            try
+            {
                 totalFiles = Convert.ToInt32(downloader.webRead(url + mod + "/count.txt"));
-            } catch (WebException) {
-                WindowManager.mainWindow.Worker.ReportProgress(-1, "Web exception in reading " + url + mod + "/count.txt");
+            }
+            catch (WebException)
+            {
+                WindowManager.mainWindow.Worker.ReportProgress(-1,
+                    "Web exception in reading " + url + mod + "/count.txt");
                 return;
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 WindowManager.mainWindow.Worker.ReportProgress(-1, e.Message);
                 return;
             }
@@ -229,63 +319,82 @@ namespace SlickUpdater {
             File.Move("SU.version", arma3Path + "\\" + mod + "\\SU.version");
         }
 
-        static private void checkFilesFolders(string folder) {
+        private static void checkFilesFolders(string folder)
+        {
             if (isArma2)
             {
-                arma3Path = regcheck.arma2RegCheck();
+                armaPath = regcheck.arma2RegCheck();
             }
-            else { arma3Path = Properties.Settings.Default.A3path; }
-            string relativePath = folder.Replace(arma3Path, "");
+            else
+            {
+                armaPath = Settings.Default.A3path;
+            }
+            string relativePath = folder.Replace(armaPath, "");
             string[] files = downloader.webReadLines(url + relativePath + "/files.cfg");
 
-            DirectoryInfo info = new DirectoryInfo(folder);
+            var info = new DirectoryInfo(folder);
 
             string[] dirs = downloader.webReadLines(url + relativePath + "\\dirs.cfg");
 
-            foreach (DirectoryInfo dirInfo in info.GetDirectories()) {
+            foreach (DirectoryInfo dirInfo in info.GetDirectories())
+            {
                 bool exists = false;
-                foreach (string dir in dirs) {
-                    if (dir == dirInfo.Name) {
+                foreach (string dir in dirs)
+                {
+                    if (dir == dirInfo.Name)
+                    {
                         exists = true;
                     }
                 }
-                if (!exists) {
+                if (!exists)
+                {
                     dirInfo.Delete(true);
                 }
             }
 
-            foreach (string dir in dirs) {
-                DirectoryInfo dirInfo = new DirectoryInfo(folder + "\\" + dir);
-                if (!dirInfo.Exists) {
+            foreach (string dir in dirs)
+            {
+                var dirInfo = new DirectoryInfo(folder + "\\" + dir);
+                if (!dirInfo.Exists)
+                {
                     dirInfo.Create();
                 }
                 checkFilesFolders(dirInfo.FullName);
             }
 
-            foreach (FileInfo file in info.GetFiles()) {
+            foreach (FileInfo file in info.GetFiles())
+            {
                 bool exists = false;
-                foreach (string fileString in files) {
-                    if (file.Name == fileString) {
+                foreach (string fileString in files)
+                {
+                    if (file.Name == fileString)
+                    {
                         exists = true;
                     }
                 }
-                if (exists == false) {
+                if (exists == false)
+                {
                     file.Delete();
                 }
             }
-            WebClient client = new WebClient();
-            foreach (string file in files) {
-                FileInfo fileInfo = new FileInfo(folder + "\\" + file);
-                if (fileInfo.Exists) {
+            var client = new WebClient();
+            foreach (string file in files)
+            {
+                var fileInfo = new FileInfo(folder + "\\" + file);
+                if (fileInfo.Exists)
+                {
                     string hash = RepoGenerator.md5Calc(fileInfo.FullName);
                     string downloadedHash = downloader.webRead(url + relativePath + "\\" + fileInfo.Name + ".hash");
-                    if (hash != downloadedHash) {
+                    if (hash != downloadedHash)
+                    {
                         downloader.download(url + relativePath + "\\" + fileInfo.Name + ".7z", client);
                         Unzippy.extract(fileInfo.Name + ".7z", fileInfo.DirectoryName);
                         increment();
                         File.Delete(fileInfo.Name + ".7z");
                     }
-                } else {
+                }
+                else
+                {
                     downloader.download(url + relativePath + "\\" + fileInfo.Name + ".7z", client);
                     Unzippy.extract(fileInfo.Name + ".7z", fileInfo.DirectoryName);
                     increment();
@@ -293,20 +402,26 @@ namespace SlickUpdater {
                 }
             }
 
-            if (info.Name == "plugin") {
+            if (info.Name == "plugin")
+            {
                 //Now Create all of the directories
                 foreach (string dirPath in Directory.GetDirectories(info.FullName, "*",
                     SearchOption.AllDirectories))
-                    Directory.CreateDirectory(dirPath.Replace(info.FullName, Properties.Settings.Default.ts3Dir + "\\plugins"));
+                    Directory.CreateDirectory(dirPath.Replace(info.FullName, Settings.Default.ts3Dir + "\\plugins"));
 
                 //Copy all the files
-                foreach (string newPath in Directory.GetFiles(info.FullName, "*.*", SearchOption.AllDirectories)) {
-                    if (!File.Exists(newPath.Replace(info.FullName, Properties.Settings.Default.ts3Dir + "\\plugins")))
+                foreach (string newPath in Directory.GetFiles(info.FullName, "*.*", SearchOption.AllDirectories))
+                {
+                    if (!File.Exists(newPath.Replace(info.FullName, Settings.Default.ts3Dir + "\\plugins")))
                     {
-                        try {
-                            File.Copy(newPath, newPath.Replace(info.FullName, Properties.Settings.Default.ts3Dir + "\\plugins"), true);
+                        try
+                        {
+                            File.Copy(newPath, newPath.Replace(info.FullName, Settings.Default.ts3Dir + "\\plugins"),
+                                true);
                             logIt.addData("Copied ACRE plugin to TS3 folder");
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e)
+                        {
                             WindowManager.mainWindow.Worker.ReportProgress(-1, e.Message);
                             logIt.addData("Failed to copy ACRE plugin to TS3 folder. Error Message: " + e.Message);
                         }
@@ -314,8 +429,9 @@ namespace SlickUpdater {
                 }
             }
 
-            if (info.Name == "userconfig") {
-                string output = arma3Path + "\\userconfig";
+            if (info.Name == "userconfig")
+            {
+                string output = armaPath + "\\userconfig";
                 Directory.CreateDirectory(output);
 
                 foreach (string dirPath in Directory.GetDirectories(info.FullName, "*",
@@ -324,35 +440,41 @@ namespace SlickUpdater {
 
                 foreach (string newPath in Directory.GetFiles(info.FullName, "*.*",
                     SearchOption.AllDirectories))
-                    try {
+                    try
+                    {
                         File.Copy(newPath, newPath.Replace(info.FullName, output), true);
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e)
+                    {
                         WindowManager.mainWindow.Worker.ReportProgress(-1, e.Message);
                     }
             }
-            
         }
 
-        public static void downloadAsync (string url) {
-            WebClient client = new WebClient();
-            Uri uri = new Uri(url);
-            string filename = System.IO.Path.GetFileName(uri.LocalPath);
-            try {
+        public static void downloadAsync(string url)
+        {
+            var client = new WebClient();
+            var uri = new Uri(url);
+            string filename = Path.GetFileName(uri.LocalPath);
+            try
+            {
                 client.DownloadFileAsync(uri, filename);
-            } catch (ArgumentNullException e) {
-                MessageBox.Show(e.Message);
-                logIt.addData(e.Message);
-            } catch (WebException e) {
-                MessageBox.Show(e.Message + " on " + url);
-                logIt.addData(e.Message + " on " + url);
-            } catch (InvalidOperationException e) {
+            }
+            catch (ArgumentNullException e)
+            {
                 MessageBox.Show(e.Message);
                 logIt.addData(e.Message);
             }
-
+            catch (WebException e)
+            {
+                MessageBox.Show(e.Message + " on " + url);
+                logIt.addData(e.Message + " on " + url);
+            }
+            catch (InvalidOperationException e)
+            {
+                MessageBox.Show(e.Message);
+                logIt.addData(e.Message);
+            }
         }
-
-
-
     }
 }
