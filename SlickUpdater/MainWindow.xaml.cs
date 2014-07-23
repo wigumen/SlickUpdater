@@ -131,16 +131,14 @@ namespace SlickUpdater
 
         private void InitProperties()
         {
-            string gameversion = Settings.Default.gameversion;
             a2DirText.Text = Settings.Default.A2path;
             a3DirText.Text = Settings.Default.A3path;
             ts3DirText.Text = Settings.Default.ts3Dir;
-            if (gameversion == "ArmA3")
-            {
-                _subreddit = Slickversion.repos[repomenu.SelectedIndex].subreddit;
-                joinButton.Content = Slickversion.repos[repomenu.SelectedIndex].joinText;
-                //changeGameButton.Content = "Arma 3";
-            }
+            if (Settings.Default.showIrcTab) { ircTab.Visibility = Visibility.Visible; }
+            if (Settings.Default.showIrcTab == false) { ircTab.Visibility = Visibility.Collapsed; }
+            ircbox.IsChecked = Properties.Settings.Default.showIrcTab;
+            _subreddit = Slickversion.repos[repomenu.SelectedIndex].subreddit;
+            joinButton.Content = Slickversion.repos[repomenu.SelectedIndex].joinText;
         }
 
         //Do some work
@@ -675,6 +673,23 @@ namespace SlickUpdater
         }
 
         #endregion
+
+        private void UpdateIRCTab(object sender, RoutedEventArgs e)
+        {
+            if (ircbox.IsChecked == true)
+            {
+                ircTab.Visibility = Visibility.Visible;
+                Properties.Settings.Default.showIrcTab = true;
+            }
+
+            if (ircbox.IsChecked == false)
+            {
+                ircTab.Visibility = Visibility.Collapsed;
+                Properties.Settings.Default.showIrcTab = true;
+            }
+
+            Properties.Settings.Default.Save();
+        }
     }
 
     public class Mod

@@ -274,5 +274,17 @@ namespace SlickUpdater.Properties {
                 this["vA2Path"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool showIrcTab {
+            get {
+                return ((bool)(this["showIrcTab"]));
+            }
+            set {
+                this["showIrcTab"] = value;
+            }
+        }
     }
 }

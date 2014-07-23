@@ -4,9 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Properties="clr-namespace:SlickUpdater.Properties" xmlns:local="clr-namespace:SlickUpdater" x:Name="mainWindow" mc:Ignorable="d" x:Class="SlickUpdater.MainWindow"
         Closing="Window_Closing"
-        Title="Slick Updater Beta" Height="350" Width="550" Loaded="MainWindow_Loaded" Background="White" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+        Title="Slick Updater Beta" Height="350" Width="539" Loaded="MainWindow_Loaded" Background="White" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
 
-    <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="322" Margin="0,0,-4,-3" VerticalAlignment="Top" Width="550" Background="White">
+    <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="322" Margin="0,0,-4,-3" VerticalAlignment="Top" Width="536" Background="White">
         <TabItem x:Name="mainTab" Header="Arma 3">
             <Grid Width="544" Margin="0,0,0,-3">
                 <Grid.ColumnDefinitions>
@@ -73,6 +73,15 @@
                 <Button x:Name="eventbutton" Content="Refresh" HorizontalAlignment="Left" Margin="210,13,0,0" VerticalAlignment="Top" Width="55" Height="20" Click="refreshEvents"/>
             </Grid>
         </TabItem>
+        <TabItem x:Name="ircTab" Header="IRC Chat">
+            <Grid HorizontalAlignment="Left" Height="305" VerticalAlignment="Top" Width="546" Margin="0,0,0,-5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="43*"/>
+                    <ColumnDefinition Width="139*"/>
+                </Grid.ColumnDefinitions>
+                <WebBrowser HorizontalAlignment="Center" Height="300" VerticalAlignment="Center" Width="543" Grid.ColumnSpan="2" Source="http://webchat.quakenet.org/?channels=#projectawesome" Margin="0,0,0,10"/>
+            </Grid>
+        </TabItem>
         <TabItem Header="Options" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60">
             <TabItem.Background>
                 <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
@@ -107,6 +116,8 @@
                 <TextBox x:Name="a2DirText" HorizontalAlignment="Left" Height="23" Margin="0,114,0,0" VerticalAlignment="Top" Width="372" TextChanged="a2DirText_TextChanged" Grid.Column="2" Grid.Row="1"/>
                 <TextBox x:Name="va2DirText" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0,142,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="372" TextChanged="va2DirText_TextChanged"/>
                 <Label Content="Arma 2 Directory&#xA;" HorizontalAlignment="Left" Margin="10,142,0,0" VerticalAlignment="Top" Width="135" Height="23" Grid.ColumnSpan="2" Grid.Row="1"/>
+                <Label Content="Show IRC tab&#xA;" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top" Width="135" Height="23" Grid.ColumnSpan="2" Grid.Row="1"/>
+                <CheckBox x:Name="ircbox" Content="" Grid.Column="2" HorizontalAlignment="Left" Margin="0,170,0,0" Grid.Row="1" VerticalAlignment="Top" IsChecked="True" Click="UpdateIRCTab"/>
 
 
             </Grid>
