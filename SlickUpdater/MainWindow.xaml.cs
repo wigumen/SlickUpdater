@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Timers;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,6 +17,7 @@ using Newtonsoft.Json;
 using SlickUpdater.Properties;
 using Button = System.Windows.Controls.Button;
 using DragEventArgs = System.Windows.DragEventArgs;
+using Image = System.Windows.Controls.Image;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -28,7 +30,7 @@ namespace SlickUpdater
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly List<events> rposts = new List<events>();
+        private readonly List<events> _rposts = new List<events>();
         public BackgroundWorker CheckWorker;
         public string CurrentGame = "Arma 3";
         public double DownloadedBytes = 1;
@@ -38,7 +40,6 @@ namespace SlickUpdater
         public versionfile Slickversion;
         public BackgroundWorker Worker;
         private string _downloadProgress = "";
-        private List<MenuItem> _items = new List<MenuItem>();
         private string _subreddit = "/r/ProjectMilSim";
         private string _time = "";
         private int clickCount;
@@ -70,7 +71,7 @@ namespace SlickUpdater
             sw.Close();
 #if DEBUG
     //local debug server for A2 
-            rawSlickJson = downloader.webRead("http://localhost/repo/slickupdater/slickversion.json");
+            rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
 #endif
             //Timer callback stuff for clock
 
@@ -123,6 +124,7 @@ namespace SlickUpdater
             a2DirText.Text = regcheck.arma2RegCheck();
             va2DirText.Text = regcheck.varma2RegCheck();
             ts3DirText.Text = regcheck.ts3RegCheck();
+
             Settings.Default.firstLaunch = false;
             InitProperties();
             logocheck();
@@ -134,11 +136,9 @@ namespace SlickUpdater
             a2DirText.Text = Settings.Default.A2path;
             a3DirText.Text = Settings.Default.A3path;
             ts3DirText.Text = Settings.Default.ts3Dir;
-            if (Settings.Default.showIrcTab) { ircTab.Visibility = Visibility.Visible; }
-            if (Settings.Default.showIrcTab == false) { ircTab.Visibility = Visibility.Collapsed; }
-            ircbox.IsChecked = Properties.Settings.Default.showIrcTab;
             _subreddit = Slickversion.repos[repomenu.SelectedIndex].subreddit;
             joinButton.Content = Slickversion.repos[repomenu.SelectedIndex].joinText;
+            updateGuides(null, null);
         }
 
         //Do some work
@@ -392,7 +392,7 @@ namespace SlickUpdater
             lastDownloadedBytes = DownloadedBytes;
             lastUpdateTime = now;
             _downloadProgress = " @ " + downloadSpeed.ToString("0.000") + " MB/s";
-            Dispatcher.Invoke(() => { WindowManager.mainWindow.updateTitle(); });
+            Dispatcher.Invoke(() => WindowManager.mainWindow.updateTitle());
         }
 
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -443,40 +443,6 @@ namespace SlickUpdater
         {
             var logging = new log();
             logging.Show();
-        }
-
-        private void forceToggle(object sender, RoutedEventArgs e)
-        {
-            string currepourl = Settings.Default.A3repourl;
-            string[] modlist = downloader.webReadLines(currepourl + "modlist.cfg");
-            MessageBoxResult result = MessageBox.Show("This will delete your mods and redownload them are you sure?",
-                "You 100% sure?", MessageBoxButton.YesNo);
-            switch (result)
-            {
-                case MessageBoxResult.Yes:
-                    string msg = "Removed mods";
-                    forceButton.Content = msg;
-                    forceButton.Width = 90;
-                    string a3path = regcheck.arma3RegCheck();
-                    foreach (string modline in modlist)
-                    {
-                        try
-                        {
-                            if (Directory.Exists(a3path + "\\" + modline))
-                            {
-                                logIt.addData("Deleted " + modline);
-                                Directory.Delete(a3path + "\\" + modline, true);
-                            }
-                        }
-                        catch (IOException)
-                        {
-                        }
-                    }
-                    break;
-                case MessageBoxResult.No:
-
-                    break;
-            }
         }
 
         private void repoHide()
@@ -563,7 +529,7 @@ namespace SlickUpdater
         private void refreshEvents(object sender, RoutedEventArgs e)
         {
             eventbox.Items.Clear();
-            rposts.Clear();
+            _rposts.Clear();
             RedditWorker.RunWorkerAsync();
             eventbutton.IsEnabled = false;
         }
@@ -597,25 +563,24 @@ namespace SlickUpdater
             {
                 if (i.data.link_flair_text == "EVENT")
                 {
-                    var evt = new events();
-                    evt.title = i.data.title;
-                    evt.author = i.data.author;
-                    evt.url = i.data.permalink;
-                    rposts.Add(evt);
+                    var evt = new events {title = i.data.title, author = i.data.author, url = i.data.permalink};
+                    _rposts.Add(evt);
                 }
             }
         }
 
         private void redditworker_Done(object sender, AsyncCompletedEventArgs e)
         {
-            foreach (events evn in rposts)
+            foreach (events evn in _rposts)
             {
-                var newEvent = new Button();
-                newEvent.Content = evn.title + " by " + evn.author;
-                newEvent.Height = 50;
-                newEvent.Width = 520;
-                newEvent.Tag = evn.url;
-                newEvent.FontSize = 14;
+                var newEvent = new Button
+                {
+                    Content = evn.title + " by " + evn.author,
+                    Height = 50,
+                    Width = 520,
+                    Tag = evn.url,
+                    FontSize = 14
+                };
                 newEvent.Click += newEvent_Click;
                 eventbox.Items.Add(newEvent);
             }
@@ -631,19 +596,6 @@ namespace SlickUpdater
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             Settings.Default.Save();
-        }
-
-        private void ChangeGame(object sender, RoutedEventArgs e)
-        {
-            string gameversion = Settings.Default.gameversion;
-            if (gameversion == "ArmA3")
-            {
-                Settings.Default.gameversion = "ArmA2";
-            }
-            if (gameversion == "ArmA2")
-            {
-                Settings.Default.gameversion = "ArmA3";
-            }
         }
 
         private void a2DirText_TextChanged(object sender, TextChangedEventArgs e)
@@ -674,28 +626,58 @@ namespace SlickUpdater
 
         #endregion
 
-        private void UpdateIRCTab(object sender, RoutedEventArgs e)
+        public void updateGuides(object sender, RoutedEventArgs e)
         {
-            if (ircbox.IsChecked == true)
+            Guidebox.Items.Clear();
+            List<Link> _links = new List<Link>(); 
+            string jsonString = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/guides.json");
+            var guides = JsonConvert.DeserializeObject<Guide>(jsonString);
+            _links = guides.Links;
+            foreach (var guide in _links)
             {
-                ircTab.Visibility = Visibility.Visible;
-                Properties.Settings.Default.showIrcTab = true;
-            }
+                var image = new Image()
+                {
+                    Source = new BitmapImage(new Uri(guide.icon)),
+                    Width = 42,
+                    Height = 42,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(4, 0, 0, 0)
+                };
 
-            if (ircbox.IsChecked == false)
-            {
-                ircTab.Visibility = Visibility.Collapsed;
-                Properties.Settings.Default.showIrcTab = true;
-            }
+                var newGuide = new Button
+                {
+                    Content = "                  " + guide.title,
+                    Height = 50,
+                    Width = 521,
+                    Tag = guide.url + "",
+                    FontSize = 14,
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    HorizontalContentAlignment = HorizontalAlignment.Left
+                };
 
-            Properties.Settings.Default.Save();
+                var panel = new Grid();
+                panel.Children.Add(newGuide);
+                panel.Children.Add(image);
+
+                newGuide.Click += GuideClick;
+                Guidebox.Items.Add(panel);
+            }
         }
+
+        private static void GuideClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            Process.Start(button.Tag + "");
+        }
+
+        
+
+
     }
 
     public class Mod
     {
         public ImageSource status { get; set; }
-
         public string modName { get; set; }
         public string version { get; set; }
         public string servVersion { get; set; }

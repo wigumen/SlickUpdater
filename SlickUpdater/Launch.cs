@@ -9,10 +9,10 @@ using System.Windows.Controls;
 namespace SlickUpdater {
     static class Launch {
         static public void a3Launch(bool connectToServer, string server, string password) {
-            string arma3Path = regcheck.arma3RegCheck() + "\\arma3.exe";
-            string world = Properties.Settings.Default.world;
-            string customParams = Properties.Settings.Default.customParams;
-            string mods = modlister();
+            var arma3Path = regcheck.arma3RegCheck() + "\\arma3.exe";
+            var world = Properties.Settings.Default.world;
+            var customParams = Properties.Settings.Default.customParams;
+            var mods = Modlister();
 
             string args = "";
             if (Properties.Settings.Default.window == true) {
@@ -72,7 +72,7 @@ namespace SlickUpdater {
             string varma2Path = regcheck.varma2RegCheck();
             string world = Properties.Settings.Default.world;
             string customParams = Properties.Settings.Default.customParams;
-            string mods = modlister();
+            string mods = Modlister();
             string args = "";
 
             if (Properties.Settings.Default.window == true)
@@ -137,7 +137,7 @@ namespace SlickUpdater {
             Process.Start(arma2Path, args);
             logIt.addData("Launched Arma 2 with " + args);
         }
-        static private string modlister() {
+        static private string Modlister() {
             string modlist = "";
             foreach (Mod item in WindowManager.mainWindow.a3ModList.Items) {
                 if (modlist == "") {

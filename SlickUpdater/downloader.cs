@@ -39,8 +39,6 @@ namespace SlickUpdater {
             Stream stream = client.OpenRead(url);
             StreamReader reader = new StreamReader(stream);
             String content = reader.ReadToEnd();
-
-
             return content;
         }
 
