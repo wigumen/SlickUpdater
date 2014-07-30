@@ -12,7 +12,7 @@ namespace SlickUpdater
 
         public static void addData(string log)
         {
-            logData = logData + "[" + DateTime.Now + "] " + log + "\r";
+            logData = logData + "[" + DateTime.UtcNow + "] " + log + "\r";
         }
     }
 }
