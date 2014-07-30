@@ -22,6 +22,12 @@ namespace SlickUpdater
             public string version { get; set; }
             public string download { get; set; }
             public List<Repos> repos { get; set; }
+            public versionfile()
+            {
+                version = String.Empty;
+                download = String.Empty;
+                repos = new List<Repos>();
+            }
         }
 
         public class Link

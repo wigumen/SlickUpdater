@@ -34,11 +34,25 @@ namespace SlickUpdater {
             WindowManager.mainWindow.Worker.ReportProgress(args.ProgressPercentage);
             WindowManager.mainWindow.DownloadedBytes = args.BytesReceived;
         }
-        public static string webRead(string url) {
-            WebClient client = new WebClient();
-            Stream stream = client.OpenRead(url);
-            StreamReader reader = new StreamReader(stream);
-            String content = reader.ReadToEnd();
+
+        public static string webRead(string url)
+        {
+            logIt.addData("webRead : " + url);
+            String content = String.Empty;
+            try
+            {
+                WebClient client = new WebClient();
+                Stream stream = client.OpenRead(url);
+                StreamReader reader = new StreamReader(stream);
+                content = reader.ReadToEnd();
+            }
+            catch (Exception e)
+            {
+                logIt.addData(e.Message);
+                throw;
+                //Optionally, show the user something is wrong
+                //MessageBox.Show("An error occured while trying to download something. Maybe the server is down.\n\n" + e.ToString(), "Error while downloading", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             return content;
         }
 
