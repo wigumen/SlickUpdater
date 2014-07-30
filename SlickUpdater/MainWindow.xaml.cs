@@ -51,9 +51,33 @@ namespace SlickUpdater
 
         public MainWindow()
         {
-            string rawSlickJson =
-                downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
-            Slickversion = JsonConvert.DeserializeObject<versionfile>(rawSlickJson);
+            logIt.addData("Starting app");
+            string rawSlickJson = String.Empty;
+            try
+            {
+#if DEBUG
+                //local debug server for A2 
+                rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
+#else                
+                rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
+#endif
+            }
+            catch (Exception ex)
+            {
+                logIt.addData("Error while downloading slickversion.json:\n" + ex.ToString());
+            }
+
+            if (!String.IsNullOrEmpty(rawSlickJson))
+            {
+                Slickversion = JsonConvert.DeserializeObject<versionfile>(rawSlickJson);
+            }
+            else
+            {
+                // the Slickversion file couldn't be downloaded, create it ourselves.
+                // Note: this means the data displayed in the app is not correct
+                Slickversion = new versionfile();
+            }
+
             InitializeComponent();
             //First launch message!
             if (Settings.Default.firstLaunch)
@@ -69,13 +93,10 @@ namespace SlickUpdater
             var sw = new StreamWriter(fs);
             sw.WriteLine(SlickVersion);
             sw.Close();
-#if DEBUG
-    //local debug server for A2 
-            rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
-#endif
+
             //Timer callback stuff for clock
 
-            if (Slickversion.version != SlickVersion)
+            if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) && (Slickversion.version != SlickVersion))
             {
                 MessageBoxResult result =
                     MessageBox.Show(
@@ -136,8 +157,11 @@ namespace SlickUpdater
             a2DirText.Text = Settings.Default.A2path;
             a3DirText.Text = Settings.Default.A3path;
             ts3DirText.Text = Settings.Default.ts3Dir;
-            _subreddit = Slickversion.repos[repomenu.SelectedIndex].subreddit;
-            joinButton.Content = Slickversion.repos[repomenu.SelectedIndex].joinText;
+            if ((repomenu.SelectedIndex) >= (Slickversion.repos.Count))
+            {
+                _subreddit = Slickversion.repos[repomenu.SelectedIndex].subreddit;
+                joinButton.Content = Slickversion.repos[repomenu.SelectedIndex].joinText;
+            }
             updateGuides(null, null);
         }
 
@@ -537,7 +561,14 @@ namespace SlickUpdater
         //logo change
         private void logocheck()
         {
-            if (Slickversion.repos[repomenu.SelectedIndex].game == "arma2")
+            String currentGame = String.Empty;
+            if ((repomenu.SelectedIndex) >= (Slickversion.repos.Count))
+            {
+                Repos currentRepo = Slickversion.repos[repomenu.SelectedIndex];
+                currentGame = currentRepo.game;
+            } 
+
+            if (currentGame == "arma2")
             {
                 logo_image.Source = new BitmapImage(new Uri(@"Resources/ArmA2.png", UriKind.Relative));
                 mainTab.Header = "Arma 2";
@@ -556,7 +587,17 @@ namespace SlickUpdater
         private void redditWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             string url = @"http://www.reddit.com" + _subreddit + "/hot.json";
-            string json = downloader.webRead(url);
+            string json = String.Empty;
+            try
+            { 
+                json = downloader.webRead(url);
+            }
+            catch(Exception ex)
+            {
+                logIt.addData(ex.ToString());
+                return;
+            }
+
             var topic = JsonConvert.DeserializeObject<RootObject>(json);
 
             foreach (Child i in topic.data.children)
@@ -628,7 +669,7 @@ namespace SlickUpdater
 
         public void updateGuides(object sender, RoutedEventArgs e)
         {
-            Guidebox.Items.Clear();
+            Guidebox.Items.Clear();            
             List<Link> _links = new List<Link>(); 
             string jsonString = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/guides.json");
             var guides = JsonConvert.DeserializeObject<Guide>(jsonString);
