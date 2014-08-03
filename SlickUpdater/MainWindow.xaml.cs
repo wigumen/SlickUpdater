@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 using System.Timers;
 using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -17,6 +21,7 @@ using Newtonsoft.Json;
 using SlickUpdater.Properties;
 using Button = System.Windows.Controls.Button;
 using DragEventArgs = System.Windows.DragEventArgs;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using Image = System.Windows.Controls.Image;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
@@ -51,7 +56,7 @@ namespace SlickUpdater
 
         public MainWindow()
         {
-            logIt.addData("Starting app");
+            logIt.add("Starting app");
             string rawSlickJson = String.Empty;
             try
             {
@@ -64,7 +69,7 @@ namespace SlickUpdater
             }
             catch (Exception ex)
             {
-                logIt.addData("Error while downloading slickversion.json:\n" + ex.ToString());
+                logIt.add("Error while downloading slickversion.json:\n" + ex.ToString());
             }
 
             if (!String.IsNullOrEmpty(rawSlickJson))
@@ -163,6 +168,8 @@ namespace SlickUpdater
                 joinButton.Content = Slickversion.repos[repomenu.SelectedIndex].joinText;
             }
             updateGuides(null, null);
+
+
         }
 
         //Do some work
@@ -594,7 +601,7 @@ namespace SlickUpdater
             }
             catch(Exception ex)
             {
-                logIt.addData(ex.ToString());
+                logIt.add(ex.ToString());
                 return;
             }
 
@@ -709,6 +716,14 @@ namespace SlickUpdater
         {
             var button = sender as Button;
             Process.Start(button.Tag + "");
+        }
+        NotifyIcon nIcon = new NotifyIcon();
+        private void test(object sender, RoutedEventArgs e)
+        {
+            //this.WindowState = System.Windows.WindowState.Minimized;
+            nIcon.Icon = new Icon(@"..\..\Slick_Updater.ico");
+            nIcon.ShowBalloonTip(5000, "Hi", "This is a BallonTip from Windows Notification", ToolTipIcon.Info);
+            
         }
 
         

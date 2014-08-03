@@ -111,7 +111,7 @@ namespace SlickUpdater
                                     version = "v. " + versionString,
                                     servVersion = "v. " + version0String
                                 });
-                                logIt.addData(mod + " is up to date.");
+                                logIt.add(mod + " is up to date.");
                                 //MessageBox.Show(mod + " is up to date.");
                             }
                             else
@@ -126,7 +126,7 @@ namespace SlickUpdater
                                 });
                                 date = false;
                                 //MessageBox.Show(mod + " is out of date.");
-                                logIt.addData(mod + " is out to date.");
+                                logIt.add(mod + " is out to date.");
                             }
                         }
                         else
@@ -141,7 +141,7 @@ namespace SlickUpdater
                             });
                             date = false;
                             //MessageBox.Show(mod + " is missing a version file.");
-                            logIt.addData(mod + " is missing a version file.");
+                            logIt.add(mod + " is missing a version file.");
                         }
                     }
                     else
@@ -157,7 +157,7 @@ namespace SlickUpdater
                         //File.Delete(versionFile);
                         date = false;
                         //MessageBox.Show(mod + " doesn't exist on your computer.");
-                        logIt.addData(mod + " doesn't exist on your computer.");
+                        logIt.add(mod + " doesn't exist on your computer.");
                     }
                 }
             }
@@ -227,7 +227,7 @@ namespace SlickUpdater
                         {
                             versionString = File.ReadAllText(versionFile);
                             version0String = downloader.webRead(url + mod + "\\" + version0File);
-                            logIt.addData("Fetched versionfile from server version is " + versionString);
+                            logIt.add("Fetched versionfile from server version is " + versionString);
                             File.Delete(version0File);
                             if (versionString == version0String)
                             {
@@ -418,12 +418,12 @@ namespace SlickUpdater
                         {
                             File.Copy(newPath, newPath.Replace(info.FullName, Settings.Default.ts3Dir + "\\plugins"),
                                 true);
-                            logIt.addData("Copied ACRE plugin to TS3 folder");
+                            logIt.add("Copied ACRE plugin to TS3 folder");
                         }
                         catch (Exception e)
                         {
                             WindowManager.mainWindow.Worker.ReportProgress(-1, e.Message);
-                            logIt.addData("Failed to copy ACRE plugin to TS3 folder. Error Message: " + e.Message);
+                            logIt.add("Failed to copy ACRE plugin to TS3 folder. Error Message: " + e.Message);
                         }
                     }
                 }
@@ -463,17 +463,17 @@ namespace SlickUpdater
             catch (ArgumentNullException e)
             {
                 MessageBox.Show(e.Message);
-                logIt.addData(e.Message);
+                logIt.add(e.Message);
             }
             catch (WebException e)
             {
                 MessageBox.Show(e.Message + " on " + url);
-                logIt.addData(e.Message + " on " + url);
+                logIt.add(e.Message + " on " + url);
             }
             catch (InvalidOperationException e)
             {
                 MessageBox.Show(e.Message);
-                logIt.addData(e.Message);
+                logIt.add(e.Message);
             }
         }
     }

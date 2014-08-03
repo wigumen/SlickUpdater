@@ -14,7 +14,7 @@ namespace SlickUpdater
         public static string logData = "Logging @ " + Path.GetFullPath(logFileName) + Environment.NewLine;
         public static StreamWriter logfile = File.AppendText(Path.GetFullPath(logFileName));
 
-        public static void addData(string log)
+        public static void add(string log)
         {
             string logLine = "[" + DateTime.UtcNow + "] " + log + Environment.NewLine;
             logData = logData + logLine;
