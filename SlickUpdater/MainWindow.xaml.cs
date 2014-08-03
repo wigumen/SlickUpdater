@@ -64,12 +64,23 @@ namespace SlickUpdater
                 //local debug server for A2 
                 rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
 #else                
-                rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
+            rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
 #endif
             }
             catch (Exception ex)
             {
-                logIt.add("Error while downloading slickversion.json:\n" + ex.ToString());
+                logIt.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
+            }
+            if (!String.IsNullOrEmpty(rawSlickJson))
+            {
+                try
+                {
+                    rawSlickJson = downloader.webRead("https://gist.githubusercontent.com/wigumen/015cb44774c6320cf901/raw/6a5f22437997c6c120a1b15beaabdb3ade3be06a/slickversion.json");
+                }
+                catch (Exception ex)
+                {
+                    logIt.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
+                }
             }
 
             if (!String.IsNullOrEmpty(rawSlickJson))

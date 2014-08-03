@@ -4,9 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Properties="clr-namespace:SlickUpdater.Properties" xmlns:local="clr-namespace:SlickUpdater" x:Name="mainWindow" mc:Ignorable="d" x:Class="SlickUpdater.MainWindow"
         Closing="Window_Closing"
-        Title="Slick Updater Beta" Height="350" Width="539" Loaded="MainWindow_Loaded" Background="White" ResizeMode="NoResize">
+        Title="Slick Updater Beta" Height="362" Width="550.2" Loaded="MainWindow_Loaded" Background="White" ResizeMode="NoResize">
 
-    <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="322" Margin="0,0,-4,-3" VerticalAlignment="Top" Width="536" Background="White">
+    <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="335" Margin="0,0,0,-1.4" VerticalAlignment="Top" Width="547" Background="White">
         <TabItem x:Name="mainTab" Header="Arma 3">
             <Grid Width="544" Margin="0,0,0,-3">
                 <Grid.ColumnDefinitions>
