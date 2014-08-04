@@ -4,9 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Properties="clr-namespace:SlickUpdater.Properties" xmlns:local="clr-namespace:SlickUpdater" x:Name="mainWindow" mc:Ignorable="d" x:Class="SlickUpdater.MainWindow"
         Closing="Window_Closing"
-        Title="Slick Updater Beta" Height="362" Width="550.2" Loaded="MainWindow_Loaded" Background="White" ResizeMode="NoResize">
+        Title="Slick Updater Beta" Height="346.8" Width="550.2" Loaded="MainWindow_Loaded" Background="White" ResizeMode="NoResize">
 
-    <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="335" Margin="0,0,0,-1.4" VerticalAlignment="Top" Width="547" Background="White">
+    <TabControl x:Name="tabs" HorizontalAlignment="Left" Height="321" Margin="0,0,-6,0" VerticalAlignment="Top" Width="546" Background="White">
         <TabItem x:Name="mainTab" Header="Arma 3">
             <Grid Width="544" Margin="0,0,0,-3">
                 <Grid.ColumnDefinitions>
@@ -24,8 +24,8 @@
                     <RowDefinition Height="151*"/>
                     <RowDefinition Height="104*"/>
                 </Grid.RowDefinitions>
-                <Button x:Name="arma3Button" Content="Update ArmA 3" HorizontalAlignment="Right" VerticalAlignment="Top" Width="171" Height="88" Grid.Row="2" Grid.Column="5" Click="OnArma3Clicked" Margin="0,3,0.4,0"/>
-                <ListView x:Name="a3ModList" HorizontalAlignment="Left" Height="190" VerticalAlignment="Top" Width="342" Grid.ColumnSpan="6" Grid.RowSpan="2" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <Button x:Name="arma3Button" Content="Update ArmA 3" HorizontalAlignment="Right" VerticalAlignment="Top" Width="171" Height="88" Grid.Row="2" Grid.Column="5" Click="OnArma3Clicked" Margin="0,2.8,10,0" Grid.ColumnSpan="2"/>
+                <ListView x:Name="a3ModList" HorizontalAlignment="Left" Height="197" VerticalAlignment="Top" Width="354" Grid.ColumnSpan="6" Grid.RowSpan="3" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Status">
@@ -43,9 +43,9 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <ProgressBar x:Name="totalProgress" HorizontalAlignment="Left" Height="26" Margin="0,65,0,0" Grid.Row="2" VerticalAlignment="Top" Width="342" ToolTip="Total Update Progress" Grid.ColumnSpan="6"/>
-                <ProgressBar x:Name="indivProgress" HorizontalAlignment="Left" Height="26" Grid.Row="2" VerticalAlignment="Top" Width="342" ToolTip="Individual File Progress" Margin="0,3,0,0" Grid.ColumnSpan="6"/>
-                <Button x:Name="a3RefreshButton" HorizontalAlignment="Left" Height="90" VerticalAlignment="Top" Width="94" Grid.Column="5" Margin="10.2,66.8,0,0" ToolTip="Refresh Modlist" Cursor="Arrow" Click="a3RefreshButton_Click" Grid.Row="1">
+                <ProgressBar x:Name="totalProgress" HorizontalAlignment="Left" Height="26" Margin="0,64.8,0,0" Grid.Row="2" VerticalAlignment="Top" Width="354" ToolTip="Total Update Progress" Grid.ColumnSpan="6"/>
+                <ProgressBar x:Name="indivProgress" HorizontalAlignment="Left" Height="26" Grid.Row="2" VerticalAlignment="Top" Width="354" ToolTip="Individual File Progress" Margin="0,2.8,0,0" Grid.ColumnSpan="6"/>
+                <Button x:Name="a3RefreshButton" HorizontalAlignment="Left" Height="90" VerticalAlignment="Top" Width="94" Grid.Column="5" Margin="18.2,66.8,0,0" ToolTip="Refresh Modlist" Cursor="Arrow" Click="a3RefreshButton_Click" Grid.Row="1" Grid.RowSpan="2">
                     <StackPanel>
                         <Image x:Name="refreshImage" Source="/Resources/betterRefresh.png" Cursor="Arrow" MouseEnter="a3RefreshImageEnter" RenderTransformOrigin="0.5,0.5" Height="90" Width="96">
                             <Image.RenderTransform>
@@ -56,10 +56,10 @@
                         </Image>
                     </StackPanel>
                 </Button>
-                <Button x:Name="launchOptionsButton" Content="Launch&#xA;Options" Grid.Column="5" HorizontalAlignment="Left" Margin="108.2,66.8,0,0" VerticalAlignment="Top" Width="73" Height="45" Click="launchOptionsButton_Click" Grid.Row="1" FontSize="9"/>
-                <ProgressBar x:Name="midProgress" HorizontalAlignment="Left" Height="26" Margin="0,34,0,0" Grid.Row="2" VerticalAlignment="Top" Width="342" ToolTip="Individual Mod Progress" Grid.ColumnSpan="6"/>
-                <Image x:Name="logo_image" HorizontalAlignment="Center" Height="97" VerticalAlignment="Top" Width="176" Grid.Column="5" Margin="8.2,5,15,0" Source="Resources/ArmA3.png" MouseDown="showrepo" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2"/>
-                <Button x:Name="joinButton" Content="Join PA server" Grid.Column="5" HorizontalAlignment="Left" Margin="108.2,111.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="73" Height="45" FontSize="9" Click="LaunchAndJoin"/>
+                <Button x:Name="launchOptionsButton" Content="Launch&#xA;Options" Grid.Column="5" HorizontalAlignment="Left" Margin="116.2,66.8,0,0" VerticalAlignment="Top" Width="73" Height="45" Click="launchOptionsButton_Click" Grid.Row="1" FontSize="9" Grid.ColumnSpan="2"/>
+                <ProgressBar x:Name="midProgress" HorizontalAlignment="Left" Height="26" Margin="1,33.8,0,0" Grid.Row="2" VerticalAlignment="Top" Width="353" ToolTip="Individual Mod Progress" Grid.ColumnSpan="6"/>
+                <Image x:Name="logo_image" HorizontalAlignment="Center" Height="97" VerticalAlignment="Top" Width="171" Grid.Column="5" Margin="18.2,5,10,0" Source="Resources/ArmA3.png" MouseDown="showrepo" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2"/>
+                <Button x:Name="joinButton" Content="Join PA server" Grid.Column="5" HorizontalAlignment="Left" Margin="116.2,111.8,0,0" Grid.Row="1" VerticalAlignment="Top" Width="73" Height="45" FontSize="9" Click="LaunchAndJoin" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
                 <Label x:Name="indivProgressTxt" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="" HorizontalAlignment="Left" Margin="1,3,0,0" Grid.Row="2" VerticalAlignment="Top" Height="25" Width="340" Grid.ColumnSpan="6" ToolTip="Induvidual file progress for mod"/>
                 <Label x:Name="midProgressTxt" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="" HorizontalAlignment="Left" Margin="1,35,0,0" Grid.Row="2" VerticalAlignment="Top" Height="25" Width="340" Grid.ColumnSpan="6"/>
                 <Label x:Name="totalProgressTxt" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Content="" HorizontalAlignment="Left" Margin="1,66,0,0" Grid.Row="2" VerticalAlignment="Top" Height="25" Width="340" Grid.ColumnSpan="6"/>
@@ -74,7 +74,7 @@
         </TabItem>
         <TabItem Header="Guides" HorizontalAlignment="Left">
             <Grid HorizontalAlignment="Left" Height="305" VerticalAlignment="Top" Width="546" Margin="0,0,0,-5">
-                <ListBox x:Name="Guidebox" HorizontalAlignment="Left" Height="258" Margin="0,37,0,0" VerticalAlignment="Top" Width="533" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+                <ListBox x:Name="Guidebox" HorizontalAlignment="Left" Height="247" Margin="0,37,0,0" VerticalAlignment="Top" Width="533" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
                 <Label Content="Guides:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Height="40" Width="210" FontSize="24"/>
             </Grid>
         </TabItem>

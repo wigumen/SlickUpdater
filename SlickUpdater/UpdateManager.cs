@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using SlickUpdater.Properties;
@@ -95,7 +96,7 @@ namespace SlickUpdater
                     }
                     modFolder = armaPath + "\\" + mod;
                     versionFile = armaPath + "\\" + mod + "\\SU.version";
-                    version0String = downloader.webRead(url + "/" + mod + "/" + "SU.version");
+                    version0String = downloader.webRead(url + "/" + mod + "/" + "SU.version"); 
                     if (Directory.Exists(modFolder))
                     {
                         if (File.Exists(versionFile))
