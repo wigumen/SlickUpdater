@@ -167,7 +167,7 @@ namespace SlickUpdater
             a2DirText.Text = Settings.Default.A2path;
             a3DirText.Text = Settings.Default.A3path;
             ts3DirText.Text = Settings.Default.ts3Dir;
-            if ((repomenu.SelectedIndex) >= (Slickversion.repos.Count))
+            if ((repomenu.SelectedIndex) < (Slickversion.repos.Count))
             {
                 _subreddit = Slickversion.repos[repomenu.SelectedIndex].subreddit;
                 joinButton.Content = Slickversion.repos[repomenu.SelectedIndex].joinText;
@@ -542,7 +542,6 @@ namespace SlickUpdater
 
         private void setActiveRepo(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("IT WORKS OMG" + "     " + repomenu.SelectedIndex);
             if (Slickversion.repos[repomenu.SelectedIndex].url == "not")
             {
                 MessageBox.Show("This repo has not yet been implemented. Setting you to default");
@@ -560,6 +559,8 @@ namespace SlickUpdater
             {
                 a3UpdateCheck();
             }
+            
+           InitProperties();
         }
 
         private void refreshEvents(object sender, RoutedEventArgs e)
