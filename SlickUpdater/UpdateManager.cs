@@ -22,7 +22,7 @@ namespace SlickUpdater
         public static bool isArma2 = false;
 
 
-        public static void arma3UpdateCheck()
+        public static void UpdateCheck()
         {
             if (isArma2)
             {

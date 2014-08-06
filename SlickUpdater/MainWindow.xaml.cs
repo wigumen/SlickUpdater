@@ -55,11 +55,12 @@ namespace SlickUpdater
             try
             {
 #if DEBUG
-                //local debug server for A2 
+                //local debug server for testing
                 rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
 #else                
+            //Default master file location hosted on Project Awesome servers
             rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
-#endif
+
             }
             catch (Exception ex)
             {
@@ -69,6 +70,7 @@ namespace SlickUpdater
             {
                 try
                 {
+                    //Backup master file hosted on GitHub servers
                     rawSlickJson = downloader.webRead("https://gist.githubusercontent.com/wigumen/015cb44774c6320cf901/raw/6a5f22437997c6c120a1b15beaabdb3ade3be06a/slickversion.json");
                 }
                 catch (Exception ex)
@@ -87,7 +89,7 @@ namespace SlickUpdater
                 // Note: this means the data displayed in the app is not correct
                 Slickversion = new versionfile();
             }
-
+#endif
             InitializeComponent();
             //First launch message!
             if (Settings.Default.firstLaunch)
@@ -146,7 +148,7 @@ namespace SlickUpdater
             //Init timer
             timer = new DispatcherTimer();
             timer.Tick += updateTime;
-            timer.Interval = new TimeSpan(0, 0, 20);
+            timer.Interval = new TimeSpan(0, 0, 10);
             timer.Start();
 
             WindowManager.SetWnd(this);
@@ -218,15 +220,7 @@ namespace SlickUpdater
         // worker runs the updateManager, checks game version using <GameVER><Game>
         private void checkWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            string gameversion = Settings.Default.gameversion;
-            if (gameversion == "ArmA3")
-            {
-                UpdateManager.arma3UpdateCheck();
-            }
-            else
-            {
-                MessageBox.Show("Game version dun goofed! Please report issue to wigumen");
-            }
+            UpdateManager.UpdateCheck();
         }
 
         private void updateTitle()
@@ -554,12 +548,12 @@ namespace SlickUpdater
                 Settings.Default.A3repo = "" + repomenu.SelectedIndex;
                 Settings.Default.A3repourl = Slickversion.repos[repomenu.SelectedIndex].url;
             }
-            logocheck();
+            
             if (repomenu.IsDropDownOpen)
             {
                 a3UpdateCheck();
             }
-            
+           logocheck();
            InitProperties();
         }
 
@@ -575,7 +569,7 @@ namespace SlickUpdater
         private void logocheck()
         {
             String currentGame = String.Empty;
-            if ((repomenu.SelectedIndex) >= (Slickversion.repos.Count))
+            if ((repomenu.SelectedIndex) < (Slickversion.repos.Count))
             {
                 Repos currentRepo = Slickversion.repos[repomenu.SelectedIndex];
                 currentGame = currentRepo.game;
