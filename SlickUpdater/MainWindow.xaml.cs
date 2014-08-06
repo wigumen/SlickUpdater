@@ -147,7 +147,6 @@ namespace SlickUpdater
                         Process.GetCurrentProcess().Kill();
                         break;
                     case MessageBoxResult.No:
-
                         break;
                 }
             }
@@ -252,7 +251,7 @@ namespace SlickUpdater
 
         private void updateTitle()
         {
-            Title = _time + " GMT" + " | " + title + _downloadProgress;
+            Title = _time + " UTC" + " | " + title + _downloadProgress;
         }
 
         private void updateTime(object obj, EventArgs e)
