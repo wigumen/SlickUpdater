@@ -12,6 +12,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using SlickUpdater.Properties;
 using Button = System.Windows.Controls.Button;
@@ -50,32 +51,56 @@ namespace SlickUpdater
 
         public MainWindow()
         {
-            logIt.add("Starting app");
             string rawSlickJson = String.Empty;
-            try
-            {
-#if DEBUG
-                //local debug server for testing
-                rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
-#else                
-            //Default master file location hosted on Project Awesome servers
-            rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
 
-            }
-            catch (Exception ex)
+            logIt.add("Starting app");
+
+            //Check Command Line args
+            var args = Environment.GetCommandLineArgs();
+            for (int i = 0; i < args.Length; i++)
             {
-                logIt.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
+                if (args[i] == "-override")
+                {
+                    try
+                    {
+                        rawSlickJson = downloader.webRead(args[i + 1]);
+                    }
+                    catch (Exception e)
+                    {
+                        logIt.add("Could not override masterfile: " + e);
+                    }
+                }
             }
-            if (!String.IsNullOrEmpty(rawSlickJson))
+            if (rawSlickJson == String.Empty)
             {
                 try
                 {
-                    //Backup master file hosted on GitHub servers
-                    rawSlickJson = downloader.webRead("https://gist.githubusercontent.com/wigumen/015cb44774c6320cf901/raw/6a5f22437997c6c120a1b15beaabdb3ade3be06a/slickversion.json");
+#if DEBUG
+    //local debug server for testing
+                rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
+#else
+
+                    //Default master file location hosted on Project Awesome servers
+                    rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
+
                 }
                 catch (Exception ex)
                 {
-                    logIt.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
+                    logIt.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
+                }
+                if (!String.IsNullOrEmpty(rawSlickJson))
+                {
+                    try
+                    {
+                        //Backup master file hosted on GitHub servers
+                        rawSlickJson =
+                            downloader.webRead(
+                                "https://gist.githubusercontent.com/wigumen/015cb44774c6320cf901/raw/6a5f22437997c6c120a1b15beaabdb3ade3be06a/slickversion.json");
+                    }
+                    catch (Exception ex)
+                    {
+                        logIt.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
+                    }
                 }
             }
 
@@ -97,7 +122,7 @@ namespace SlickUpdater
                 MessageBox.Show(
                     "Hello! This seems to be the first time you launch SlickUpdater so make sure your arma 3 and ts3 path is set correctly in options. Have a nice day!",
                     "Welcome");
-                //Properties.Settings.Default.firstLaunch = false;
+                //Note to myself: I actualy set firstLaunch to false in initProps
             }
             LogThread = new logIt();
             repoHide();
@@ -108,7 +133,8 @@ namespace SlickUpdater
 
             //Timer callback stuff for clock
 
-            if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) && (Slickversion.version != SlickVersion))
+            if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) &&
+                (Slickversion.version != SlickVersion))
             {
                 MessageBoxResult result =
                     MessageBox.Show(
@@ -125,6 +151,7 @@ namespace SlickUpdater
                         break;
                 }
             }
+
             initRepos();
             // Initialize Update Worker
             Worker = new BackgroundWorker();
