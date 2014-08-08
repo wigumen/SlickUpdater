@@ -12,6 +12,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using SlickUpdater.Properties;
 using Button = System.Windows.Controls.Button;
@@ -50,30 +51,56 @@ namespace SlickUpdater
 
         public MainWindow()
         {
-            logIt.add("Starting app");
             string rawSlickJson = String.Empty;
-            try
+
+            logIt.add("Starting app");
+
+            //Check Command Line args
+            var args = Environment.GetCommandLineArgs();
+            for (int i = 0; i < args.Length; i++)
             {
-#if DEBUG
-                //local debug server for A2 
-                rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
-#else                
-            rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
-#endif
+                if (args[i] == "-override")
+                {
+                    try
+                    {
+                        rawSlickJson = downloader.webRead(args[i + 1]);
+                    }
+                    catch (Exception e)
+                    {
+                        logIt.add("Could not override masterfile: " + e);
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                logIt.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
-            }
-            if (!String.IsNullOrEmpty(rawSlickJson))
+            if (rawSlickJson == String.Empty)
             {
                 try
                 {
-                    rawSlickJson = downloader.webRead("https://gist.githubusercontent.com/wigumen/015cb44774c6320cf901/raw/6a5f22437997c6c120a1b15beaabdb3ade3be06a/slickversion.json");
+#if DEBUG
+    //local debug server for testing
+                rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
+#else
+
+                    //Default master file location hosted on Project Awesome servers
+                    rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
+
                 }
                 catch (Exception ex)
                 {
-                    logIt.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
+                    logIt.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
+                }
+                if (!String.IsNullOrEmpty(rawSlickJson))
+                {
+                    try
+                    {
+                        //Backup master file hosted on GitHub servers
+                        rawSlickJson =
+                            downloader.webRead(
+                                "https://gist.githubusercontent.com/wigumen/015cb44774c6320cf901/raw/6a5f22437997c6c120a1b15beaabdb3ade3be06a/slickversion.json");
+                    }
+                    catch (Exception ex)
+                    {
+                        logIt.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
+                    }
                 }
             }
 
@@ -87,7 +114,7 @@ namespace SlickUpdater
                 // Note: this means the data displayed in the app is not correct
                 Slickversion = new versionfile();
             }
-
+#endif
             InitializeComponent();
             //First launch message!
             if (Settings.Default.firstLaunch)
@@ -95,7 +122,7 @@ namespace SlickUpdater
                 MessageBox.Show(
                     "Hello! This seems to be the first time you launch SlickUpdater so make sure your arma 3 and ts3 path is set correctly in options. Have a nice day!",
                     "Welcome");
-                //Properties.Settings.Default.firstLaunch = false;
+                //Note to myself: I actualy set firstLaunch to false in initProps
             }
             LogThread = new logIt();
             repoHide();
@@ -106,7 +133,8 @@ namespace SlickUpdater
 
             //Timer callback stuff for clock
 
-            if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) && (Slickversion.version != SlickVersion))
+            if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) &&
+                (Slickversion.version != SlickVersion))
             {
                 MessageBoxResult result =
                     MessageBox.Show(
@@ -119,10 +147,10 @@ namespace SlickUpdater
                         Process.GetCurrentProcess().Kill();
                         break;
                     case MessageBoxResult.No:
-
                         break;
                 }
             }
+
             initRepos();
             // Initialize Update Worker
             Worker = new BackgroundWorker();
@@ -146,7 +174,7 @@ namespace SlickUpdater
             //Init timer
             timer = new DispatcherTimer();
             timer.Tick += updateTime;
-            timer.Interval = new TimeSpan(0, 0, 20);
+            timer.Interval = new TimeSpan(0, 0, 10);
             timer.Start();
 
             WindowManager.SetWnd(this);
@@ -167,7 +195,7 @@ namespace SlickUpdater
             a2DirText.Text = Settings.Default.A2path;
             a3DirText.Text = Settings.Default.A3path;
             ts3DirText.Text = Settings.Default.ts3Dir;
-            if ((repomenu.SelectedIndex) >= (Slickversion.repos.Count))
+            if ((repomenu.SelectedIndex) < (Slickversion.repos.Count))
             {
                 _subreddit = Slickversion.repos[repomenu.SelectedIndex].subreddit;
                 joinButton.Content = Slickversion.repos[repomenu.SelectedIndex].joinText;
@@ -218,20 +246,12 @@ namespace SlickUpdater
         // worker runs the updateManager, checks game version using <GameVER><Game>
         private void checkWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            string gameversion = Settings.Default.gameversion;
-            if (gameversion == "ArmA3")
-            {
-                UpdateManager.arma3UpdateCheck();
-            }
-            else
-            {
-                MessageBox.Show("Game version dun goofed! Please report issue to wigumen");
-            }
+            UpdateManager.UpdateCheck();
         }
 
         private void updateTitle()
         {
-            Title = _time + " GMT" + " | " + title + _downloadProgress;
+            Title = _time + " UTC" + " | " + title + _downloadProgress;
         }
 
         private void updateTime(object obj, EventArgs e)
@@ -542,7 +562,6 @@ namespace SlickUpdater
 
         private void setActiveRepo(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show("IT WORKS OMG" + "     " + repomenu.SelectedIndex);
             if (Slickversion.repos[repomenu.SelectedIndex].url == "not")
             {
                 MessageBox.Show("This repo has not yet been implemented. Setting you to default");
@@ -555,11 +574,13 @@ namespace SlickUpdater
                 Settings.Default.A3repo = "" + repomenu.SelectedIndex;
                 Settings.Default.A3repourl = Slickversion.repos[repomenu.SelectedIndex].url;
             }
-            logocheck();
+            
             if (repomenu.IsDropDownOpen)
             {
                 a3UpdateCheck();
             }
+           logocheck();
+           InitProperties();
         }
 
         private void refreshEvents(object sender, RoutedEventArgs e)
@@ -574,7 +595,7 @@ namespace SlickUpdater
         private void logocheck()
         {
             String currentGame = String.Empty;
-            if ((repomenu.SelectedIndex) >= (Slickversion.repos.Count))
+            if ((repomenu.SelectedIndex) < (Slickversion.repos.Count))
             {
                 Repos currentRepo = Slickversion.repos[repomenu.SelectedIndex];
                 currentGame = currentRepo.game;
