@@ -88,7 +88,7 @@ namespace SlickUpdater
                 {
                     logIt.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
                 }
-                if (!String.IsNullOrEmpty(rawSlickJson))
+                if (String.IsNullOrEmpty(rawSlickJson))
                 {
                     try
                     {
