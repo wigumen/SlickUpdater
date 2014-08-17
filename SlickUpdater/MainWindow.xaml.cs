@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Security.AccessControl;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,10 +49,20 @@ namespace SlickUpdater
         private double lastDownloadedBytes;
         private DateTime lastUpdateTime;
         private DispatcherTimer timer;
-        private string title = "Slick Updater";
+        private const string Title = "Slick Updater";
 
         public MainWindow()
         {
+            if (util.checkDependencies() == false)
+            {
+                //MessageBoxResult result =
+                   MessageBox.Show(
+                    "Theres missions .dll's from the slickupdater install folder, please make sure you downloaded the correct version on GitHub and all the required dll's are in the installation folder",
+                    "Dun Goofed", MessageBoxButton.OK);
+
+                Process.GetCurrentProcess().Kill();
+            }
+
             string rawSlickJson = String.Empty;
 
             logIt.add("Starting app");
@@ -76,13 +88,11 @@ namespace SlickUpdater
                 try
                 {
 #if DEBUG
-    //local debug server for testing
+                //local debug server for testing
                 rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
 #else
-
                     //Default master file location hosted on Project Awesome servers
                     rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
-
                 }
                 catch (Exception ex)
                 {
@@ -251,7 +261,7 @@ namespace SlickUpdater
 
         private void updateTitle()
         {
-            Title = _time + " UTC" + " | " + title + _downloadProgress;
+            base.Title = _time + " UTC" + " | " + Title + _downloadProgress;
         }
 
         private void updateTime(object obj, EventArgs e)

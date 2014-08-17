@@ -155,6 +155,7 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Unzippy.cs" />
+    <Compile Include="util.cs" />
     <Compile Include="WindowManager.cs" />
     <Compile Include="Zippy.cs" />
     <Page Include="About.xaml">
