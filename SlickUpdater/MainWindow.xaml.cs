@@ -661,7 +661,7 @@ namespace SlickUpdater
                 {
                     Content = evn.title + " by " + evn.author,
                     Height = 50,
-                    Width = 520,
+                    Width = 560,
                     Tag = evn.url,
                     FontSize = 14
                 };
@@ -732,7 +732,7 @@ namespace SlickUpdater
                 {
                     Content = "                  " + guide.title,
                     Height = 50,
-                    Width = 521,
+                    Width = 560,
                     Tag = guide.url + "",
                     FontSize = 14,
                     HorizontalAlignment = HorizontalAlignment.Right,
