@@ -14,7 +14,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using Microsoft.Win32;
 using Newtonsoft.Json;
 using SlickUpdater.Properties;
 using Button = System.Windows.Controls.Button;

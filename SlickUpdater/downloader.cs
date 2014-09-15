@@ -34,7 +34,7 @@ namespace SlickUpdater {
             WindowManager.mainWindow.Worker.ReportProgress(args.ProgressPercentage);
             WindowManager.mainWindow.DownloadedBytes = args.BytesReceived;
         }
-
+		
         public static string webRead(string url)
         {
             logIt.add("webRead : " + url);

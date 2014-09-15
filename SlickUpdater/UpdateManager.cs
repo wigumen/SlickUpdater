@@ -39,7 +39,7 @@ namespace SlickUpdater
             string versionFile;
             string versionString;
             string version0String;
-            string xmlLine = Settings.Default.A3repourl;
+            string a3Repourl = Settings.Default.A3repourl;
             versionfile slickversion = WindowManager.mainWindow.Slickversion;
             //string slickVersion = downloader.webRead("http://projectawesomemodhost.com/beta/repo/slickupdater/slickversion");
             /*
@@ -48,9 +48,9 @@ namespace SlickUpdater
 #endif
              */
             //string[] parsedslickVersion = slickVersion.Split('%');
-            if (xmlLine != "")
+            if (a3Repourl != "")
             {
-                url = xmlLine;
+                url = a3Repourl;
             }
             else
             {
