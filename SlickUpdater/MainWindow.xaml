@@ -36,7 +36,6 @@
                             <GridViewColumn x:Name="servVersion" Header="Version on server" DisplayMemberBinding="{Binding servVersion}" />
                         </GridView>
                     </ListView.View>
-                    <Button Content="Button" Height="100" Width="75"/>
                 </ListView>
                 <Image x:Name="logo_image" HorizontalAlignment="Right" Height="96" VerticalAlignment="Top" Width="180" Grid.Column="1" Margin="0,5,0,0" Source="Resources/ArmA3.png" MouseDown="showrepo" RenderTransformOrigin="0.749,0.75" />
                 <Button x:Name="a3RefreshButton" HorizontalAlignment="Right" Height="95" VerticalAlignment="Top" Width="95" Grid.Column="1" Margin="0,106,85,0" ToolTip="Refresh Modlist" Cursor="Arrow" Click="a3RefreshButton_Click">
