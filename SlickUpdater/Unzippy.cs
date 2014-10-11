@@ -11,16 +11,11 @@ namespace SlickUpdater {
     static class Unzippy {
         static public void extract(string fileName, string directory) {
             SevenZipExtractor.SetLibraryPath("7z.dll");
-            try {
-                SevenZipExtractor extractor = new SevenZipExtractor(fileName);
-                extractor.Extracting += new EventHandler<ProgressEventArgs>(extr_Extracting);
-                extractor.FileExtractionStarted += new EventHandler<FileInfoEventArgs>(extr_FileExtractionStarted);
-                extractor.ExtractionFinished += new EventHandler<EventArgs>(extr_ExtractionFinished);
-                extractor.ExtractArchive(directory);
-            } 
-            catch (System.IO.FileNotFoundException e) {
-                MessageBox.Show(e.Message);
-            }
+            SevenZipExtractor extractor = new SevenZipExtractor(fileName);
+            extractor.Extracting += new EventHandler<ProgressEventArgs>(extr_Extracting);
+            extractor.FileExtractionStarted += new EventHandler<FileInfoEventArgs>(extr_FileExtractionStarted);
+            extractor.ExtractionFinished += new EventHandler<EventArgs>(extr_ExtractionFinished);
+            extractor.ExtractArchive(directory);
         }
         static void extr_Extracting(object sender, EventArgs e) {
 

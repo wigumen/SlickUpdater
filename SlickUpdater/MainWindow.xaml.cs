@@ -497,6 +497,9 @@ namespace SlickUpdater
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (e.Error != null) {
+                MessageBox.Show("Worker finished with errors!\n\n" + e.Error.ToString());
+            }
             a3UpdateCheck();
             indivProgress.Value = 0;
             midProgress.Value = 0;
