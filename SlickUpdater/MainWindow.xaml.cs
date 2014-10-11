@@ -56,12 +56,12 @@ namespace SlickUpdater
             Process curProc = Process.GetCurrentProcess();
             Process[] procs = Process.GetProcesses();
             foreach (Process proc in procs) {
-				if (curProc.Id != proc.Id) {
-					if (curProc.ProcessName == proc.ProcessName) {
-						MessageBox.Show("SlickUpdater is already running!");
-						Application.Current.Shutdown();
-					}
-				}
+                if (curProc.Id != proc.Id) {
+                    if (curProc.ProcessName == proc.ProcessName) {
+                        MessageBox.Show("SlickUpdater is already running!");
+                        Application.Current.Shutdown();
+                    }
+                }
             }
 
             if (util.checkDependencies() == false)
