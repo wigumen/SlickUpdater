@@ -6,6 +6,7 @@ using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using SlickUpdater.Properties;
+using System.Diagnostics;
 
 namespace SlickUpdater
 {
@@ -425,6 +426,34 @@ namespace SlickUpdater
                         {
                             WindowManager.mainWindow.Worker.ReportProgress(-1, e.Message);
                             logIt.add("Failed to copy ACRE plugin to TS3 folder. Error Message: " + e.Message);
+                        }
+                    }
+                    else
+                    {
+                        Process[] pro64 = Process.GetProcessesByName("ts3client_win64");
+                        Process[] pro32 = Process.GetProcessesByName("ts3client_win32");
+
+                        if (pro32.Length == 0 && pro64.Length == 0)
+                        {
+                            logIt.add("TS3 is not running");
+                            File.Delete(newPath.Replace(info.FullName, Settings.Default.ts3Dir + "\\plugins"));
+                            File.Copy(newPath, newPath.Replace(info.FullName, Settings.Default.ts3Dir + "\\plugins"));
+                        }
+                        else
+                        {
+                            logIt.add("TS3 is running");
+                            foreach(Process p in pro64)
+                            {
+                                p.Kill();
+                            }
+
+                            foreach(Process p in pro32)
+                            {
+                                p.Kill();
+                            }
+
+                            File.Delete(newPath.Replace(info.FullName, Settings.Default.ts3Dir + "\\plugins"));
+                            File.Copy(newPath, newPath.Replace(info.FullName, Settings.Default.ts3Dir + "\\plugins"));
                         }
                     }
                 }

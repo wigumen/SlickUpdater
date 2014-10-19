@@ -208,7 +208,11 @@ namespace SlickUpdater
             Settings.Default.firstLaunch = false;
             InitProperties();
             logocheck();
-
+            if (Settings.Default.WindowHeight > 0 || Settings.Default.WindowWidth > 0)
+            {
+                mainWindow.Width = Settings.Default.WindowWidth;
+                mainWindow.Height = Settings.Default.WindowHeight;
+            }
         }
 
         private void InitProperties()
@@ -672,7 +676,7 @@ namespace SlickUpdater
                 {
                     Content = evn.title + " by " + evn.author,
                     Height = 50,
-                    Width = 560,
+                    Width = this.Width - 45,
                     Tag = evn.url,
                     FontSize = 14
                 };
@@ -743,7 +747,7 @@ namespace SlickUpdater
                 {
                     Content = "                  " + guide.title,
                     Height = 50,
-                    Width = 560,
+                    Width = mainWindow.Width + 30,
                     Tag = guide.url + "",
                     FontSize = 14,
                     HorizontalAlignment = HorizontalAlignment.Right,
@@ -763,6 +767,13 @@ namespace SlickUpdater
         {
             var button = sender as Button;
             Process.Start(button.Tag + "");
+        }
+
+        private void UpdateSettings(object sender, SizeChangedEventArgs e)
+        {
+            Settings.Default.WindowWidth = (int)mainWindow.Width;
+            Settings.Default.WindowHeight = (int)mainWindow.Height;
+            Settings.Default.Save();
         }
     }
 

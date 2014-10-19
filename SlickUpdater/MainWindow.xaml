@@ -10,14 +10,15 @@
         mc:Ignorable="d"
         x:Class="SlickUpdater.MainWindow"
         Closing="Window_Closing"
-        Title="Slick Updater Beta" Height="361" Width="545" Loaded="MainWindow_Loaded" Background="#FF434343" ResizeMode="CanResize" MinHeight="400" MinWidth="600">
+        Title="Slick Updater Beta" Height="361" Width="545" Loaded="MainWindow_Loaded" Background="#FF434343" ResizeMode="CanResize" MinHeight="400" MinWidth="600" SizeChanged="UpdateSettings">
 
     <TabControl x:Name="tabs" Margin="0,0,0,0" BorderThickness="5">
         <TabItem x:Name="mainTab" Header="Arma 3">
             <Grid Margin="0,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="185" />
+                    <ColumnDefinition Width="183" />
+                    <ColumnDefinition Width="2"/>
                 </Grid.ColumnDefinitions>
                 <ListView x:Name="a3ModList" Grid.ColumnSpan="1" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,5,0,90">
                     <ListView.View>
@@ -37,8 +38,8 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <Image x:Name="logo_image" HorizontalAlignment="Right" Height="96" VerticalAlignment="Top" Width="180" Grid.Column="1" Margin="0,5,0,0" Source="Resources/ArmA3.png" MouseDown="showrepo" RenderTransformOrigin="0.749,0.75" />
-                <Button x:Name="a3RefreshButton" HorizontalAlignment="Right" Height="95" VerticalAlignment="Top" Width="95" Grid.Column="1" Margin="0,106,85,0" ToolTip="Refresh Modlist" Cursor="Arrow" Click="a3RefreshButton_Click">
+                <Image x:Name="logo_image" HorizontalAlignment="Right" Height="96" VerticalAlignment="Top" Width="180" Grid.Column="1" Margin="0,5,0,0" Source="Resources/ArmA3.png" MouseDown="showrepo" RenderTransformOrigin="0.749,0.75" Grid.ColumnSpan="2" />
+                <Button x:Name="a3RefreshButton" HorizontalAlignment="Right" Height="95" VerticalAlignment="Bottom" Width="95" Grid.Column="1" Margin="0,0,85,90" ToolTip="Refresh Modlist" Cursor="Arrow" Click="a3RefreshButton_Click">
                     <StackPanel>
                         <Image x:Name="refreshImage" Source="/Resources/betterRefresh.png" Cursor="Arrow" MouseEnter="a3RefreshImageEnter" RenderTransformOrigin="0.5,0.5" Height="95" Width="95">
                             <Image.RenderTransform>
@@ -49,9 +50,9 @@
                         </Image>
                     </StackPanel>
                 </Button>
-                <Button x:Name="launchOptionsButton" Content="Launch&#xA;Options" Grid.Column="1" HorizontalAlignment="Right" Margin="0,106,0,0" VerticalAlignment="Top" Width="80" Height="45" Click="launchOptionsButton_Click" FontSize="9" />
-                <Button x:Name="joinButton" Content="Join PA server" Grid.Column="1" HorizontalAlignment="Right" Margin="0,156,0,0" VerticalAlignment="Top" Width="80" Height="45" FontSize="9" Click="LaunchAndJoin" />
-                <Button x:Name="arma3Button" Content="Update ArmA 3" HorizontalAlignment="Right" Width="180" Grid.Column="1" Click="OnArma3Clicked" Margin="0,206,0,0" Height="87" VerticalAlignment="Top" />
+                <Button x:Name="launchOptionsButton" Content="Launch&#xA;Options" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,0,140" VerticalAlignment="Bottom" Width="80" Height="45" Click="launchOptionsButton_Click" FontSize="9" />
+                <Button x:Name="joinButton" Content="Join PA server" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,0,90" VerticalAlignment="Bottom" Width="80" Height="45" FontSize="9" Click="LaunchAndJoin" />
+                <Button x:Name="arma3Button" Content="Update ArmA 3" HorizontalAlignment="Right" Width="180" Grid.Column="1" Click="OnArma3Clicked" Height="85" VerticalAlignment="Bottom" />
                 <Grid x:Name="progressBarGrid" Grid.ColumnSpan="1" Margin="0" Height="85" VerticalAlignment="Bottom">
                     <Label x:Name="indivProgressTxt" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,0,60" VerticalAlignment="Bottom" Height="25" ToolTip="Induvidual file progress for mod" />
                     <ProgressBar x:Name="indivProgress" Height="25" VerticalAlignment="Bottom" ToolTip="Individual File Progress" Margin="0,0,0,60" />
@@ -64,7 +65,7 @@
         </TabItem>
         <TabItem Header="Events">
             <Grid Margin="0,0,0,0">
-                <ListBox x:Name="eventbox" Margin="0,45,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                <ListBox x:Name="eventbox" Margin="0,45,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch" />
                 <Label Content="Upcoming Events:" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Height="40" Width="210" FontSize="24" />
                 <Button x:Name="eventbutton" Content="Refresh" Margin="0,5,0,0" VerticalAlignment="Top" Height="35" Click="refreshEvents" HorizontalAlignment="Right" Width="80" />
             </Grid>
@@ -93,19 +94,19 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Label Content="Arma 3 Directory&#xA;" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top" Width="124" Height="23" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
+                <Label Content="Arma 3 Directory:&#xA;" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top" Width="124" Height="23" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
                 <TextBox x:Name="a3DirText" Height="23" Margin="0,15,10,0" VerticalAlignment="Top" TextChanged="a3DirText_TextChanged" Grid.Column="2" />
-                <Label Content="Teamspeak 3 Directory" HorizontalAlignment="Left" Margin="0,43,0,0" VerticalAlignment="Top" Height="22" Width="124" Grid.Column="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
+                <Label Content="Teamspeak 3 Directory:" HorizontalAlignment="Left" Margin="0,43,0,0" VerticalAlignment="Top" Height="22" Width="124" Grid.Column="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
                 <TextBox x:Name="ts3DirText" Grid.Column="2" Margin="0,43,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.497,0.5" TextChanged="a3Ts3Text_TextChanged" Height="22" />
-                <Label Content="Logging Window" HorizontalAlignment="Left" Margin="0,154,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
+                <Label Content="Logging Window" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
                 <Button Content="" Grid.Column="2" HorizontalAlignment="Left" Margin="0,154,0,0" VerticalAlignment="Top" Width="22" Height="22" Click="logging_click" />
                 <Label Content="Current Repo: " HorizontalAlignment="Left" Margin="0,121,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="25" Width="140" Visibility="Hidden" Grid.Column="1" />
                 <Label Content="Repository:" HorizontalAlignment="Left" Margin="0,126,0,0" VerticalAlignment="Top" Width="124" Height="23" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
                 <ComboBox x:Name="repomenu" Grid.Column="2" Margin="0,126,10,0" VerticalAlignment="Top" Height="23" SelectionChanged="setActiveRepo" />
-                <Label Content="Arma 2 OA Directory" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Width="124" Height="23" Grid.Column="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
+                <Label Content="Arma 2 OA Directory:" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Width="124" Height="23" Grid.Column="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
                 <TextBox x:Name="a2DirText" Height="23" Margin="0,70,10,0" VerticalAlignment="Top" TextChanged="a2DirText_TextChanged" Grid.Column="2" />
                 <TextBox x:Name="va2DirText" Grid.Column="2" Height="23" Margin="0,98,10,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="va2DirText_TextChanged" />
-                <Label Content="Arma 2 Directory&#xA;" HorizontalAlignment="Left" Margin="0,98,0,0" VerticalAlignment="Top" Width="124" Height="23" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
+                <Label Content="Arma 2 Directory:&#xA;" HorizontalAlignment="Left" Margin="0,98,0,0" VerticalAlignment="Top" Width="124" Height="23" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
             </Grid>
         </TabItem>
         <TabItem Header="About" HorizontalAlignment="Left" VerticalAlignment="Top" Width="55" Foreground="White">
