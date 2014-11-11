@@ -1,7 +1,7 @@
 ﻿<Window x:Class="SlickUpdater.Arma3LaunchOptionsDialogue"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Arma3LaunchOptionsDialogue" Height="300" Width="300" WindowStyle="ToolWindow" ResizeMode="CanMinimize" Closed="Window_Closed" Background="{x:Null}">
+        Title="Arma3LaunchOptionsDialogue" Height="321" Width="300" WindowStyle="ToolWindow" ResizeMode="CanMinimize" Closed="Window_Closed" Background="{x:Null}">
     <Grid>
         <CheckBox x:Name="window" Content="-window" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Cursor="Arrow" ToolTip="Displays Arma windowed instead of full screen." Click="window_Click"/>
         <CheckBox x:Name="nosplash" Content="-nosplash" HorizontalAlignment="Left" Margin="81,10,0,0" VerticalAlignment="Top" Cursor="" IsChecked="True" ToolTip="Disables splash screens." Click="nosplash_Click"/>
@@ -13,6 +13,7 @@
         <CheckBox x:Name="showScriptErrors" Content="-showScriptErrors" HorizontalAlignment="Left" Margin="158,30,0,0" VerticalAlignment="Top" ToolTip="Introduced to show errors in scripts on-screen." Click="showScriptErrors_Click"/>
         <Label Content="Custom&#xD;&#xA;Parameters:" HorizontalAlignment="Left" Margin="10,138,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="customParams" HorizontalAlignment="Left" Height="182" Margin="82,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="customParams_TextChanged"/>
+        <Button x:Name="btn_addmod" Content="Add specific mod" HorizontalAlignment="Left" Margin="82,265,0,0" VerticalAlignment="Top" Width="200" Click="btn_addmod_Click"/>
 
     </Grid>
 </Window>

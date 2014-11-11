@@ -154,21 +154,29 @@ namespace SlickUpdater
 
             //Timer callback stuff for clock
 
-            if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) &&
-                (Slickversion.version != SlickVersion))
+            AutoUpdate Update = new AutoUpdate();
+            if (Update.exupdate == true)
             {
-                MessageBoxResult result =
-                    MessageBox.Show(
-                        "There seems to be a new version of slickupdater available, do you wanna update it it?",
-                        "New Update", MessageBoxButton.YesNo);
-                switch (result)
+                Update.CheckAvailableUpdates(SlickVersion, Slickversion.version);
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) &&
+                    (Slickversion.version != SlickVersion))
                 {
-                    case MessageBoxResult.Yes:
-                        Process.Start("SlickAutoUpdate.exe");
-                        Process.GetCurrentProcess().Kill();
-                        break;
-                    case MessageBoxResult.No:
-                        break;
+                    MessageBoxResult result =
+                        MessageBox.Show(
+                            "There seems to be a new version of slickupdater available, do you wanna update it it?",
+                            "New Update", MessageBoxButton.YesNo);
+                    switch (result)
+                    {
+                        case MessageBoxResult.Yes:
+                            Process.Start("SlickAutoUpdate.exe");
+                            Process.GetCurrentProcess().Kill();
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                    }
                 }
             }
 
@@ -308,6 +316,15 @@ namespace SlickUpdater
             string gameversion = Settings.Default.gameversion;
             if (arma3Button.Content as string == "Update Arma 3" || arma3Button.Content as string == "Update Arma 2")
             {
+                if (UpdateManager.TFRalert == true)
+                {
+                    MessageBoxResult result = MessageBox.Show("Teamspeak needs to be closed before updating Task Force Radio. Would you like SU to close Teamspeak automatically when needed?\n\nPress No to get a warning before and Yes to get no warning.",
+                "Teamspeak needs to be closed...", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        UpdateManager.TFRalert = false;
+                    }
+                }
                 if (!Worker.IsBusy)
                 {
                     dlSpeedTimer = new Timer(10000);

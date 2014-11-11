@@ -21,10 +21,12 @@ namespace SlickUpdater
         private static int updateProgress;
         private static int totalFiles;
         public static bool isArma2 = false;
+        public static Boolean TFRalert = false;
 
 
         public static void UpdateCheck()
         {
+            //Boolean TFRalert = false;
             if (isArma2)
             {
                 armaPath = regcheck.arma2RegCheck();
@@ -129,6 +131,10 @@ namespace SlickUpdater
                                 date = false;
                                 //MessageBox.Show(mod + " is out of date.");
                                 logIt.add(mod + " is out to date.");
+                                if (mod == "@task_force_radio")
+                                {
+                                    TFRalert = true;
+                                }
                             }
                         }
                         else
@@ -160,6 +166,10 @@ namespace SlickUpdater
                         date = false;
                         //MessageBox.Show(mod + " doesn't exist on your computer.");
                         logIt.add(mod + " doesn't exist on your computer.");
+                        if (mod == "@task_force_radio")
+                        {
+                            TFRalert = true;
+                        }
                     }
                 }
             }
@@ -442,6 +452,10 @@ namespace SlickUpdater
                         else
                         {
                             logIt.add("TS3 is running");
+                            if (UpdateManager.TFRalert == true)
+                            {
+                                MessageBox.Show("Teamspeak will now be closed to update the plugin files.", "Teamspeak will now close...", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                            }
                             foreach(Process p in pro64)
                             {
                                 p.Kill();

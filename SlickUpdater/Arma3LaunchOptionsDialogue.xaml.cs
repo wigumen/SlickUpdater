@@ -16,10 +16,13 @@ namespace SlickUpdater {
     /// <summary>
     /// Interaction logic for Arma3LaunchOptionsDialogue.xaml
     /// </summary>
+
     public partial class Arma3LaunchOptionsDialogue : Window {
+        public static Arma3LaunchOptionsDialogue Instance;
         public Arma3LaunchOptionsDialogue() {
             InitializeComponent();
             initializeValues();
+            Instance = this;
         }
         void initializeValues() {
 
@@ -136,6 +139,13 @@ namespace SlickUpdater {
         private void Window_Closed(object sender, EventArgs e) {
             Properties.Settings.Default.Save();
             WindowManager.mainWindow.IsEnabled = true;
+        }
+
+        private void btn_addmod_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new AddModsLaunchOptions(Properties.Settings.Default.A3path.ToString());
+            window.Show();
+            btn_addmod.IsEnabled = false;
         }
     }
 }
