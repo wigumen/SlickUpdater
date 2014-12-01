@@ -341,12 +341,50 @@ namespace SlickUpdater
             }
             else if (CurrentGame == "Arma 3")
             {
-                Launch.a3Launch(false, null, null);
+                if (CheckProcess("arma3") == false)
+                {
+                    Launch.a3Launch(false, null, null);
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Arma 3 is already running!\nDo you want to start Arma 3 anyway?", "Arma 3 already running!", 
+                    MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Launch.a3Launch(false, null, null);
+                    }
+                }
             }
             else if (CurrentGame == "Arma 2")
             {
-                Launch.a2Launch(false, null, null);
+                if (CheckProcess("ArmA2OA") == false)
+                {
+                    Launch.a2Launch(false, null, null);
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Arma 2 OA is already running!\nDo you want to start Arma 2 OA anyway?", "Arma 2 OA already running!",
+                    MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Launch.a2Launch(false, null, null);
+                    }
+                }                
             }
+        }
+
+        Boolean CheckProcess(String ProcessName)
+        {
+            Process[] list = Process.GetProcesses();
+
+            foreach (Process pro in list)
+            {
+                if (pro.ProcessName == ProcessName)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
