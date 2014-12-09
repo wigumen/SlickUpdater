@@ -20,6 +20,8 @@ Credits
 -------
 Main Programmer - Wigumen (/u/wigumen)
 
+Programmer - EchoCode
+
 Original Programmer - sl8_slick (/u/sl8_slick)
 
 Contributor - AdenFlorian (/u/AdenFlorian)
