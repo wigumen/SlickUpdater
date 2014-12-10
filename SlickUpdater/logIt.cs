@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SlickUpdater
 {
-    public class logIt
+    public class logit
     {
         const string logFileName = "log.txt";
 

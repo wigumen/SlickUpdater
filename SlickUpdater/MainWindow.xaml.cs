@@ -35,7 +35,7 @@ namespace SlickUpdater
         public BackgroundWorker CheckWorker;
         public string CurrentGame = "Arma 3";
         public double DownloadedBytes = 1;
-        public logIt LogThread;
+        public logit LogThread;
         public BackgroundWorker RedditWorker;
         public string SlickVersion = "1.4.0.1";
         public versionfile Slickversion;
@@ -49,6 +49,7 @@ namespace SlickUpdater
         private DateTime lastUpdateTime;
         private DispatcherTimer timer;
         private const string Title = "Slick Updater";
+        private bool VerifyWorkerRunning = false;
 
         public MainWindow()
         {
@@ -76,7 +77,7 @@ namespace SlickUpdater
 
             string rawSlickJson = String.Empty;
 
-            logIt.add("Starting app");
+            logit.add("Starting app");
 
             //Check Command Line args
             var args = Environment.GetCommandLineArgs();
@@ -90,7 +91,7 @@ namespace SlickUpdater
                     }
                     catch (Exception e)
                     {
-                        logIt.add("Could not override masterfile: " + e);
+                        logit.add("Could not override masterfile: " + e);
                     }
                 }
             }
@@ -107,7 +108,7 @@ namespace SlickUpdater
                 }
                 catch (Exception ex)
                 {
-                    logIt.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
+                    logit.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
                 }
                 if (String.IsNullOrEmpty(rawSlickJson))
                 {
@@ -120,7 +121,7 @@ namespace SlickUpdater
                     }
                     catch (Exception ex)
                     {
-                        logIt.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
+                        logit.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
                     }
                 }
             }
@@ -145,7 +146,7 @@ namespace SlickUpdater
                     "Welcome");
                 //Note to myself: I actualy set firstLaunch to false in initProps
             }
-            LogThread = new logIt();
+            LogThread = new logit();
             repoHide();
             var fs = new FileStream("localversion", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
@@ -655,7 +656,7 @@ namespace SlickUpdater
             }
             catch(Exception ex)
             {
-                logIt.add(ex.ToString());
+                logit.add(ex.ToString());
                 return;
             }
 
@@ -777,6 +778,41 @@ namespace SlickUpdater
             Settings.Default.WindowWidth = (int)mainWindow.Width;
             Settings.Default.WindowHeight = (int)mainWindow.Height;
             Settings.Default.Save();
+        }
+
+        private void verify_click(object sender, RoutedEventArgs e)
+        {
+            string path;
+            if(Slickversion.repos[repomenu.SelectedIndex].game == "arma2")
+            {
+                path = Settings.Default.A2path + "\\";
+            } else if(Slickversion.repos[repomenu.SelectedIndex].game == "arma3")
+            {
+                path = Settings.Default.A3path + "\\";
+            } else
+            {
+                throw new System.Exception("WHAT THE FUCKING IS GOING ON?");
+            }
+            string[] verifierArgs = {Slickversion.repos[repomenu.SelectedIndex].url, path};
+            BackgroundWorker verifyAsync = new BackgroundWorker();
+            verifyAsync.DoWork += verify_mods;
+            verifyAsync.RunWorkerCompleted += verify_done;
+            VerifyWorkerRunning = true;
+            verifyAsync.RunWorkerAsync(verifierArgs);
+            mainWindow.verifyButton.IsEnabled = false;
+        }
+
+        private void verify_mods(object sender, DoWorkEventArgs e)
+        {
+            string[] args = e.Argument as string[];
+            var slickverify = new SlickVerify();
+            slickverify.VerifyFiles(args[0], args[1]);
+        }
+
+        private void verify_done(object sender, RunWorkerCompletedEventArgs e)
+        {
+            VerifyWorkerRunning = false;
+            mainWindow.verifyButton.IsEnabled = true;
         }
     }
 

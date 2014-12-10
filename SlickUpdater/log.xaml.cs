@@ -28,13 +28,13 @@ namespace SlickUpdater
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            logIt.logData = "";
+            logit.logData = "";
             update();
         }
 
         private void copy_Click(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(logIt.logData);
+            Clipboard.SetText(logit.logData);
         }
 
         private void updatelog_Click(object sender, RoutedEventArgs e)
@@ -44,7 +44,7 @@ namespace SlickUpdater
 
         private void update()
         {
-            logwindow.Text = logIt.logData;
+            logwindow.Text = logit.logData;
         }
     }
 }

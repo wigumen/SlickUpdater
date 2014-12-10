@@ -107,6 +107,8 @@
                 <TextBox x:Name="a2DirText" Height="23" Margin="0,70,10,0" VerticalAlignment="Top" TextChanged="a2DirText_TextChanged" Grid.Column="2" />
                 <TextBox x:Name="va2DirText" Grid.Column="2" Height="23" Margin="0,98,10,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="va2DirText_TextChanged" />
                 <Label Content="Arma 2 Directory:&#xA;" HorizontalAlignment="Left" Margin="0,98,0,0" VerticalAlignment="Top" Width="124" Height="23" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
+                <Label Content="Verify Mods" HorizontalAlignment="Left" Margin="10,181,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
+                <Button x:Name="verifyButton" Content="" Grid.Column="2" HorizontalAlignment="Left" Margin="0,181,0,0" VerticalAlignment="Top" Width="22" Height="22" Click="verify_click" />
             </Grid>
         </TabItem>
         <TabItem Header="About" HorizontalAlignment="Left" VerticalAlignment="Top" Width="55" Foreground="White">

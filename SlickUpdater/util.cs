@@ -50,7 +50,7 @@ namespace SlickUpdater
 
             if (filesFound == deps.Length)
                 foundall = true;
-            logIt.add("Found all dependencies: " + foundall);
+            logit.add("Found all dependencies: " + foundall);
             return foundall;
         }
     }
