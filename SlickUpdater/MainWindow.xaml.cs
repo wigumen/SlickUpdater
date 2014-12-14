@@ -801,6 +801,8 @@ namespace SlickUpdater
             verifyAsync.RunWorkerAsync(verifierArgs);
             mainWindow.verifyButton.IsEnabled = false;
             logging_click(null, null);
+            mainWindow.verifyButton.Content = "Running";
+            mainWindow.verifyButton.Width = 100;
         }
 
         private void verify_mods(object sender, DoWorkEventArgs e)
@@ -814,6 +816,8 @@ namespace SlickUpdater
         {
             VerifyWorkerRunning = false;
             mainWindow.verifyButton.IsEnabled = true;
+            mainWindow.verifyButton.Content = "";
+            mainWindow.verifyButton.Width = 22;
         }
     }
 
