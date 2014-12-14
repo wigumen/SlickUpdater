@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace SlickUpdater
 {
@@ -19,10 +20,15 @@ namespace SlickUpdater
     /// </summary>
     public partial class log : Window
     {
+        BackgroundWorker autoUpdate = new BackgroundWorker();
+
         public log()
         {
             InitializeComponent();
             //logwindow.Text = logIt.logData;
+            autoUpdate.DoWork += constantUpdate;
+            autoUpdate.RunWorkerCompleted += constantUpdateDone;
+            autoUpdate.RunWorkerAsync();
             update();
         }
 
@@ -42,9 +48,20 @@ namespace SlickUpdater
             update();
         }
 
-        private void update()
+        public void update()
         {
             logwindow.Text = logit.logData;
+        }
+
+        public void constantUpdate(object sender, DoWorkEventArgs e)
+        {
+            System.Threading.Thread.Sleep(200);
+        }
+
+        private void constantUpdateDone(object sender, RunWorkerCompletedEventArgs e)
+        {
+            update();
+            autoUpdate.RunWorkerAsync();
         }
     }
 }
