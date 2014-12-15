@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -143,8 +144,15 @@ namespace SlickUpdater {
 
         private void btn_addmod_Click(object sender, RoutedEventArgs e)
         {
-            var window = new AddModsLaunchOptions(Properties.Settings.Default.A3path.ToString());
-            window.Show();
+            if (Properties.Settings.Default.gameversion == "ArmA3")
+            {
+                var window = new AddModsLaunchOptions(Properties.Settings.Default.ModPathA3.ToString());
+                window.Show();
+            }
+            else if (Properties.Settings.Default.gameversion == "ArmA2"){
+                var window = new AddModsLaunchOptions(Properties.Settings.Default.ModPathA2.ToString());
+                window.Show();
+            }
             btn_addmod.IsEnabled = false;
         }
     }

@@ -213,6 +213,17 @@ namespace SlickUpdater
             va2DirText.Text = regcheck.varma2RegCheck();
             ts3DirText.Text = regcheck.ts3RegCheck();
 
+            //Sets modpaths
+            if (Settings.Default.ModPathA3 == "")
+            {
+                A3ModPath.Text = a3DirText.Text;
+            }
+
+            if (Settings.Default.ModPathA2 == "")
+            {
+                A2ModPath.Text = a2DirText.Text;
+            }            
+
             Settings.Default.firstLaunch = false;
             InitProperties();
             logocheck();
@@ -227,6 +238,9 @@ namespace SlickUpdater
         {
             a2DirText.Text = Settings.Default.A2path;
             a3DirText.Text = Settings.Default.A3path;
+            A3ModPath.Text = Settings.Default.ModPathA3;
+            A2ModPath.Text = Settings.Default.ModPathA2;
+
             ts3DirText.Text = Settings.Default.ts3Dir;
             if ((repomenu.SelectedIndex) < (Slickversion.repos.Count))
             {
@@ -831,6 +845,18 @@ namespace SlickUpdater
         {
             Settings.Default.WindowWidth = (int)mainWindow.Width;
             Settings.Default.WindowHeight = (int)mainWindow.Height;
+            Settings.Default.Save();
+        }
+
+        private void A3ModPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Settings.Default.ModPathA3 = A3ModPath.Text;
+            Settings.Default.Save();
+        }
+
+        private void A2ModPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Settings.Default.ModPathA2 = A2ModPath.Text;
             Settings.Default.Save();
         }
     }

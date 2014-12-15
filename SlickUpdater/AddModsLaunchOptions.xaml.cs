@@ -61,13 +61,15 @@ namespace SlickUpdater
             //Saves the whole custom params to a string.
             String tmp = Arma3LaunchOptionsDialogue.Instance.customParams.Text;
             //Creates a regex to scan tmp with.
-            Regex rgex = new Regex("@[A-z0-9_]*");
+            //Regex rgex = new Regex("@[A-z0-9_]*");
+            Regex rgex = new Regex("(@[A-z0-9_\\:]*|C:\\@[A-z0-9_\\:]*)");
             MatchCollection coll = rgex.Matches(tmp);
 
             //Adds all of the matched results.
             for (int i = 0; i < coll.Count; i++)
             {
                 added.Items.Add(coll[i].ToString().Replace(";", ""));
+                logIt.add(coll[i].ToString());
             }
         }
         private void btn_add_Click(object sender, RoutedEventArgs e)
@@ -117,10 +119,11 @@ namespace SlickUpdater
                 addedmods = "-mod=" + addedmods;
             }
             //Gets the customParams textbox value and removes ";" and "-mod=" and saves to String tmp
-            String tmp = Arma3LaunchOptionsDialogue.Instance.customParams.Text.Replace(";", "").Replace("-mod=", "");
+            String tmp = "";
+            tmp = Arma3LaunchOptionsDialogue.Instance.customParams.Text.Replace(";", "").Replace("-mod=", "");
 
             //Creates a regex to find all the mods in string tmp
-            Regex rgx = new Regex("@[A-z0-9_-]*");
+            Regex rgx = new Regex("(@[A-z0-9_\\:]*|C:\\@[A-z0-9_\\:]*)");
             MatchCollection collection = rgx.Matches(tmp);
 
             //Removes all the modnames in the string tmp
@@ -130,9 +133,12 @@ namespace SlickUpdater
             }
 
             //If the first character in the string tmp is NOT a whitespace it will add one
-            if (tmp[0] != ' ' && added.Items.Count != 0)
+            if (tmp != "")
             {
-                addedmods += " ";
+                if (tmp[0] != ' ' && added.Items.Count != 0)
+                {
+                    addedmods += " ";
+                }
             }
 
             //Replaces the old text with the new one

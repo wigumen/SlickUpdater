@@ -29,11 +29,11 @@ namespace SlickUpdater
             //Boolean TFRalert = false;
             if (isArma2)
             {
-                armaPath = regcheck.arma2RegCheck();
+                armaPath = path("ArmA2");
             }
             else
             {
-                armaPath = Settings.Default.A3path;
+                armaPath = path("ArmA3");
             }
             string mod;
             int index;
@@ -184,16 +184,15 @@ namespace SlickUpdater
             WindowManager.mainWindow.CheckWorker.ReportProgress(2, a3Items);
         }
 
-
         public static void a3Update()
         {
             if (isArma2)
             {
-                armaPath = Settings.Default.A2path;
+                armaPath = path("ArmA2");
             }
             else
             {
-                armaPath = Settings.Default.A3path;
+                armaPath = path("ArmA3");
             }
             if (url == "")
             {
@@ -297,11 +296,13 @@ namespace SlickUpdater
             string arma3Path = "";
             if (isArma2)
             {
-                arma3Path = regcheck.arma2RegCheck();
+                //arma3Path = regcheck.arma2RegCheck();
+                arma3Path = path("ArmA2");
             }
             else
             {
-                arma3Path = regcheck.arma3RegCheck();
+                //arma3Path = regcheck.arma3RegCheck();
+                arma3Path = path("ArmA3");
             }
 
             string modPath = arma3Path + "\\" + mod;
@@ -335,14 +336,16 @@ namespace SlickUpdater
         {
             if (isArma2)
             {
-                armaPath = regcheck.arma2RegCheck();
+                //armaPath = regcheck.arma2RegCheck();
+                armaPath = path("ArmA2");
             }
             else
             {
-                armaPath = Settings.Default.A3path;
+                //armaPath = Settings.Default.A3path;
+                armaPath = path("ArmA3");
             }
             string relativePath = folder.Replace(armaPath, "");
-            string[] files = downloader.webReadLines(url + relativePath + "/files.cfg");
+            string[] files = downloader.webReadLines(url + relativePath.Replace(@"\\", "") + "/files.cfg");
 
             var info = new DirectoryInfo(folder);
 
@@ -519,6 +522,33 @@ namespace SlickUpdater
                 MessageBox.Show(e.Message);
                 logIt.add(e.Message);
             }
+        }
+        static string path(string game)
+        {
+            string path = "";
+            if (game == "ArmA3")
+            {
+                if (Properties.Settings.Default.A3path != Properties.Settings.Default.ModPathA3)
+                {
+                    path = Properties.Settings.Default.ModPathA3;
+                }
+                else
+                {
+                    path = Settings.Default.A3path;
+                }
+            }
+            if (game == "ArmA2")
+            {
+                if (Properties.Settings.Default.A2path != Properties.Settings.Default.ModPathA3)
+                {
+                    path = Properties.Settings.Default.ModPathA2;
+                }
+                else
+                {
+                    path = Settings.Default.A2path;
+                }
+            }
+            return path;
         }
     }
 }
