@@ -57,7 +57,7 @@ namespace SlickUpdater {
             }
 
             Process.Start(arma3Path, args);
-            logit.add("Launched Arma 3 with " + args);
+            logIt.add("Launched Arma 3 with " + args);
         }
         //added ArmA2 OA launcher
         static public void a2Launch(bool connectToServer, string server, string password)
@@ -129,7 +129,7 @@ namespace SlickUpdater {
             }
 
             Process.Start(arma2Path, args);
-            logit.add("Launched Arma 2 with " + args);
+            logIt.add("Launched Arma 2 with " + args);
         }
         static private string Modlister() {
             string modlist = "";

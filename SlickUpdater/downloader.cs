@@ -37,7 +37,7 @@ namespace SlickUpdater {
 		
         public static string webRead(string url)
         {
-            logit.add("webRead : " + url);
+            logIt.add("webRead : " + url);
             String content = String.Empty;
             try
             {
@@ -48,7 +48,7 @@ namespace SlickUpdater {
             }
             catch (Exception e)
             {
-                logit.add(e.Message);
+                logIt.add(e.Message);
                 throw;
                 //Optionally, show the user something is wrong
                 //MessageBox.Show("An error occured while trying to download something. Maybe the server is down.\n\n" + e.ToString(), "Error while downloading", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -84,7 +84,7 @@ namespace SlickUpdater {
                 MessageBox.Show("Tell Slick He Fucked Up!", "A NotSupportedException occurred in the download method");
             }
             while (!downloadFinished) { System.Threading.Thread.Sleep(20);  };
-            logit.add("Downloaded " + filename);
+            logIt.add("Downloaded " + filename);
             
             return filename;
         }
@@ -99,7 +99,7 @@ namespace SlickUpdater {
             } catch (IOException e) {
                 MessageBox.Show(e.Message);
             }
-            logit.add("Deleted directory " + dir);
+            logIt.add("Deleted directory " + dir);
         }
         static void setAttributesNormal(DirectoryInfo dir) {
             foreach (DirectoryInfo subDirPath in dir.GetDirectories()) {

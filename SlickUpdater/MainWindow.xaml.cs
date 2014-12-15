@@ -35,7 +35,7 @@ namespace SlickUpdater
         public BackgroundWorker CheckWorker;
         public string CurrentGame = "Arma 3";
         public double DownloadedBytes = 1;
-        public logit LogThread;
+        public logIt LogThread;
         public BackgroundWorker RedditWorker;
         public string SlickVersion = "1.4.0.1";
         public versionfile Slickversion;
@@ -77,7 +77,7 @@ namespace SlickUpdater
 
             string rawSlickJson = String.Empty;
 
-            logit.add("Starting app");
+            logIt.add("Starting app");
 
             //Check Command Line args
             var args = Environment.GetCommandLineArgs();
@@ -91,7 +91,7 @@ namespace SlickUpdater
                     }
                     catch (Exception e)
                     {
-                        logit.add("Could not override masterfile: " + e);
+                        logIt.add("Could not override masterfile: " + e);
                     }
                 }
             }
@@ -108,7 +108,7 @@ namespace SlickUpdater
                 }
                 catch (Exception ex)
                 {
-                    logit.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
+                    logIt.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
                 }
                 if (String.IsNullOrEmpty(rawSlickJson))
                 {
@@ -121,7 +121,7 @@ namespace SlickUpdater
                     }
                     catch (Exception ex)
                     {
-                        logit.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
+                        logIt.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
                     }
                 }
             }
@@ -146,7 +146,7 @@ namespace SlickUpdater
                     "Welcome");
                 //Note to myself: I actualy set firstLaunch to false in initProps
             }
-            LogThread = new logit();
+            LogThread = new logIt();
             repoHide();
             var fs = new FileStream("localversion", FileMode.Create, FileAccess.Write);
             var sw = new StreamWriter(fs);
@@ -656,7 +656,7 @@ namespace SlickUpdater
             }
             catch(Exception ex)
             {
-                logit.add(ex.ToString());
+                logIt.add(ex.ToString());
                 return;
             }
 

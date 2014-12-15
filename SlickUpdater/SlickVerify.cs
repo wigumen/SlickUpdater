@@ -15,7 +15,7 @@ namespace SlickUpdater
     {
         public void VerifyFiles(String Url, String Dir)
         {
-            logit.add("Scanning for mods");
+            logIt.add("Scanning for mods");
 
             output("@" + DateTime.Now.ToString("H:mm:ss") + " Starting Scan");
 
@@ -146,7 +146,7 @@ namespace SlickUpdater
                     }
                 }
 
-                logit.add("@" + DateTime.Now.ToString("H:mm:ss") + " Verification done!");
+                logIt.add("@" + DateTime.Now.ToString("H:mm:ss") + " Verification done!");
                 output("Result: Scanned through " + LocalFiles.Count.ToString() + " files and found " + FinalList.Count.ToString() + " faulty files");
             }
             catch (Exception ex)
@@ -395,13 +395,13 @@ namespace SlickUpdater
         {
             //MainWindow.Instance.lbl_cuop.Content = text;
             //MainWindow.Instance.lview_mods.Items.Add(text);
-            logit.add(text);
+            logIt.add(text);
         }
 
         void addline(string text)
         {
             //MainWindow.Instance.lview_mods.Items.Add(text);
-            logit.add(text);
+            logIt.add(text);
         }
     }
     public class SlickJson
