@@ -14,6 +14,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>C:\Users\Ian\Documents\Output\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -33,6 +34,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <ExpressionBlendVersion>12.0.41002.1</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,6 +45,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -52,6 +55,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>Internet</TargetZone>
@@ -92,6 +96,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -105,6 +110,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
@@ -115,10 +121,13 @@
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AddModsLaunchOptions.xaml.cs">
+      <DependentUpon>AddModsLaunchOptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Arma3LaunchOptionsDialogue.xaml.cs">
       <DependentUpon>Arma3LaunchOptionsDialogue.xaml</DependentUpon>
     </Compile>
-    <Compile Include="a2UpdateManager.cs" />
+    <Compile Include="AutoUpdate.cs" />
     <Compile Include="config.cs" />
     <Compile Include="downloader.cs" />
     <Compile Include="DragAndDrop.cs" />
@@ -126,18 +135,20 @@
     <Compile Include="log.xaml.cs">
       <DependentUpon>log.xaml</DependentUpon>
     </Compile>
-    <Compile Include="logIt.cs" />
+    <Compile Include="logit.cs" />
     <Compile Include="newRepo.xaml.cs">
       <DependentUpon>newRepo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Settings1.Designer.cs">
+    <Compile Include="notify.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="reddit.cs" />
     <Compile Include="regcheck.cs" />
-    <Compile Include="a3UpdateManager.cs" />
+    <Compile Include="SlickVerify.cs" />
+    <Compile Include="UpdateManager.cs" />
     <Compile Include="RepoGenerator.cs" />
     <Compile Include="RepoGen_InputDir_Browse.xaml.cs">
       <DependentUpon>RepoGen_InputDir_Browse.xaml</DependentUpon>
@@ -150,11 +161,16 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Unzippy.cs" />
+    <Compile Include="util.cs" />
     <Compile Include="WindowManager.cs" />
     <Compile Include="Zippy.cs" />
     <Page Include="About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddModsLaunchOptions.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Arma3LaunchOptionsDialogue.xaml">
       <SubType>Designer</SubType>
@@ -216,7 +232,7 @@
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>

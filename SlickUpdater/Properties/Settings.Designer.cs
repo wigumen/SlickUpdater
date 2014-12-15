@@ -133,7 +133,7 @@ namespace SlickUpdater.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string A2repo {
             get {
                 return ((string)(this["A2repo"]));
@@ -260,6 +260,66 @@ namespace SlickUpdater.Properties {
             }
             set {
                 this["A3path"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string vA2Path {
+            get {
+                return ((string)(this["vA2Path"]));
+            }
+            set {
+                this["vA2Path"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int WindowWidth {
+            get {
+                return ((int)(this["WindowWidth"]));
+            }
+            set {
+                this["WindowWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int WindowHeight {
+            get {
+                return ((int)(this["WindowHeight"]));
+            }
+            set {
+                this["WindowHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ModPathA2 {
+            get {
+                return ((string)(this["ModPathA2"]));
+            }
+            set {
+                this["ModPathA2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ModPathA3 {
+            get {
+                return ((string)(this["ModPathA3"]));
+            }
+            set {
+                this["ModPathA3"] = value;
             }
         }
     }

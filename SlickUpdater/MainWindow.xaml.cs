@@ -1,148 +1,284 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Security.AccessControl;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Media.Animation;
-using System.ComponentModel;
-using System.IO;
-using System.Xml.Linq;
-using System.Diagnostics;
+using System.Windows.Threading;
 using Newtonsoft.Json;
-using System.Net;
+using SlickUpdater.Properties;
+using Button = System.Windows.Controls.Button;
+using DragEventArgs = System.Windows.DragEventArgs;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using Image = System.Windows.Controls.Image;
+using MessageBox = System.Windows.MessageBox;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using Timer = System.Timers.Timer;
 
 namespace SlickUpdater
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public BackgroundWorker worker;
-        public BackgroundWorker checkWorker;
-        public BackgroundWorker redditWorker;
-        public logIt logThread;
-        public string slickVersion = "1.3";
-        List<MenuItem> items = new List<MenuItem>();
-        //string rawslickServVer;
-        //string[] slickServVer;
-        public versionfile slickversion;
-        string subreddit = "/r/ProjectMilSim";
-        public double downloadedBytes = 1;
-        Stopwatch sw = new Stopwatch();
+        private readonly List<events> _rposts = new List<events>();
+        public BackgroundWorker CheckWorker;
+        public string CurrentGame = "Arma 3";
+        public double DownloadedBytes = 1;
+        public logIt LogThread;
+        public BackgroundWorker RedditWorker;
+        public string SlickVersion = "1.4.0.1";
+        public versionfile Slickversion;
+        public BackgroundWorker Worker;
+        private string _downloadProgress = "";
+        private string _subreddit = "/r/ProjectMilSim";
+        private string _time = "";
+        private int clickCount;
+        private Timer dlSpeedTimer;
+        private double lastDownloadedBytes;
+        private DateTime lastUpdateTime;
+        private DispatcherTimer timer;
+        private const string Title = "Slick Updater";
+        private bool VerifyWorkerRunning = false;
 
         public MainWindow()
         {
-            string rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
-            slickversion = JsonConvert.DeserializeObject<versionfile>(rawSlickJson);
-            InitializeComponent();
-            //First launch message!
-            if(Properties.Settings.Default.firstLaunch == true)
-            {
-                MessageBox.Show("Hello! This seems to be the first time you launch SlickUpdater so make sure your arma 3 and ts3 path is set correctly in options. Have a nice day!", "Welcome");
-                Properties.Settings.Default.firstLaunch = false;
-            }
-            logThread = new logIt();
-            repoHide();
-            FileStream fs = new FileStream("localversion", FileMode.Create, FileAccess.Write);
-            StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine(slickVersion);
-            sw.Close();
-#if DEBUG
-            //local debug server for A2 
-            rawslickServVer = downloader.webRead("http://localhost/repo/slickupdater/slickversion");
-#endif
-            MenuItem pa = new MenuItem();
-            pa.Tag = "http://projectawesomemodhost.com/beta/repo/";
-            pa.Header = "PA Repo";
-            items.Add(pa);
-            if (slickversion.version != slickVersion)
-            {
-                MessageBoxResult result = MessageBox.Show("There seems to be a new version of slickupdater available, do you wanna update it it?", "New Update", MessageBoxButton.YesNo);
-                switch (result)
-                {
-                    case MessageBoxResult.Yes:
-                        System.Diagnostics.Process.Start("SlickAutoUpdate.exe");
-                        System.Diagnostics.Process.GetCurrentProcess().Kill();
-                        break;
-                    case MessageBoxResult.No:
-
-                        break;
-                }
-            }
-            initRepos();
-            // Initialize Update Worker
-            worker = new BackgroundWorker();
-            worker.DoWork += worker_DoWork;
-            worker.ProgressChanged += worker_ProgressChanged;
-            worker.WorkerReportsProgress = true;
-            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
-
-            //init checkWorker
-            checkWorker = new BackgroundWorker();
-            checkWorker.DoWork += checkWorker_DoWork;
-            checkWorker.ProgressChanged += checkWorker_ProgressChanged;
-            checkWorker.WorkerReportsProgress = true;
-            checkWorker.RunWorkerCompleted += checkWorker_RunWorkerCompleted;
-
-            //reddit worker
-            redditWorker = new BackgroundWorker();
-            redditWorker.DoWork += redditWorker_DoWork;
-            redditWorker.RunWorkerCompleted += redditworker_Done;
-
-            WindowManager.SetWnd(this);
-
-            //Check if the user if a PA user or a TEST user
-            if (repomenu.SelectedIndex != -1)
-            {
-                var gameversion = Properties.Settings.Default.gameversion;
-                if (gameversion == "ArmA3")
-                {
-                    a3DirText.Text = regcheck.arma3RegCheck();
-                    ts3DirText.Text = regcheck.ts3RegCheck();
-                    //menuButton.Content = Properties.Settings.Default.A3repo;
-                    subreddit = slickversion.repos[repomenu.SelectedIndex].subreddit;
-                    joinButton.Content = slickversion.repos[repomenu.SelectedIndex].joinText;
-
-                }
-                else if(gameversion == "ArmA2")
-                {
-                    var subredd = Properties.Settings.Default.A2repo;
-                    if (subredd == "PA ArmA 2 Repo")
-                    {
-                        subreddit = "/r/ProjectMilSim";
-                        joinButton.Content = "Join PA ArmA 2 server";
+            // Check if another instance is already running
+            Process curProc = Process.GetCurrentProcess();
+            Process[] procs = Process.GetProcesses();
+            foreach (Process proc in procs) {
+                if (curProc.Id != proc.Id) {
+                    if (curProc.ProcessName == proc.ProcessName) {
+                        MessageBox.Show("SlickUpdater is already running!");
+                        Application.Current.Shutdown();
                     }
                 }
             }
 
+            if (util.checkDependencies() == false)
+            {
+                //MessageBoxResult result =
+                   MessageBox.Show(
+                    "Theres missions .dll's from the slickupdater install folder, please make sure you downloaded the correct version on GitHub and all the required dll's are in the installation folder",
+                    "Dun Goofed", MessageBoxButton.OK);
+
+                Process.GetCurrentProcess().Kill();
+            }
+
+            string rawSlickJson = String.Empty;
+
+            logIt.add("Starting app");
+
+            //Check Command Line args
+            var args = Environment.GetCommandLineArgs();
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i] == "-override")
+                {
+                    try
+                    {
+                        rawSlickJson = downloader.webRead(args[i + 1]);
+                    }
+                    catch (Exception e)
+                    {
+                        logIt.add("Could not override masterfile: " + e);
+                    }
+                }
+            }
+            if (rawSlickJson == String.Empty)
+            {
+                try
+                {
+#if DEBUG
+                //local debug server for testing
+                rawSlickJson = downloader.webRead("http://localhost/slickversion.json");
+#else
+                    //Default master file location hosted on Project Awesome servers
+                    rawSlickJson = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/slickversion.json");
+                }
+                catch (Exception ex)
+                {
+                    logIt.add("Error while downloading slickversion.json trying backup server:\n" + ex.ToString());
+                }
+                if (String.IsNullOrEmpty(rawSlickJson))
+                {
+                    try
+                    {
+                        //Backup master file hosted on GitHub servers
+                        rawSlickJson =
+                            downloader.webRead(
+                                "https://gist.githubusercontent.com/wigumen/015cb44774c6320cf901/raw/6a5f22437997c6c120a1b15beaabdb3ade3be06a/slickversion.json");
+                    }
+                    catch (Exception ex)
+                    {
+                        logIt.add("Error while trying to reach backup server going offline mode:\n" + ex.ToString());
+                    }
+                }
+            }
+
+            if (!String.IsNullOrEmpty(rawSlickJson))
+            {
+                Slickversion = JsonConvert.DeserializeObject<versionfile>(rawSlickJson);
+            }
+            else
+            {
+                // the Slickversion file couldn't be downloaded, create it ourselves.
+                // Note: this means the data displayed in the app is not correct
+                Slickversion = new versionfile();
+            }
+#endif
+            InitializeComponent();
+            //First launch message!
+            if (Settings.Default.firstLaunch)
+            {
+                MessageBox.Show(
+                    "Hello! This seems to be the first time you launch SlickUpdater so make sure your arma 3 and ts3 path is set correctly in options. Have a nice day!",
+                    "Welcome");
+                //Note to myself: I actualy set firstLaunch to false in initProps
+            }
+            LogThread = new logIt();
+            repoHide();
+            var fs = new FileStream("localversion", FileMode.Create, FileAccess.Write);
+            var sw = new StreamWriter(fs);
+            sw.WriteLine(SlickVersion);
+            sw.Close();
+
+            //Timer callback stuff for clock
+
+            AutoUpdate Update = new AutoUpdate();
+            if (Update.exupdate == true)
+            {
+                Update.CheckAvailableUpdates(SlickVersion, Slickversion.version);
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) &&
+                    (Slickversion.version != SlickVersion))
+                {
+                    MessageBoxResult result =
+                        MessageBox.Show(
+                            "There seems to be a new version of slickupdater available, do you wanna update it it?",
+                            "New Update", MessageBoxButton.YesNo);
+                    switch (result)
+                    {
+                        case MessageBoxResult.Yes:
+                            Process.Start("SlickAutoUpdate.exe");
+                            Process.GetCurrentProcess().Kill();
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                    }
+                }
+            }
+
+            initRepos();
+            // Initialize Update Worker
+            Worker = new BackgroundWorker();
+            Worker.DoWork += worker_DoWork;
+            Worker.ProgressChanged += worker_ProgressChanged;
+            Worker.WorkerReportsProgress = true;
+            Worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+
+            //init checkWorker
+            CheckWorker = new BackgroundWorker();
+            CheckWorker.DoWork += checkWorker_DoWork;
+            CheckWorker.ProgressChanged += checkWorker_ProgressChanged;
+            CheckWorker.WorkerReportsProgress = true;
+            CheckWorker.RunWorkerCompleted += checkWorker_RunWorkerCompleted;
+
+            //reddit worker
+            RedditWorker = new BackgroundWorker();
+            RedditWorker.DoWork += redditWorker_DoWork;
+            RedditWorker.RunWorkerCompleted += redditworker_Done;
+
+            //Init timer
+            timer = new DispatcherTimer();
+            timer.Tick += updateTime;
+            timer.Interval = new TimeSpan(0, 0, 10);
+            timer.Start();
+
+            WindowManager.SetWnd(this);
+
+            a3DirText.Text = regcheck.arma3RegCheck();
+            a2DirText.Text = regcheck.arma2RegCheck();
+            va2DirText.Text = regcheck.varma2RegCheck();
+            ts3DirText.Text = regcheck.ts3RegCheck();
+
+            //Sets modpaths
+            if (Settings.Default.ModPathA3 == "")
+            {
+                A3ModPath.Text = a3DirText.Text;
+            }
+
+            if (Settings.Default.ModPathA2 == "")
+            {
+                A2ModPath.Text = a2DirText.Text;
+            }            
+
+            Settings.Default.firstLaunch = false;
+            InitProperties();
+            logocheck();
+            if (Settings.Default.WindowHeight > 0 || Settings.Default.WindowWidth > 0)
+            {
+                mainWindow.Width = Settings.Default.WindowWidth;
+                mainWindow.Height = Settings.Default.WindowHeight;
+            }
         }
+
+        private void InitProperties()
+        {
+            a2DirText.Text = Settings.Default.A2path;
+            a3DirText.Text = Settings.Default.A3path;
+            A3ModPath.Text = Settings.Default.ModPathA3;
+            A2ModPath.Text = Settings.Default.ModPathA2;
+
+            ts3DirText.Text = Settings.Default.ts3Dir;
+            if ((repomenu.SelectedIndex) < (Slickversion.repos.Count))
+            {
+                _subreddit = Slickversion.repos[repomenu.SelectedIndex].subreddit;
+                joinButton.Content = Slickversion.repos[repomenu.SelectedIndex].joinText;
+            }
+            updateGuides(null, null);
+
+
+        }
+
         //Do some work
-        void checkWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            if (checkWorker.IsBusy) return;
-            if (worker.IsBusy) return;
-            setBusy(false);
+        private void checkWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (CheckWorker.IsBusy) return;
+            if (Worker.IsBusy) return;
+            SetBusy(false);
         }
+
         //check if da shit is up to date
-        void a3UpdateCheck() {
-            if (!checkWorker.IsBusy) {
-                setBusy(true);
-                checkWorker.RunWorkerAsync();
-            } else {
+        private void a3UpdateCheck()
+        {
+            if (!CheckWorker.IsBusy)
+            {
+                SetBusy(true);
+                CheckWorker.RunWorkerAsync();
+            }
+            else
+            {
                 MessageBox.Show("checkWorker is Busy!");
             }
         }
-        
-        void checkWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-            switch (e.ProgressPercentage) {
+
+        private void checkWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            switch (e.ProgressPercentage)
+            {
                 case -1:
                     MessageBox.Show(e.UserState as String);
                     break;
@@ -152,77 +288,141 @@ namespace SlickUpdater
                 case 2:
                     a3ModList.ItemsSource = e.UserState as List<Mod>;
                     break;
-
             }
         }
+
         // worker runs the updateManager, checks game version using <GameVER><Game>
-        void checkWorker_DoWork(object sender, DoWorkEventArgs e) {
-            var gameversion = Properties.Settings.Default.gameversion;
-            if (gameversion == "ArmA3")
-            {
-                
-                a3UpdateManager.arma3UpdateCheck();
-            }
-            else if (gameversion == "ArmA2")
-            {
-                a2UpdateManager.arma2UpdateCheck();
-            }
-            else
-            {
-                MessageBox.Show("Game version dun goofed! Please report issue to wigumen");
-            }
+        private void checkWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            UpdateManager.UpdateCheck();
         }
 
-        private void setBusy(bool isBusy) {
-            if (isBusy) {
+        private void updateTitle()
+        {
+            base.Title = _time + " UTC" + " | " + Title + _downloadProgress;
+        }
+
+        private void updateTime(object obj, EventArgs e)
+        {
+            _time = DateTime.UtcNow.ToString("HH:mm");
+            updateTitle();
+        }
+
+        private void SetBusy(bool isBusy)
+        {
+            if (isBusy)
+            {
                 a3RefreshButton.IsEnabled = false;
                 arma3Button.IsEnabled = false;
                 joinButton.IsEnabled = false;
                 repomenu.IsEnabled = false;
-            } else if (!isBusy) {
+            }
+            else if (!isBusy)
+            {
                 a3RefreshButton.IsEnabled = true;
                 arma3Button.IsEnabled = true;
                 joinButton.IsEnabled = true;
                 repomenu.IsEnabled = true;
             }
         }
-        private void onArma3Clicked(object sender, RoutedEventArgs e) {
-            var gameversion = Properties.Settings.Default.gameversion;
-            if (arma3Button.Content as string == "Update ArmA 3" || arma3Button.Content as string == "Update ArmA 2")
+
+        private void OnArma3Clicked(object sender, RoutedEventArgs e)
+        {
+            string gameversion = Settings.Default.gameversion;
+            if (arma3Button.Content as string == "Update Arma 3" || arma3Button.Content as string == "Update Arma 2")
             {
-                if (!worker.IsBusy) {
-                    setBusy(true);
-                    worker.RunWorkerAsync();
-                } else {
-                    MessageBox.Show("Worker is Busy(You really must be dicking around or unlucky to make this pop up...)");
+                if (UpdateManager.TFRalert == true)
+                {
+                    MessageBoxResult result = MessageBox.Show("Teamspeak needs to be closed before updating Task Force Radio. Would you like SU to close Teamspeak automatically when needed?\n\nPress No to get a warning before and Yes to get no warning.",
+                "Teamspeak needs to be closed...", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        UpdateManager.TFRalert = false;
+                    }
+                }
+                if (!Worker.IsBusy)
+                {
+                    dlSpeedTimer = new Timer(10000);
+                    dlSpeedTimer.Elapsed += updateDlSpeed;
+                    dlSpeedTimer.Start();
+                    SetBusy(true);
+                    Worker.RunWorkerAsync();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Worker is Busy(You really must be dicking around or unlucky to make this pop up...)");
                 }
             }
-            else if (gameversion == "ArmA3")
+            else if (CurrentGame == "Arma 3")
             {
-                Launch.a3Launch(false, null, null);
+                if (CheckProcess("arma3") == false)
+                {
+                    Launch.a3Launch(false, null, null);
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Arma 3 is already running!\nDo you want to start Arma 3 anyway?", "Arma 3 already running!", 
+                    MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Launch.a3Launch(false, null, null);
+                    }
+                }
+            }
+            else if (CurrentGame == "Arma 2")
+            {
+                if (CheckProcess("ArmA2OA") == false)
+                {
+                    Launch.a2Launch(false, null, null);
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Arma 2 OA is already running!\nDo you want to start Arma 2 OA anyway?", "Arma 2 OA already running!",
+                    MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Launch.a2Launch(false, null, null);
+                    }
+                }                
+            }
+        }
+
+        Boolean CheckProcess(String ProcessName)
+        {
+            Process[] list = Process.GetProcesses();
+
+            foreach (Process pro in list)
+            {
+                if (pro.ProcessName == ProcessName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.ToString());
+        }
+
+        private void a3RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CheckWorker.IsBusy)
+            {
+                SetBusy(true);
+                a3UpdateCheck();
             }
             else
             {
-                Launch.a2Launch(false, null);
-            }
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e) {
-            System.Diagnostics.Process.Start(e.Uri.ToString());
-        }
-
-        private void a3RefreshButton_Click(object sender, RoutedEventArgs e) {
-            if (!checkWorker.IsBusy) {
-                setBusy(true);
-                a3UpdateCheck();
-            } else {
                 MessageBox.Show("checkWorker thread is currently busy...");
             }
-
         }
 
-        private void a3RefreshImageEnter(object sender, MouseEventArgs e) {
-            DoubleAnimation rotationAnimation = new DoubleAnimation();
+        private void a3RefreshImageEnter(object sender, MouseEventArgs e)
+        {
+            var rotationAnimation = new DoubleAnimation();
 
             rotationAnimation.From = 0;
             rotationAnimation.To = 360;
@@ -230,7 +430,7 @@ namespace SlickUpdater
             rotationAnimation.AccelerationRatio = 0.3;
             rotationAnimation.DecelerationRatio = 0.3;
 
-            Storyboard storyboard = new Storyboard();
+            var storyboard = new Storyboard();
 
             Storyboard.SetTarget(rotationAnimation, refreshImage);
             Storyboard.SetTargetProperty(rotationAnimation,
@@ -238,111 +438,142 @@ namespace SlickUpdater
             storyboard.Children.Add(rotationAnimation);
 
 
-            this.BeginStoryboard(storyboard);
+            BeginStoryboard(storyboard);
         }
 
-        private void launchOptionsButton_Click(object sender, RoutedEventArgs e) {
-            Arma3LaunchOptionsDialogue dialogue = new Arma3LaunchOptionsDialogue();
+        private void launchOptionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialogue = new Arma3LaunchOptionsDialogue();
             dialogue.Show();
             mainWindow.IsEnabled = false;
         }
 
-        private void a3DirText_TextChanged(object sender, TextChangedEventArgs e) {
-            Properties.Settings.Default.path = a3DirText.Text;
+        private void a3DirText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Settings.Default.A3path = a3DirText.Text;
+            Settings.Default.Save();
         }
 
         private void a3Ts3Text_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Properties.Settings.Default.ts3Dir = ts3DirText.Text;
+            Settings.Default.ts3Dir = ts3DirText.Text;
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e) {
-            setBusy(true);
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetBusy(true);
             a3UpdateCheck();
-            redditWorker.RunWorkerAsync();
+            RedditWorker.RunWorkerAsync();
             eventbutton.IsEnabled = false;
+            _time = DateTime.UtcNow.ToString("HH:mm");
+            updateTitle();
         }
 
-        private void repoGen_Options_Click(object sender, RoutedEventArgs e) {
-            RepoGen_Options repoGen = new RepoGen_Options();
+        private void repoGen_Options_Click(object sender, RoutedEventArgs e)
+        {
+            var repoGen = new RepoGen_Options();
             repoGen.Show();
             mainWindow.IsEnabled = false;
         }
 
-        private void inputDirListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        private void inputDirListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
             DragAndDrop.startPoint = e.GetPosition(null);
         }
 
-        private void inputDirListBox_PreviewMouseMove(object sender, MouseEventArgs e) {
+        private void inputDirListBox_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
             DragAndDrop.inputDirListBox_PreviewMouseMove(sender, e);
         }
 
-        private void outputDirListBox_DragEnter(object sender, DragEventArgs e) {
+        private void outputDirListBox_DragEnter(object sender, DragEventArgs e)
+        {
             DragAndDrop.outputDirListBox_DragEnter(sender, e);
         }
 
-        private void outputDirListBox_Drop(object sender, DragEventArgs e) {
+        private void outputDirListBox_Drop(object sender, DragEventArgs e)
+        {
             DragAndDrop.outputDirListBox_Drop(sender, e);
         }
 
-        private void repoGen_Refresh_Click(object sender, RoutedEventArgs e) {
+        private void repoGen_Refresh_Click(object sender, RoutedEventArgs e)
+        {
             RepoGenerator.inputGen();
         }
 
-        private void inputDirListBox_DragEnter(object sender, DragEventArgs e) {
+        private void inputDirListBox_DragEnter(object sender, DragEventArgs e)
+        {
             DragAndDrop.inputDirListBox_DragEnter(sender, e);
         }
 
-        private void inputDirListBox_Drop(object sender, DragEventArgs e) {
+        private void inputDirListBox_Drop(object sender, DragEventArgs e)
+        {
             DragAndDrop.inputDirListBox_Drop(sender, e);
         }
 
-        private void outputDirListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+        private void outputDirListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
             DragAndDrop.startPoint = e.GetPosition(null);
         }
 
-        private void outputDirListBox_PreviewMouseMove(object sender, MouseEventArgs e) {
+        private void outputDirListBox_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
             DragAndDrop.outputDirListBox_PreviewMouseMove(sender, e);
         }
 
-        private void repoGenButton_Click(object sender, RoutedEventArgs e) {
+        private void repoGenButton_Click(object sender, RoutedEventArgs e)
+        {
             mainWindow.IsEnabled = false;
             RepoGenerator.startGen();
         }
 
-        private void worker_DoWork(object sender, DoWorkEventArgs e) {
-            sw.Start();
-            var gameversion = Properties.Settings.Default.gameversion;
-            if (gameversion == "ArmA3")
-            {
-                a3UpdateManager.a3Update();
-            }
-            else
-            {
-                a2UpdateManager.a2Update();
-            }
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            UpdateManager.a3Update();
         }
 
-        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-            if (e.ProgressPercentage <= 100 && e.ProgressPercentage >= 0) {
+        private void updateDlSpeed(object sender, ElapsedEventArgs e)
+        {
+            DateTime now = DateTime.Now;
+            TimeSpan intverval = now - lastUpdateTime;
+            double timeDiff = intverval.TotalSeconds;
+            double sizeDiff = DownloadedBytes - lastDownloadedBytes;
+            double downloadSpeed = (int) Math.Floor((sizeDiff)/timeDiff);
+            downloadSpeed = downloadSpeed/1048576;
+            lastDownloadedBytes = DownloadedBytes;
+            lastUpdateTime = now;
+            _downloadProgress = " @ " + downloadSpeed.ToString("0.000") + " MB/s";
+            Dispatcher.Invoke(() => WindowManager.mainWindow.updateTitle());
+        }
+
+        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.ProgressPercentage <= 100 && e.ProgressPercentage >= 0)
+            {
                 indivProgress.Value = e.ProgressPercentage;
                 indivProgressTxt.Content = e.ProgressPercentage + "%";
-
-            } else if (e.ProgressPercentage > 100 && e.ProgressPercentage <= 201) {
+            }
+            else if (e.ProgressPercentage > 100 && e.ProgressPercentage <= 201)
+            {
                 midProgressTxt.Content = e.ProgressPercentage - 101 + "%";
                 midProgress.Value = e.ProgressPercentage - 101;
-            } else if (e.ProgressPercentage > 201 && e.ProgressPercentage <= 302) {
+            }
+            else if (e.ProgressPercentage > 201 && e.ProgressPercentage <= 302)
+            {
                 totalProgressTxt.Content = e.ProgressPercentage - 202 + "%";
                 totalProgress.Value = e.ProgressPercentage - 202;
-            } else if (e.ProgressPercentage == -1) {
+            }
+            else if (e.ProgressPercentage == -1)
+            {
                 MessageBox.Show(e.UserState as string);
             }
-            double downloadSpeed = downloadedBytes / 1048576 / sw.Elapsed.TotalMilliseconds * 1000;
-            Title = "Slick Updater Beta @ " + downloadSpeed.ToString("0.00#") + " Mb/s";
         }
 
-        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            sw.Stop();
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null) {
+                MessageBox.Show("Worker finished with errors!\n\n" + e.Error.ToString());
+            }
             a3UpdateCheck();
             indivProgress.Value = 0;
             midProgress.Value = 0;
@@ -350,58 +581,28 @@ namespace SlickUpdater
             midProgressTxt.Content = "";
             indivProgressTxt.Content = "";
             totalProgressTxt.Content = "";
-            Title = "Slick Updater Beta";
-            
+            _downloadProgress = "";
+            dlSpeedTimer.Stop();
+            updateTitle();
         }
 
-        private void helpButton_Click(object sender, RoutedEventArgs e) {
+        private void helpButton_Click(object sender, RoutedEventArgs e)
+        {
             mainWindow.IsEnabled = false;
-            About abt = new About();
+            var abt = new About();
             abt.Show();
         }
 
         private void logging_click(object sender, RoutedEventArgs e)
         {
-            log logging = new log();
+            var logging = new log();
             logging.Show();
-        }
-
-        private void forceToggle(object sender, RoutedEventArgs e)
-        {
-            var currepourl = Properties.Settings.Default.A3repourl;
-            string[] modlist = downloader.webReadLines(currepourl + "modlist.cfg");
-            MessageBoxResult result = MessageBox.Show("This will delete your mods and redownload them are you sure?", "You 100% sure?", MessageBoxButton.YesNo);
-            switch (result)
-            {
-                case MessageBoxResult.Yes:
-                    string msg = "Removed mods";
-                    forceButton.Content = msg;
-                    forceButton.Width = 90;
-                    string a3path = regcheck.arma3RegCheck();
-                    foreach (string modline in modlist)
-                    {
-                        try
-                        {
-                            if(Directory.Exists(a3path + "\\" + modline)){
-                                logIt.addData("Deleted " + modline);
-                                Directory.Delete(a3path + "\\" + modline, true);
-                            }
-                        }
-                        catch (IOException) { }
-                    }
-                    break;
-                case MessageBoxResult.No:
-
-                    break;
-            }
         }
 
         private void repoHide()
         {
             repoGen.Visibility = Visibility.Hidden;
         }
-
-        int clickCount = 0;
 
         private void showrepo(object sender, MouseButtonEventArgs e)
         {
@@ -412,9 +613,179 @@ namespace SlickUpdater
             }
         }
 
-        
+        private void LaunchAndJoin(object sender, RoutedEventArgs e)
+        {
+            if (CurrentGame == "Arma 2")
+            {
+                string gameversion = Settings.Default.gameversion;
+                string server = Slickversion.repos[repomenu.SelectedIndex].server;
+                string password = Slickversion.repos[repomenu.SelectedIndex].password;
+                Launch.a2Launch(true, server, password);
+            }
+            else if (CurrentGame == "Arma 3")
+            {
+                string gameversion = Settings.Default.gameversion;
+                string server = Slickversion.repos[repomenu.SelectedIndex].server;
+                string password = Slickversion.repos[repomenu.SelectedIndex].password;
+                Launch.a3Launch(true, server, password);
+            }
+        }
+
+        private void initRepos()
+        {
+            //List<ComboBoxItem> repos = new List<ComboBoxItem>();
+            if (Settings.Default.A3repo != "")
+            {
+                repomenu.SelectedIndex = int.Parse(Settings.Default.A3repo);
+            }
+
+            foreach (Repos repo in Slickversion.repos)
+            {
+                string Game = "";
+                if (repo.game == "arma2")
+                {
+                    Game = "Arma 2";
+                }
+                else if (repo.game == "arma3")
+                {
+                    Game = "Arma 3";
+                }
+                var newItem = new ComboBoxItem();
+                newItem.Tag = repo.url;
+                newItem.Content = Game + " | " + repo.name;
+                newItem.MouseDown += setActiveRepo;
+                repomenu.Items.Add(newItem);
+            }
+        }
+
+        private void setActiveRepo(object sender, RoutedEventArgs e)
+        {
+            if (Slickversion.repos[repomenu.SelectedIndex].url == "not")
+            {
+                MessageBox.Show("This repo has not yet been implemented. Setting you to default");
+                repomenu.SelectedIndex = 0;
+                Settings.Default.A3repo = "" + 0;
+                Settings.Default.A3repourl = Slickversion.repos[0].url;
+            }
+            else
+            {
+                Settings.Default.A3repo = "" + repomenu.SelectedIndex;
+                Settings.Default.A3repourl = Slickversion.repos[repomenu.SelectedIndex].url;
+            }
+            
+            if (repomenu.IsDropDownOpen)
+            {
+                a3UpdateCheck();
+            }
+           logocheck();
+           InitProperties();
+        }
+
+        private void refreshEvents(object sender, RoutedEventArgs e)
+        {
+            eventbox.Items.Clear();
+            _rposts.Clear();
+            RedditWorker.RunWorkerAsync();
+            eventbutton.IsEnabled = false;
+        }
+
+        //logo change
+        private void logocheck()
+        {
+            String currentGame = String.Empty;
+            if ((repomenu.SelectedIndex) < (Slickversion.repos.Count))
+            {
+                Repos currentRepo = Slickversion.repos[repomenu.SelectedIndex];
+                currentGame = currentRepo.game;
+            } 
+
+            if (currentGame == "arma2")
+            {
+                logo_image.Source = new BitmapImage(new Uri(@"Resources/ArmA2.png", UriKind.Relative));
+                mainTab.Header = "Arma 2";
+                CurrentGame = "Arma 2";
+                UpdateManager.isArma2 = true;
+            }
+            else
+            {
+                logo_image.Source = new BitmapImage(new Uri(@"Resources/ArmA3.png", UriKind.Relative));
+                mainTab.Header = "Arma 3";
+                CurrentGame = "Arma 3";
+                UpdateManager.isArma2 = false;
+            }
+        }
+
+        private void redditWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string url = @"http://www.reddit.com" + _subreddit + "/hot.json";
+            string json = String.Empty;
+            try
+            { 
+                json = downloader.webRead(url);
+            }
+            catch(Exception ex)
+            {
+                logIt.add(ex.ToString());
+                return;
+            }
+
+            var topic = JsonConvert.DeserializeObject<RootObject>(json);
+
+            foreach (Child i in topic.data.children)
+            {
+                if (i.data.link_flair_text == "EVENT")
+                {
+                    var evt = new events {title = i.data.title, author = i.data.author, url = i.data.permalink};
+                    _rposts.Add(evt);
+                }
+            }
+        }
+
+        private void redditworker_Done(object sender, AsyncCompletedEventArgs e)
+        {
+            foreach (events evn in _rposts)
+            {
+                var newEvent = new Button
+                {
+                    Content = evn.title + " by " + evn.author,
+                    Height = 50,
+                    Width = this.Width - 45,
+                    Tag = evn.url,
+                    FontSize = 14
+                };
+                newEvent.Click += newEvent_Click;
+                eventbox.Items.Add(newEvent);
+            }
+            eventbutton.IsEnabled = true;
+        }
+
+        private void newEvent_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            Process.Start("http://www.reddit.com" + button.Tag);
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Settings.Default.Save();
+        }
+
+        private void a2DirText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Settings.Default.A2path = a2DirText.Text;
+            Settings.Default.Save();
+        }
+
+        private void va2DirText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Settings.Default.vA2Path = va2DirText.Text;
+            Settings.Default.Save();
+        }
+
         #region TOPSECRET EASTEREGG NO PEAKING
-        int nyanClick = 0;
+
+        private int nyanClick;
+
         private void nyanEgg(object sender, MouseButtonEventArgs e)
         {
             nyanClick++;
@@ -424,137 +795,116 @@ namespace SlickUpdater
                 nyan.Visibility = Visibility.Visible;
             }
         }
+
         #endregion
 
-        private void LaunchAndJoin(object sender, RoutedEventArgs e)
+        public void updateGuides(object sender, RoutedEventArgs e)
         {
-            var gameversion = Properties.Settings.Default.gameversion;
-            if (gameversion == "ArmA3")
+            Guidebox.Items.Clear();            
+            List<Link> _links = new List<Link>(); 
+            string jsonString = downloader.webRead("http://arma.projectawesome.net/beta/repo/slickupdater/guides.json");
+            var guides = JsonConvert.DeserializeObject<Guide>(jsonString);
+            _links = guides.Links;
+            foreach (var guide in _links)
             {
-                var server = slickversion.repos[repomenu.SelectedIndex].server;
-                var password = slickversion.repos[repomenu.SelectedIndex].password;
-                Launch.a3Launch(true, server, password);
-            }
-            else
-            {
-                Launch.a2Launch(true, "PA Repo");
-            }
-        }
-
-        private void initRepos()
-        {
-            //List<ComboBoxItem> repos = new List<ComboBoxItem>();
-            if(Properties.Settings.Default.A3repo != "")
-            {
-                repomenu.SelectedIndex = int.Parse(Properties.Settings.Default.A3repo);
-            }
-            foreach(Repos repo in slickversion.repos)
-            {
-                ComboBoxItem newItem = new ComboBoxItem();
-                newItem.Tag = repo.url;
-                newItem.Content = repo.name;
-                newItem.MouseDown += setActiveRepo;
-                repomenu.Items.Add(newItem);
-            }
-        }
-
-        private void setActiveRepo(object sender, RoutedEventArgs e)
-        {
-            //MessageBox.Show("IT WORKS OMG" + "     " + repomenu.SelectedIndex);
-            if (slickversion.repos[repomenu.SelectedIndex].url == "not")
-            {
-                MessageBox.Show("This repo has not yet been implemented. Setting you to default");
-                repomenu.SelectedIndex = 0;
-                Properties.Settings.Default.A3repo = "" + 0;
-                Properties.Settings.Default.A3repourl = slickversion.repos[0].url;
-            }
-            else
-            {
-                Properties.Settings.Default.A3repo = "" + repomenu.SelectedIndex;
-                Properties.Settings.Default.A3repourl = slickversion.repos[repomenu.SelectedIndex].url;
-            }
-
-            if (repomenu.IsDropDownOpen == true)
+                var image = new Image()
                 {
-                    a3UpdateCheck();
-                }
-            
-        }
+                    Source = new BitmapImage(new Uri(guide.icon)),
+                    Width = 42,
+                    Height = 42,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(4, 0, 0, 0)
+                };
 
-        private void refreshEvents(object sender, RoutedEventArgs e)
-        {
-            eventbox.Items.Clear();
-            rposts.Clear();
-            redditWorker.RunWorkerAsync();
-            eventbutton.IsEnabled = false;
-        }
-        //logo change
-        void logocheck(String gameversion)
-        {
-            if (gameversion == "ArmA2")
-            {
-                
-                logo_image.Source = new BitmapImage(new Uri(@"Resources/ArmA2.png", UriKind.Relative));
-            }
-            else
-            {
-                logo_image.Source = new BitmapImage(new Uri(@"Resources/ArmA3.png", UriKind.Relative));
-            }
-        }
-
-        List<events> rposts = new List<events>();
-
-        void redditWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-
-            string url = @"http://www.reddit.com" + subreddit + "/hot.json";
-            string json = downloader.webRead(url);
-            RootObject topic = JsonConvert.DeserializeObject<RootObject>(json);
-            
-            foreach(Child i in topic.data.children)
-            {
-                if (i.data.link_flair_text == "EVENT")
+                var newGuide = new Button
                 {
-                    events evt = new events();
-                    evt.title = i.data.title;
-                    evt.author = i.data.author;
-                    evt.url = i.data.permalink;
-                    rposts.Add(evt);
-                }
+                    Content = "                  " + guide.title,
+                    Height = 50,
+                    Width = mainWindow.Width + 30,
+                    Tag = guide.url + "",
+                    FontSize = 14,
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    HorizontalContentAlignment = HorizontalAlignment.Left
+                };
+
+                var panel = new Grid();
+                panel.Children.Add(newGuide);
+                panel.Children.Add(image);
+
+                newGuide.Click += GuideClick;
+                Guidebox.Items.Add(panel);
             }
-             
         }
 
-        void redditworker_Done(object sender, AsyncCompletedEventArgs e)
+        private static void GuideClick(object sender, RoutedEventArgs e)
         {
-            foreach (events evn in rposts)
+            var button = sender as Button;
+            Process.Start(button.Tag + "");
+        }
+
+        private void UpdateSettings(object sender, SizeChangedEventArgs e)
+        {
+            Settings.Default.WindowWidth = (int)mainWindow.Width;
+            Settings.Default.WindowHeight = (int)mainWindow.Height;
+            Settings.Default.Save();
+        }
+
+        private void A3ModPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Settings.Default.ModPathA3 = A3ModPath.Text;
+            Settings.Default.Save();
+        }
+
+        private void A2ModPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Settings.Default.ModPathA2 = A2ModPath.Text;
+            Settings.Default.Save();
+        }
+
+        private void verify_click(object sender, RoutedEventArgs e)
+        {
+            string path;
+            if(Slickversion.repos[repomenu.SelectedIndex].game == "arma2")
             {
-                
-                Button newEvent = new Button();
-                newEvent.Content = evn.title + " by " + evn.author;
-                newEvent.Height = 50;
-                newEvent.Width = 520;
-                newEvent.Tag = evn.url;
-                newEvent.FontSize = 14;
-                newEvent.Click += newEvent_Click;
-                eventbox.Items.Add(newEvent);
-             }
-            eventbutton.IsEnabled = true;
+                path = Settings.Default.A2path + "\\";
+            } else if(Slickversion.repos[repomenu.SelectedIndex].game == "arma3")
+            {
+                path = Settings.Default.A3path + "\\";
+            } else
+            {
+                throw new System.Exception("WHAT THE FUCKING IS GOING ON?");
+            }
+            string[] verifierArgs = {Slickversion.repos[repomenu.SelectedIndex].url, path};
+            BackgroundWorker verifyAsync = new BackgroundWorker();
+            verifyAsync.DoWork += verify_mods;
+            verifyAsync.RunWorkerCompleted += verify_done;
+            VerifyWorkerRunning = true;
+            verifyAsync.RunWorkerAsync(verifierArgs);
+            mainWindow.verifyButton.IsEnabled = false;
+            logging_click(null, null);
+            mainWindow.verifyButton.Content = "Running";
+            mainWindow.verifyButton.Width = 100;
         }
 
-        void newEvent_Click(object sender, RoutedEventArgs e)
+        private void verify_mods(object sender, DoWorkEventArgs e)
         {
-            Button button = sender as Button;
-            System.Diagnostics.Process.Start("http://www.reddit.com" + button.Tag.ToString());
+            string[] args = e.Argument as string[];
+            var slickverify = new SlickVerify();
+            slickverify.VerifyFiles(args[0], args[1]);
         }
-        void Window_Closing(object sender, CancelEventArgs e)
+
+        private void verify_done(object sender, RunWorkerCompletedEventArgs e)
         {
-            Properties.Settings.Default.Save();
+            VerifyWorkerRunning = false;
+            mainWindow.verifyButton.IsEnabled = true;
+            mainWindow.verifyButton.Content = "";
+            mainWindow.verifyButton.Width = 22;
         }
     }
-    public class Mod {
-        public ImageSource status { get; set; }
 
+    public class Mod
+    {
+        public ImageSource status { get; set; }
         public string modName { get; set; }
         public string version { get; set; }
         public string servVersion { get; set; }

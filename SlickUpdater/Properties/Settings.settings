@@ -30,7 +30,7 @@
       <Value Profile="(Default)">ArmA3</Value>
     </Setting>
     <Setting Name="A2repo" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ts3Dir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -60,6 +60,21 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="A3path" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="vA2Path" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="WindowWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="WindowHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ModPathA2" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ModPathA3" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

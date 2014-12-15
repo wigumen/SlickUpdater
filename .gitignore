@@ -12,6 +12,8 @@ TestResults
 *.suo
 *.user
 *.sln.docstates
+Slick Updater Beta.sln.ide/
+desktop.ini
 
 # Build results
 [Dd]ebug/

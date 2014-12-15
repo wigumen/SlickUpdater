@@ -26,22 +26,33 @@ namespace SlickUpdater {
             } catch (InvalidOperationException e) {
                 MessageBox.Show(e.Message);
             }
-
         }
         private static void onComplete(object sender, AsyncCompletedEventArgs args) {
             downloadFinished = true;
         }
         private static void onProgressChanged(object sender, DownloadProgressChangedEventArgs args) {
-            WindowManager.mainWindow.worker.ReportProgress(args.ProgressPercentage);
-            WindowManager.mainWindow.downloadedBytes = args.BytesReceived;
+            WindowManager.mainWindow.Worker.ReportProgress(args.ProgressPercentage);
+            WindowManager.mainWindow.DownloadedBytes = args.BytesReceived;
         }
-        public static string webRead(string url) {
-            WebClient client = new WebClient();
-            Stream stream = client.OpenRead(url);
-            StreamReader reader = new StreamReader(stream);
-            String content = reader.ReadToEnd();
-
-
+		
+        public static string webRead(string url)
+        {
+            logIt.add("webRead : " + url);
+            String content = String.Empty;
+            try
+            {
+                WebClient client = new WebClient();
+                Stream stream = client.OpenRead(url);
+                StreamReader reader = new StreamReader(stream);
+                content = reader.ReadToEnd();
+            }
+            catch (Exception e)
+            {
+                logIt.add(e.Message);
+                throw;
+                //Optionally, show the user something is wrong
+                //MessageBox.Show("An error occured while trying to download something. Maybe the server is down.\n\n" + e.ToString(), "Error while downloading", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             return content;
         }
 
@@ -73,7 +84,8 @@ namespace SlickUpdater {
                 MessageBox.Show("Tell Slick He Fucked Up!", "A NotSupportedException occurred in the download method");
             }
             while (!downloadFinished) { System.Threading.Thread.Sleep(20);  };
-            logIt.addData("Downloaded " + filename);
+            logIt.add("Downloaded " + filename);
+            
             return filename;
         }
 
@@ -87,7 +99,7 @@ namespace SlickUpdater {
             } catch (IOException e) {
                 MessageBox.Show(e.Message);
             }
-            logIt.addData("Deleted directory " + dir);
+            logIt.add("Deleted directory " + dir);
         }
         static void setAttributesNormal(DirectoryInfo dir) {
             foreach (DirectoryInfo subDirPath in dir.GetDirectories()) {
