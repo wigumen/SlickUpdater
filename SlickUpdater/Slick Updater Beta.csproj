@@ -34,6 +34,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <ExpressionBlendVersion>12.0.41002.1</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -120,13 +121,9 @@
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AddModsLaunchOptions.xaml.cs">
-      <DependentUpon>AddModsLaunchOptions.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Arma3LaunchOptionsDialogue.xaml.cs">
       <DependentUpon>Arma3LaunchOptionsDialogue.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AutoUpdate.cs" />
     <Compile Include="config.cs" />
     <Compile Include="downloader.cs" />
     <Compile Include="DragAndDrop.cs" />
@@ -146,6 +143,7 @@
     </Compile>
     <Compile Include="reddit.cs" />
     <Compile Include="regcheck.cs" />
+    <Compile Include="SlickVerify.cs" />
     <Compile Include="UpdateManager.cs" />
     <Compile Include="RepoGenerator.cs" />
     <Compile Include="RepoGen_InputDir_Browse.xaml.cs">
@@ -163,10 +161,6 @@
     <Compile Include="WindowManager.cs" />
     <Compile Include="Zippy.cs" />
     <Page Include="About.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="AddModsLaunchOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
