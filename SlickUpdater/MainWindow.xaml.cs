@@ -155,21 +155,29 @@ namespace SlickUpdater
 
             //Timer callback stuff for clock
 
-            if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) &&
-                (Slickversion.version != SlickVersion))
+            AutoUpdate Update = new AutoUpdate();
+            if (Update.exupdate == true)
             {
-                MessageBoxResult result =
-                    MessageBox.Show(
-                        "There seems to be a new version of slickupdater available, do you wanna update it it?",
-                        "New Update", MessageBoxButton.YesNo);
-                switch (result)
+                Update.CheckAvailableUpdates(SlickVersion, Slickversion.version);
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(Slickversion.version) && !String.IsNullOrEmpty(SlickVersion) &&
+                    (Slickversion.version != SlickVersion))
                 {
-                    case MessageBoxResult.Yes:
-                        Process.Start("SlickAutoUpdate.exe");
-                        Process.GetCurrentProcess().Kill();
-                        break;
-                    case MessageBoxResult.No:
-                        break;
+                    MessageBoxResult result =
+                        MessageBox.Show(
+                            "There seems to be a new version of slickupdater available, do you wanna update it it?",
+                            "New Update", MessageBoxButton.YesNo);
+                    switch (result)
+                    {
+                        case MessageBoxResult.Yes:
+                            Process.Start("SlickAutoUpdate.exe");
+                            Process.GetCurrentProcess().Kill();
+                            break;
+                        case MessageBoxResult.No:
+                            break;
+                    }
                 }
             }
 
@@ -206,6 +214,17 @@ namespace SlickUpdater
             va2DirText.Text = regcheck.varma2RegCheck();
             ts3DirText.Text = regcheck.ts3RegCheck();
 
+            //Sets modpaths
+            if (Settings.Default.ModPathA3 == "")
+            {
+                A3ModPath.Text = a3DirText.Text;
+            }
+
+            if (Settings.Default.ModPathA2 == "")
+            {
+                A2ModPath.Text = a2DirText.Text;
+            }            
+
             Settings.Default.firstLaunch = false;
             InitProperties();
             logocheck();
@@ -220,6 +239,9 @@ namespace SlickUpdater
         {
             a2DirText.Text = Settings.Default.A2path;
             a3DirText.Text = Settings.Default.A3path;
+            A3ModPath.Text = Settings.Default.ModPathA3;
+            A2ModPath.Text = Settings.Default.ModPathA2;
+
             ts3DirText.Text = Settings.Default.ts3Dir;
             if ((repomenu.SelectedIndex) < (Slickversion.repos.Count))
             {
@@ -309,6 +331,15 @@ namespace SlickUpdater
             string gameversion = Settings.Default.gameversion;
             if (arma3Button.Content as string == "Update Arma 3" || arma3Button.Content as string == "Update Arma 2")
             {
+                if (UpdateManager.TFRalert == true)
+                {
+                    MessageBoxResult result = MessageBox.Show("Teamspeak needs to be closed before updating Task Force Radio. Would you like SU to close Teamspeak automatically when needed?\n\nPress No to get a warning before and Yes to get no warning.",
+                "Teamspeak needs to be closed...", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        UpdateManager.TFRalert = false;
+                    }
+                }
                 if (!Worker.IsBusy)
                 {
                     dlSpeedTimer = new Timer(10000);
@@ -325,12 +356,50 @@ namespace SlickUpdater
             }
             else if (CurrentGame == "Arma 3")
             {
-                Launch.a3Launch(false, null, null);
+                if (CheckProcess("arma3") == false)
+                {
+                    Launch.a3Launch(false, null, null);
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Arma 3 is already running!\nDo you want to start Arma 3 anyway?", "Arma 3 already running!", 
+                    MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Launch.a3Launch(false, null, null);
+                    }
+                }
             }
             else if (CurrentGame == "Arma 2")
             {
-                Launch.a2Launch(false, null, null);
+                if (CheckProcess("ArmA2OA") == false)
+                {
+                    Launch.a2Launch(false, null, null);
+                }
+                else
+                {
+                    MessageBoxResult result = MessageBox.Show("Arma 2 OA is already running!\nDo you want to start Arma 2 OA anyway?", "Arma 2 OA already running!",
+                    MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Launch.a2Launch(false, null, null);
+                    }
+                }                
             }
+        }
+
+        Boolean CheckProcess(String ProcessName)
+        {
+            Process[] list = Process.GetProcesses();
+
+            foreach (Process pro in list)
+            {
+                if (pro.ProcessName == ProcessName)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
@@ -777,6 +846,18 @@ namespace SlickUpdater
         {
             Settings.Default.WindowWidth = (int)mainWindow.Width;
             Settings.Default.WindowHeight = (int)mainWindow.Height;
+            Settings.Default.Save();
+        }
+
+        private void A3ModPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Settings.Default.ModPathA3 = A3ModPath.Text;
+            Settings.Default.Save();
+        }
+
+        private void A2ModPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Settings.Default.ModPathA2 = A2ModPath.Text;
             Settings.Default.Save();
         }
 

@@ -21,17 +21,19 @@ namespace SlickUpdater
         private static int updateProgress;
         private static int totalFiles;
         public static bool isArma2 = false;
+        public static Boolean TFRalert = false;
 
 
         public static void UpdateCheck()
         {
+            //Boolean TFRalert = false;
             if (isArma2)
             {
-                armaPath = regcheck.arma2RegCheck();
+                armaPath = path("ArmA2");
             }
             else
             {
-                armaPath = Settings.Default.A3path;
+                armaPath = path("ArmA3");
             }
             string mod;
             int index;
@@ -129,6 +131,10 @@ namespace SlickUpdater
                                 date = false;
                                 //MessageBox.Show(mod + " is out of date.");
                                 logIt.add(mod + " is out to date.");
+                                if (mod == "@task_force_radio")
+                                {
+                                    TFRalert = true;
+                                }
                             }
                         }
                         else
@@ -160,6 +166,10 @@ namespace SlickUpdater
                         date = false;
                         //MessageBox.Show(mod + " doesn't exist on your computer.");
                         logIt.add(mod + " doesn't exist on your computer.");
+                        if (mod == "@task_force_radio")
+                        {
+                            TFRalert = true;
+                        }
                     }
                 }
             }
@@ -174,16 +184,15 @@ namespace SlickUpdater
             WindowManager.mainWindow.CheckWorker.ReportProgress(2, a3Items);
         }
 
-
         public static void a3Update()
         {
             if (isArma2)
             {
-                armaPath = Settings.Default.A2path;
+                armaPath = path("ArmA2");
             }
             else
             {
-                armaPath = Settings.Default.A3path;
+                armaPath = path("ArmA3");
             }
             if (url == "")
             {
@@ -287,11 +296,13 @@ namespace SlickUpdater
             string arma3Path = "";
             if (isArma2)
             {
-                arma3Path = regcheck.arma2RegCheck();
+                //arma3Path = regcheck.arma2RegCheck();
+                arma3Path = path("ArmA2");
             }
             else
             {
-                arma3Path = regcheck.arma3RegCheck();
+                //arma3Path = regcheck.arma3RegCheck();
+                arma3Path = path("ArmA3");
             }
 
             string modPath = arma3Path + "\\" + mod;
@@ -325,14 +336,16 @@ namespace SlickUpdater
         {
             if (isArma2)
             {
-                armaPath = regcheck.arma2RegCheck();
+                //armaPath = regcheck.arma2RegCheck();
+                armaPath = path("ArmA2");
             }
             else
             {
-                armaPath = Settings.Default.A3path;
+                //armaPath = Settings.Default.A3path;
+                armaPath = path("ArmA3");
             }
             string relativePath = folder.Replace(armaPath, "");
-            string[] files = downloader.webReadLines(url + relativePath + "/files.cfg");
+            string[] files = downloader.webReadLines(url + relativePath.Replace(@"\\", "") + "/files.cfg");
 
             var info = new DirectoryInfo(folder);
 
@@ -442,6 +455,10 @@ namespace SlickUpdater
                         else
                         {
                             logIt.add("TS3 is running");
+                            if (UpdateManager.TFRalert == true)
+                            {
+                                MessageBox.Show("Teamspeak will now be closed to update the plugin files.", "Teamspeak will now close...", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                            }
                             foreach(Process p in pro64)
                             {
                                 p.Kill();
@@ -505,6 +522,33 @@ namespace SlickUpdater
                 MessageBox.Show(e.Message);
                 logIt.add(e.Message);
             }
+        }
+        static string path(string game)
+        {
+            string path = "";
+            if (game == "ArmA3")
+            {
+                if (Properties.Settings.Default.A3path != Properties.Settings.Default.ModPathA3)
+                {
+                    path = Properties.Settings.Default.ModPathA3;
+                }
+                else
+                {
+                    path = Settings.Default.A3path;
+                }
+            }
+            if (game == "ArmA2")
+            {
+                if (Properties.Settings.Default.A2path != Properties.Settings.Default.ModPathA3)
+                {
+                    path = Properties.Settings.Default.ModPathA2;
+                }
+                else
+                {
+                    path = Settings.Default.A2path;
+                }
+            }
+            return path;
         }
     }
 }

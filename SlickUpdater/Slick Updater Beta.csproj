@@ -121,9 +121,13 @@
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AddModsLaunchOptions.xaml.cs">
+      <DependentUpon>AddModsLaunchOptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Arma3LaunchOptionsDialogue.xaml.cs">
       <DependentUpon>Arma3LaunchOptionsDialogue.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AutoUpdate.cs" />
     <Compile Include="config.cs" />
     <Compile Include="downloader.cs" />
     <Compile Include="DragAndDrop.cs" />
@@ -163,6 +167,10 @@
     <Page Include="About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddModsLaunchOptions.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Arma3LaunchOptionsDialogue.xaml">
       <SubType>Designer</SubType>

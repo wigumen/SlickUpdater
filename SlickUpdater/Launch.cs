@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace SlickUpdater {
     static class Launch {
@@ -49,13 +50,14 @@ namespace SlickUpdater {
                     args += " -world=" + world;
                 }
             }
+
             if (customParams != "") {
-                args += " " + customParams;
+                args += " " + cparams();
             }
             if (mods != "") {
-                args += " -mod=" + mods;
+                args += " -mod=\"" + mods + cParamsMods() + "\"";
             }
-
+            
             Process.Start(arma3Path, args);
             logIt.add("Launched Arma 3 with " + args);
         }
@@ -133,14 +135,64 @@ namespace SlickUpdater {
         }
         static private string Modlister() {
             string modlist = "";
+            string Path = path();
+
             foreach (Mod item in WindowManager.mainWindow.a3ModList.Items) {
                 if (modlist == "") {
-                    modlist = item.modName + ";";
+                    modlist = Path + item.modName + ";";
                 } else {
-                    modlist += item.modName + ";";
+                    modlist += Path + item.modName + ";";
                 }
             }
             return modlist;
+        }
+        static private string cParamsMods()
+        {
+            string result = "";
+            string Path = path();
+            Regex rgex = new Regex("(@[A-z0-9_\\:]*|C:\\@[A-z0-9_\\:]*)");
+            MatchCollection coll = rgex.Matches(Properties.Settings.Default.customParams);
+
+            for (int i = 0; i < coll.Count; i++)
+            {
+                result += Path + coll[i] + ";";
+            }
+
+            return result;
+        }
+        static private string cparams()
+        {
+            string tmp = Properties.Settings.Default.customParams;
+            Regex rgex = new Regex("(@[A-z0-9_\\:]*|C:\\@[A-z0-9_\\:]*)");
+            MatchCollection coll = rgex.Matches(tmp);
+
+            for (int i = 0; i < coll.Count; i++)
+            {
+                tmp = tmp.Replace(coll[i].ToString(), "");
+            }
+
+            tmp = tmp.Replace("-mod=", "").Replace(";", "");
+
+            return tmp;
+        }
+        static string path()
+        {
+            string path = "";
+            if (Properties.Settings.Default.gameversion == "ArmA3")
+            {
+                if (Properties.Settings.Default.A3path != Properties.Settings.Default.ModPathA3)
+                {
+                    path = Properties.Settings.Default.ModPathA3 + @"\";
+                }
+            }
+            if (Properties.Settings.Default.gameversion == "ArmA2")
+            {
+                if (Properties.Settings.Default.A2path != Properties.Settings.Default.ModPathA3)
+                {
+                    path = Properties.Settings.Default.ModPathA2 + @"\";
+                }
+            }
+            return path;
         }
     }
 }

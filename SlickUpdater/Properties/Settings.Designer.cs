@@ -298,5 +298,29 @@ namespace SlickUpdater.Properties {
                 this["WindowHeight"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ModPathA2 {
+            get {
+                return ((string)(this["ModPathA2"]));
+            }
+            set {
+                this["ModPathA2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ModPathA3 {
+            get {
+                return ((string)(this["ModPathA3"]));
+            }
+            set {
+                this["ModPathA3"] = value;
+            }
+        }
     }
 }
