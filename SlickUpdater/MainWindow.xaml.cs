@@ -49,6 +49,7 @@ namespace SlickUpdater
         private DateTime lastUpdateTime;
         private DispatcherTimer timer;
         private const string Title = "Slick Updater";
+        private bool VerifyWorkerRunning = false;
 
         public MainWindow()
         {
@@ -858,6 +859,46 @@ namespace SlickUpdater
         {
             Settings.Default.ModPathA2 = A2ModPath.Text;
             Settings.Default.Save();
+        }
+
+        private void verify_click(object sender, RoutedEventArgs e)
+        {
+            string path;
+            if(Slickversion.repos[repomenu.SelectedIndex].game == "arma2")
+            {
+                path = Settings.Default.A2path + "\\";
+            } else if(Slickversion.repos[repomenu.SelectedIndex].game == "arma3")
+            {
+                path = Settings.Default.A3path + "\\";
+            } else
+            {
+                throw new System.Exception("WHAT THE FUCKING IS GOING ON?");
+            }
+            string[] verifierArgs = {Slickversion.repos[repomenu.SelectedIndex].url, path};
+            BackgroundWorker verifyAsync = new BackgroundWorker();
+            verifyAsync.DoWork += verify_mods;
+            verifyAsync.RunWorkerCompleted += verify_done;
+            VerifyWorkerRunning = true;
+            verifyAsync.RunWorkerAsync(verifierArgs);
+            mainWindow.verifyButton.IsEnabled = false;
+            logging_click(null, null);
+            mainWindow.verifyButton.Content = "Running";
+            mainWindow.verifyButton.Width = 100;
+        }
+
+        private void verify_mods(object sender, DoWorkEventArgs e)
+        {
+            string[] args = e.Argument as string[];
+            var slickverify = new SlickVerify();
+            slickverify.VerifyFiles(args[0], args[1]);
+        }
+
+        private void verify_done(object sender, RunWorkerCompletedEventArgs e)
+        {
+            VerifyWorkerRunning = false;
+            mainWindow.verifyButton.IsEnabled = true;
+            mainWindow.verifyButton.Content = "";
+            mainWindow.verifyButton.Width = 22;
         }
     }
 

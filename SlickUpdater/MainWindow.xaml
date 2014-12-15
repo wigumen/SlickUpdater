@@ -85,7 +85,7 @@
                     <GradientStop Color="White" Offset="1" />
                 </LinearGradientBrush>
             </TabItem.Background>
-            <Grid x:Name="va2dirbox">
+            <Grid x:Name="va2dirbox" Margin="0,-37,0,37">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="14" />
                     <ColumnDefinition Width="134" />
@@ -94,23 +94,25 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Label Content="Arma 3 Directory:&#xA;" HorizontalAlignment="Left" Margin="0,15,0,0" VerticalAlignment="Top" Width="124" Height="23" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
-                <TextBox x:Name="a3DirText" Height="23" Margin="0,15,10,0" VerticalAlignment="Top" TextChanged="a3DirText_TextChanged" Grid.Column="2" />
-                <Label Content="Teamspeak 3 Directory:" HorizontalAlignment="Left" Margin="0,43,0,0" VerticalAlignment="Top" Height="22" Width="124" Grid.Column="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
-                <TextBox x:Name="ts3DirText" Grid.Column="2" Margin="0,43,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.497,0.5" TextChanged="a3Ts3Text_TextChanged" Height="22" />
-                <Label Content="Logging Window" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
-                <Button Content="" Grid.Column="2" HorizontalAlignment="Left" Margin="0,154,0,0" VerticalAlignment="Top" Width="22" Height="22" Click="logging_click" />
+                <Label Content="Arma 3 Directory:&#xA;" HorizontalAlignment="Left" Margin="0,46,0,0" VerticalAlignment="Top" Width="124" Height="23" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
+                <TextBox x:Name="a3DirText" Height="23" Margin="0,46,10,0" VerticalAlignment="Top" TextChanged="a3DirText_TextChanged" Grid.Column="2" />
+                <Label Content="Teamspeak 3 Directory:" HorizontalAlignment="Left" Margin="0,74,0,0" VerticalAlignment="Top" Height="22" Width="124" Grid.Column="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
+                <TextBox x:Name="ts3DirText" Grid.Column="2" Margin="0,74,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.497,0.5" TextChanged="a3Ts3Text_TextChanged" Height="22" />
+                <Label Content="Logging Window" HorizontalAlignment="Left" Margin="10,241,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
+                <Button Content="" Grid.Column="2" HorizontalAlignment="Left" Margin="0,241,0,0" VerticalAlignment="Top" Width="22" Height="22" Click="logging_click" />
                 <Label Content="Current Repo: " HorizontalAlignment="Left" Margin="0,121,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="25" Width="140" Visibility="Hidden" Grid.Column="1" />
-                <Label Content="Repository:" HorizontalAlignment="Left" Margin="0,126,0,0" VerticalAlignment="Top" Width="124" Height="23" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" />
-                <ComboBox x:Name="repomenu" Grid.Column="2" Margin="0,126,10,0" VerticalAlignment="Top" Height="23" SelectionChanged="setActiveRepo" />
-                <Label Content="Arma 2 OA Directory:" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top" Width="124" Height="23" Grid.Column="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
-                <TextBox x:Name="a2DirText" Height="23" Margin="0,70,10,0" VerticalAlignment="Top" TextChanged="a2DirText_TextChanged" Grid.Column="2" />
-                <TextBox x:Name="va2DirText" Grid.Column="2" Height="23" Margin="0,98,10,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="va2DirText_TextChanged" />
-                <Label Content="Arma 2 Directory:&#xA;" HorizontalAlignment="Left" Margin="0,98,0,0" VerticalAlignment="Top" Width="124" Height="23" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
-                <Label Content="Arma 3 Modpath:" HorizontalAlignment="Left" Margin="10,181,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
-                <TextBox x:Name="A3ModPath" Height="23" Margin="0,181,10,0" VerticalAlignment="Top" TextChanged="A3ModPath_TextChanged" Grid.Column="2" />
-                <Label Content="Arma 2 Modpath:" HorizontalAlignment="Left" Margin="10,208,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
-                <TextBox x:Name="A2ModPath" Height="23" Margin="0,209,10,0" VerticalAlignment="Top" TextChanged="A2ModPath_TextChanged" Grid.Column="2" />
+                <Label Content="Repository:" HorizontalAlignment="Left" Margin="0,210,0,0" VerticalAlignment="Top" Width="124" Height="23" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Grid.Column="1" />
+                <ComboBox x:Name="repomenu" Grid.Column="2" Margin="0,213,10,0" VerticalAlignment="Top" Height="23" SelectionChanged="setActiveRepo" />
+                <Label Content="Arma 2 OA Directory:" HorizontalAlignment="Left" Margin="0,101,0,0" VerticalAlignment="Top" Width="124" Height="23" Grid.Column="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" />
+                <TextBox x:Name="a2DirText" Height="23" Margin="0,101,10,0" VerticalAlignment="Top" TextChanged="a2DirText_TextChanged" Grid.Column="2" />
+                <TextBox x:Name="va2DirText" Grid.Column="2" Height="23" Margin="0,129,10,0" TextWrapping="Wrap" VerticalAlignment="Top" TextChanged="va2DirText_TextChanged" />
+                <Label Content="Arma 2 Directory:&#xA;" HorizontalAlignment="Left" Margin="0,129,0,0" VerticalAlignment="Top" Width="124" Height="23" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.Column="1" />
+                <Label Content="Arma 3 Modpath:" HorizontalAlignment="Left" Margin="10,154,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
+                <TextBox x:Name="A3ModPath" Height="23" Margin="0,157,10,0" VerticalAlignment="Top" TextChanged="A3ModPath_TextChanged" Grid.Column="2" />
+                <Label Content="Arma 2 Modpath:" HorizontalAlignment="Left" Margin="10,181,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
+                <TextBox x:Name="A2ModPath" Height="23" Margin="0,185,10,0" VerticalAlignment="Top" TextChanged="A2ModPath_TextChanged" Grid.Column="2" />
+                <Label Content="Verify Mods" HorizontalAlignment="Left" Margin="10,268,0,0" VerticalAlignment="Top" Height="22" Width="128" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
+                <Button x:Name="verifyButton" Content="" Grid.Column="2" HorizontalAlignment="Left" Margin="0,268,0,0" VerticalAlignment="Top" Width="22" Height="22" Click="verify_click" />
             </Grid>
         </TabItem>
         <TabItem Header="About" HorizontalAlignment="Left" VerticalAlignment="Top" Width="55" Foreground="White">
