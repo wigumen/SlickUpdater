@@ -109,10 +109,10 @@ namespace SlickUpdater {
 
         private void noPause_Click(object sender, RoutedEventArgs e) {
             if (noPause.IsChecked == true) {
-                Properties.Settings.Default.noLogs = true;
+                Properties.Settings.Default.noPause = true;
                 //ConfigManager.write("ArmA3", "noPause", "true");
             } else {
-                Properties.Settings.Default.noLogs = false;
+                Properties.Settings.Default.noPause = false;
                 //ConfigManager.write("ArmA3", "noPause", "false");
             }
         }
@@ -122,7 +122,7 @@ namespace SlickUpdater {
                 Properties.Settings.Default.showScriptErrors = true;
                 //ConfigManager.write("ArmA3", "showScriptErrors", "true");
             } else {
-                Properties.Settings.Default.showScriptErrors = true;
+                Properties.Settings.Default.showScriptErrors = false;
                 //ConfigManager.write("ArmA3", "showScriptErrors", "false");
             }
         }
