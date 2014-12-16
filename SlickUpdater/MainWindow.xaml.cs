@@ -37,7 +37,7 @@ namespace SlickUpdater
         public double DownloadedBytes = 1;
         public logIt LogThread;
         public BackgroundWorker RedditWorker;
-        public string SlickVersion = "1.4.0.1";
+        public string SlickVersion = "1.5";
         public versionfile Slickversion;
         public BackgroundWorker Worker;
         private string _downloadProgress = "";
