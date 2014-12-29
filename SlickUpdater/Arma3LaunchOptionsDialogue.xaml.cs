@@ -155,5 +155,120 @@ namespace SlickUpdater {
             }
             btn_addmod.IsEnabled = false;
         }
+
+        private void btn_cpyparams_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(getParams());
+        }
+        string getParams(){
+            var world = Properties.Settings.Default.world;
+            var customParams = Properties.Settings.Default.customParams;
+            var mods = Modlister();
+
+            string args = "";
+            if (Properties.Settings.Default.window == true)
+            {
+                args += " -window";
+            }
+            if (Properties.Settings.Default.nosplash == true)
+            {
+                args += " -nosplash";
+            }
+            if (Properties.Settings.Default.skipIntro == true)
+            {
+                args += " -skipIntro";
+            }
+            if (Properties.Settings.Default.noLogs == true)
+            {
+                args += " -noLogs";
+            }
+            if (Properties.Settings.Default.noPause == true)
+            {
+                args += " -noPause";
+            }
+            if (Properties.Settings.Default.showScriptErrors == true)
+            {
+                args += " -showScriptErrors";
+            }
+            if (world != "")
+            {
+                args += " -world=" + world;
+            }
+            if (customParams != "")
+            {
+                args += " " + cparams();
+            }
+            if (mods != "")
+            {
+                args += " -mod=\"" + mods + cParamsMods() + "\"";
+            }
+            return args;
+        }
+        string Modlister()
+        {
+            string modlist = "";
+            string Path = path();
+
+            foreach (Mod item in WindowManager.mainWindow.a3ModList.Items)
+            {
+                if (modlist == "")
+                {
+                    modlist = Path + item.modName + ";";
+                }
+                else
+                {
+                    modlist += Path + item.modName + ";";
+                }
+            }
+            return modlist;
+        }
+        string path()
+        {
+            string path = "";
+            if (Properties.Settings.Default.gameversion == "ArmA3")
+            {
+                if (Properties.Settings.Default.A3path != Properties.Settings.Default.ModPathA3)
+                {
+                    path = Properties.Settings.Default.ModPathA3 + @"\";
+                }
+            }
+            if (Properties.Settings.Default.gameversion == "ArmA2")
+            {
+                if (Properties.Settings.Default.A2path != Properties.Settings.Default.ModPathA3)
+                {
+                    path = Properties.Settings.Default.ModPathA2 + @"\";
+                }
+            }
+            return path;
+        }
+        private string cParamsMods()
+        {
+            string result = "";
+            string Path = path();
+            Regex rgex = new Regex("(@[A-z0-9_\\:]*|C:\\@[A-z0-9_\\:]*)");
+            MatchCollection coll = rgex.Matches(Properties.Settings.Default.customParams);
+
+            for (int i = 0; i < coll.Count; i++)
+            {
+                result += Path + coll[i] + ";";
+            }
+
+            return result;
+        }
+        private string cparams()
+        {
+            string tmp = Properties.Settings.Default.customParams;
+            Regex rgex = new Regex("(@[A-z0-9_\\:]*|C:\\@[A-z0-9_\\:]*)");
+            MatchCollection coll = rgex.Matches(tmp);
+
+            for (int i = 0; i < coll.Count; i++)
+            {
+                tmp = tmp.Replace(coll[i].ToString(), "");
+            }
+
+            tmp = tmp.Replace("-mod=", "").Replace(";", "");
+
+            return tmp;
+        }
     }
 }

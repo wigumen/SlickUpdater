@@ -14,6 +14,7 @@
         <Label Content="Custom&#xD;&#xA;Parameters:" HorizontalAlignment="Left" Margin="10,138,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="customParams" HorizontalAlignment="Left" Height="182" Margin="82,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="200" TextChanged="customParams_TextChanged"/>
         <Button x:Name="btn_addmod" Content="Add specific mod" HorizontalAlignment="Left" Margin="82,265,0,0" VerticalAlignment="Top" Width="200" Click="btn_addmod_Click"/>
+        <Button x:Name="btn_cpyparams" Content="copy params" HorizontalAlignment="Left" Margin="10,265,0,0" VerticalAlignment="Top" Width="67" Height="18" FontSize="10" ToolTip="Copies all the launch parameters to clipboard" Click="btn_cpyparams_Click"/>
 
     </Grid>
 </Window>

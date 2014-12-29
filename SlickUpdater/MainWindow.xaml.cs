@@ -243,6 +243,12 @@ namespace SlickUpdater
             A2ModPath.Text = Settings.Default.ModPathA2;
 
             ts3DirText.Text = Settings.Default.ts3Dir;
+            if (Convert.ToInt32(Settings.Default.A3repo) > repomenu.Items.Count)
+            {
+                Settings.Default.A3repo = "0";
+                repomenu.SelectedIndex = Convert.ToInt32(Settings.Default.A3repo);
+                MessageBox.Show("Errorcode: E1\nThe index was greater than available repos, setting to index to 0.\n\nReselect repo in options");
+            }
             if ((repomenu.SelectedIndex) < (Slickversion.repos.Count))
             {
                 _subreddit = Slickversion.repos[repomenu.SelectedIndex].subreddit;
