@@ -28,6 +28,8 @@ Contributor - AdenFlorian (/u/AdenFlorian)
 
 Contributor - FinnTheHuman
 
+Contributor - Tungul
+
 Various art - Cory
 
 [Project Awesome MilSim's]: https://www.reddit.com/r/projectmilsim

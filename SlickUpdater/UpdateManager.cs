@@ -57,11 +57,28 @@ namespace SlickUpdater
             }
             else
             {
-                MessageBox.Show("Your repourl is not set. Go into settings and change it! Setting it to default!");
+                MessageBox.Show("Your repo url is not set. Go into settings and change it! Setting it to default!");
                 url = slickversion.repos[0].url;
                 Settings.Default.A3repourl = slickversion.repos[0].url;
             }
 
+            // Previous color scheme:
+            // modRed    - unused.
+            // modGreen  - SU.version exists and is the same as on the server.
+            // modBlue   - mod directory does not exist.
+            // modBrown  - SU.version file does not exist.
+            // modYellow - mod is out of date.
+
+            // New color scheme:
+            // modRed    - mod directory does not exist.
+            // modGreen  - SU.version exists and is the same as on the server.
+            // modBlue   - mod is out of date.
+            // modBrown  - unused.
+            // modYellow - SU.version file does not exist.
+
+            modBrown -> modYellow
+            modBlue -> modRed
+            modYellow -> modBlue
 
             var modRed =
                 new BitmapImage(new Uri(@"pack://application:,,,/Slick Updater Beta;component/Resources/modRed.png"));
@@ -120,10 +137,10 @@ namespace SlickUpdater
                             }
                             else
                             {
-                                modYellow.Freeze();
+                                modBlue.Freeze();
                                 a3Items.Add(new Mod
                                 {
-                                    status = modYellow,
+                                    status = modBlue,
                                     modName = mod,
                                     version = "v. " + versionString,
                                     servVersion = "v. " + version0String
@@ -139,10 +156,10 @@ namespace SlickUpdater
                         }
                         else
                         {
-                            modBrown.Freeze();
+                            modYellow.Freeze();
                             a3Items.Add(new Mod
                             {
-                                status = modBrown,
+                                status = modYellow,
                                 modName = mod,
                                 version = "No file",
                                 servVersion = "v. " + version0String
@@ -154,10 +171,10 @@ namespace SlickUpdater
                     }
                     else
                     {
-                        modBlue.Freeze();
+                        modRed.Freeze();
                         a3Items.Add(new Mod
                         {
-                            status = modBlue,
+                            status = modRed,
                             modName = mod,
                             version = "No file",
                             servVersion = "v. " + version0String
@@ -259,8 +276,9 @@ namespace SlickUpdater
                             version0String = downloader.webRead(url + mod + "\\" + version0File);
                             MessageBoxResult result =
                                 MessageBox.Show(
-                                    "SlickUpdater have detected that you have the folder " + modFolder +
-                                    " if your 100% sure this is up to date you don't have to re-download. \n\nAre you sure this mod is up to date?",
+                                    "SlickUpdater have detected that you have a folder named " + modFolder +
+                                    " in your Arma directory. If you're 100% sure this mod is valid and up to date," +
+                                    " you don't have to re-download. \n\nAre you sure this mod is up to date?",
                                     "Mod folder detacted", MessageBoxButton.YesNo);
                             switch (result)
                             {
